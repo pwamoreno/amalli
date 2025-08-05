@@ -24,8 +24,9 @@ const AuthRegister = () => {
       if (data?.payload?.success){
         toast(`${data?.payload?.message}`)
         navigate("/auth/login");
+      }else{
+        toast(`${data?.payload?.message}`)
       }
-      // console.log(data);
     });
   }
 
