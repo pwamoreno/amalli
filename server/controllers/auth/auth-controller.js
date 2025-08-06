@@ -54,7 +54,7 @@ const loginUser = async (req, res) => {
     if (!checkPassword) {
       return res.json({
         success: false,
-        message: "Wrong email or password. Try again!",
+        message: "Incorrect email or password. Try again!",
       });
     }
 
@@ -74,10 +74,9 @@ const loginUser = async (req, res) => {
       user: {
         email: checkUser.email,
         role: checkUser.role,
-        id: checkUser._id
-      }
-    })
-
+        id: checkUser._id,
+      },
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({
@@ -88,7 +87,33 @@ const loginUser = async (req, res) => {
 };
 
 //logout
+const logoutUser = (req, res) => {
+  res.clearCookie("token").json({
+    success: true,
+    message: "Successfully logged out!",
+  });
+};
 
-//middleware
+//auth middleware
+const authMiddleware = async (req, res, next) => {
+  const token = req.cookies.token;
+  if (!token) {
+    return res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
 
-module.exports = { registerUser, loginUser };
+  try {
+    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    req.user = decoded;
+    next();
+  } catch (error) {
+    res.status(401).json({
+      success: false,
+      message: "Unauthorised user!",
+    });
+  }
+};
+
+module.exports = { registerUser, loginUser, logoutUser, authMiddleware };
