@@ -9,7 +9,7 @@ import { Skeleton } from "../ui/skeleton";
 const ProductImageUpload = ({
   imageFile,
   setImageFile,
-  uploadedImageUrl,
+  // uploadedImageUrl,
   setUploadedImageUrl,
   imageLoadingState,
   setImageLoadingState
@@ -17,7 +17,7 @@ const ProductImageUpload = ({
   const inputRef = useRef(null);
 
   function handleImageFileChange(event) {
-    console.log(event.target.files);
+    // console.log(event.target.files);
     const selectedFile = event.target.files?.[0];
     if (selectedFile) {
       setImageFile(selectedFile);
@@ -49,7 +49,7 @@ const ProductImageUpload = ({
     const data = new FormData()
     data.append("my_file", imageFile)
     const response = await axios.post("http://localhost:5000/api/admin/products/upload-image", data)
-    console.log("response", response);
+    // console.log("response", response);
     
     if(response?.data?.success){
         setUploadedImageUrl(response.data.result.url)

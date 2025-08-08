@@ -2,7 +2,13 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 
-const AdminProductTile = ({ product }) => {
+const AdminProductTile = ({
+  product,
+  setFormData,
+  setOpenCreateProductsDialog,
+  setCurrentIdToEdit,
+  handleDelete,
+}) => {
   return (
     <div>
       <Card className="w-full max-w-sm mx-auto pt-0">
@@ -29,8 +35,22 @@ const AdminProductTile = ({ product }) => {
           </div>
         </CardContent>
         <CardFooter className="flex justify-between items-center">
-          <Button className="hover:cursor-pointer hover:bg-amber-400">Edit</Button>
-          <Button className="hover:cursor-pointer hover:bg-red-400">Delete</Button>
+          <Button
+            className="hover:cursor-pointer hover:bg-amber-400"
+            onClick={() => {
+              setOpenCreateProductsDialog(true);
+              setCurrentIdToEdit(product._id);
+              setFormData(product);
+            }}
+          >
+            Edit
+          </Button>
+          <Button
+            className="hover:cursor-pointer hover:bg-red-400"
+            onClick={() => handleDelete(product?._id)}
+          >
+            Delete
+          </Button>
         </CardFooter>
       </Card>
     </div>
