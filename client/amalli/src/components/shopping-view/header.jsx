@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
 import {
   House,
   AlignJustify,
@@ -20,6 +21,8 @@ import {
 } from "../ui/dropdown-menu";
 import { Avatar, AvatarFallback } from "../ui/avatar";
 import { logoutUser } from "@/store/auth-slice";
+import UserCartWrapper from "./cart-wrapper";
+import { fetchCartItems } from "@/store/shop/cart-slice";
 
 function MenuItems() {
   return (
@@ -39,19 +42,41 @@ function MenuItems() {
 
 function HeaderRightContent({ className }) {
   const { user } = useSelector((state) => state.auth);
-  const navigate = useNavigate()
-  const dispatch = useDispatch()
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
 
-  function handleLogout(){
-    dispatch(logoutUser())
+  function handleLogout() {
+    dispatch(logoutUser());
   }
 
+  useEffect(() => {
+    dispatch(fetchCartItems(user?.id));
+  }, [dispatch]);
+
   return (
-    <div className={`flex lg:items-center lg:flex-row flex-col gap-4 ${className}`}>
-      <Button variant="outline" size="icon" className="hover:cursor-pointer">
-        <ShoppingCart className="h-6 w-6" />
-        <span className="sr-only">User cart</span>
-      </Button>
+    <div
+      className={`flex lg:items-center lg:flex-row flex-col gap-4 ${className}`}
+    >
+      <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => setOpenCartSheet(true)}
+          variant="outline"
+          size="icon"
+          className="hover:cursor-pointer"
+        >
+          <ShoppingCart className="h-6 w-6" />
+          <span className="sr-only">User cart</span>
+        </Button>
+        <UserCartWrapper
+          cartItems={
+            cartItems && cartItems.items && cartItems.items.length > 0
+              ? cartItems.items
+              : []
+          }
+        />
+      </Sheet>
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <Avatar className="bg-black">
@@ -98,16 +123,16 @@ const ShoppingHeader = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full max-w-xs">
-            <HeaderRightContent className="flex-row items-center justify-between mx-4 mt-12"/>
+            <HeaderRightContent className="flex-row items-center justify-between mx-4 mt-12" />
             <MenuItems />
           </SheetContent>
         </Sheet>
         <div className="hidden lg:block">
           <MenuItems />
         </div>
-          <div className="hidden lg:block">
-            <HeaderRightContent />
-          </div>
+        <div className="hidden lg:block">
+          <HeaderRightContent />
+        </div>
       </div>
     </header>
   );
