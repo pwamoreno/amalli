@@ -2,8 +2,11 @@ import React from "react";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { Button } from "../ui/button";
 import UserCartContent from "./cart-content";
+import { useNavigate } from "react-router-dom";
 
-const UserCartWrapper = ({ cartItems }) => {
+const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
+  const navigate = useNavigate();
+
   const cartTotal =
     cartItems && cartItems.length > 0
       ? cartItems.reduce(
@@ -35,7 +38,13 @@ const UserCartWrapper = ({ cartItems }) => {
           <span className="font-bold">{cartTotal.toFixed(2)}</span>
         </div>
       </div>
-      <Button className="mt-6 mx-5 hover:cursor-pointer hover:bg-green-500 ">
+      <Button
+        className="mt-6 mx-5 hover:cursor-pointer hover:bg-green-500"
+        onClick={() => {
+          navigate("/shop/checkout");
+          setOpenCartSheet(false);
+        }}
+      >
         Checkout
       </Button>
     </SheetContent>
