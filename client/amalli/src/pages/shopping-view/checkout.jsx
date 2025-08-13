@@ -43,7 +43,7 @@ const ShoppingCheckout = () => {
           <div className="mt-4 w-full">
             {/*Might want to integrate more than one payment method for checkout. Primary focus obviously on Nigerian modes of payment. */}
             <Button className="w-full hover:bg-green-500 hover:cursor-pointer">
-              Checkout with stripe
+              Checkout with paystack
             </Button>
           </div>
         </div>
