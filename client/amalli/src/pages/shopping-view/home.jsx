@@ -32,14 +32,17 @@ const categoriesWithIcon = [
   { id: "footwear", label: "Footwear", icon: Umbrella },
 ];
 
-const brandsWithIcon = [
-  { id: "nike", label: "Nike", icon: Shirt },
-  { id: "adidas", label: "Adidas", icon: Shirt },
-  { id: "puma", label: "Puma", icon: Shirt },
-  { id: "levi", label: "Levi's", icon: Shirt },
-  { id: "zara", label: "Zara", icon: Shirt },
-  { id: "h&m", label: "H&M", icon: Shirt },
-];
+/**
+ * Brand feature iterable
+ * // const brandsWithIcon = [
+//   { id: "nike", label: "Nike", icon: Shirt },
+//   { id: "adidas", label: "Adidas", icon: Shirt },
+//   { id: "puma", label: "Puma", icon: Shirt },
+//   { id: "levi", label: "Levi's", icon: Shirt },
+//   { id: "zara", label: "Zara", icon: Shirt },
+//   { id: "h&m", label: "H&M", icon: Shirt },
+// ];
+ */
 
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
@@ -95,7 +98,7 @@ const ShoppingHome = () => {
     }, 5000);
 
     return () => clearInterval(timer);
-  }, []);
+  }, [slides.length]);
 
   useEffect(() => {
     dispatch(
@@ -166,6 +169,7 @@ const ShoppingHome = () => {
         </div>
       </section>
 
+      {/* The brand feature not required.
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-8">Shop by brand</h2>
@@ -183,7 +187,8 @@ const ShoppingHome = () => {
             ))}
           </div>
         </div>
-      </section>
+      </section> 
+      */}
 
       <section className="py-12">
         <div className="container mx-auto px-4">
