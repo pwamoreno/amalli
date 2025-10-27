@@ -20,7 +20,7 @@ const initialAddressFormData = {
   notes: "",
 };
 
-const Address = () => {
+const Address = ({ setCurrentSelectedAddress }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
@@ -104,7 +104,7 @@ const Address = () => {
 
   useEffect(() => {
     dispatch(fetchAllAddress(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user?.id]);
 
   //   console.log(addressList);
 
@@ -118,6 +118,7 @@ const Address = () => {
                 index={index}
                 handleDeleteAddress={handleDeleteAddress}
                 handleEditAddress={handleEditAddress}
+                setCurrentSelectedAddress={setCurrentSelectedAddress}
                 key={index}
               />
             ))

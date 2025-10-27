@@ -8,9 +8,16 @@ const AddressCard = ({
   index,
   handleDeleteAddress,
   handleEditAddress,
+  setCurrentSelectedAddress,
 }) => {
   return (
-    <Card>
+    <Card
+      onClick={
+        setCurrentSelectedAddress
+          ? () => setCurrentSelectedAddress(addressInfo)
+          : null
+      }
+    >
       <CardContent className="grid gap-4">
         <h2 className="font-extrabold text-2xl text-muted-foreground">
           Address {index + 1}

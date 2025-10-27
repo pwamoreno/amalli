@@ -1,11 +1,20 @@
+import { useState } from "react";
 import Address from "@/components/shopping-view/address";
 import checkout from "../../assets/checkout.jpg";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import UserCartContent from "@/components/shopping-view/cart-content";
 import { Button } from "@/components/ui/button";
+import { createNewOrder } from "@/store/shop/order-slice";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
+  const { user } = useSelector((state) => state.auth);
+  const { authorizationUrl } = useSelector((state) => state.shopOrder);
+  const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const [paymentStarted, setPaymentStarted] = useState(false);
+  const dispatch = useDispatch();
+
+  // console.log(currentSelectedAddress);
 
   const cartTotal =
     cartItems && cartItems.items && cartItems.items.length > 0
@@ -20,6 +29,51 @@ const ShoppingCheckout = () => {
         )
       : 0;
 
+  function handlePaystackPayment() {
+    const orderData = {
+      userId: user?.email,
+      cartId: cartItems?._id,
+      cartItems: cartItems.items.map((item) => ({
+        productId: item?.productId,
+        title: item?.title,
+        image: item?.image,
+        price: item?.salePrice > 0 ? item?.salePrice : item?.price,
+        quantity: item?.quantity,
+      })),
+      addressInfo: {
+        addressId: currentSelectedAddress?._id,
+        address: currentSelectedAddress?.address,
+        city: currentSelectedAddress?.city,
+        pincode: currentSelectedAddress?.pincode,
+        phone: currentSelectedAddress?.phone,
+        notes: currentSelectedAddress?.notes,
+      },
+      totalAmount: cartTotal,
+      orderStatus: "pending",
+      paymentMethod: "paystack",
+      paymentStatus: "pending",
+      orderDate: new Date(),
+      orderUpdateDate: new Date(),
+      paymentId: "",
+      payerId: "",
+    };
+
+    // console.log(orderData);
+
+    dispatch(createNewOrder(orderData)).then((data) => {
+      // console.log(data), "[paystack_resp]";
+      if (data?.payload?.success) {
+        setPaymentStarted(true);
+      } else {
+        setPaymentStarted(false);
+      }
+    });
+  }
+
+  if (authorizationUrl) {
+    window.location.href = authorizationUrl;
+  }
+
   return (
     <div className="flex flex-col">
       <div className="relative h-[300px] w-full overflow-hidden">
@@ -29,7 +83,7 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address />
+        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => <UserCartContent cartItem={item} />)
@@ -42,7 +96,10 @@ const ShoppingCheckout = () => {
           </div>
           <div className="mt-4 w-full">
             {/*Might want to integrate more than one payment method for checkout. Primary focus obviously on Nigerian modes of payment. */}
-            <Button className="w-full hover:bg-green-500 hover:cursor-pointer">
+            <Button
+              onClick={handlePaystackPayment}
+              className="w-full hover:bg-green-500 hover:cursor-pointer"
+            >
               Checkout with paystack
             </Button>
           </div>

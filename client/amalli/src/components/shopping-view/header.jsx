@@ -64,7 +64,7 @@ function HeaderRightContent({ className }) {
 
   useEffect(() => {
     dispatch(fetchCartItems(user?.id));
-  }, [dispatch]);
+  }, [dispatch, user?.id]);
 
   return (
     <div
