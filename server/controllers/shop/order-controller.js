@@ -110,7 +110,7 @@ const verifyPayment = async (req, res) => {
 
     const data = responseData.data;
 
-    console.log("paystack verify data", data);
+    // console.log("paystack verify data", data);
 
     if (data.status === "success") {
       const updatedOrder = await Order.findOneAndUpdate(

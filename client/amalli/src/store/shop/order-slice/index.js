@@ -55,7 +55,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order//details/${id}`
+      `http://localhost:5000/api/shop/order/details/${id}`
     );
 
     // console.log(response.data, "[res.data]");
@@ -67,7 +67,11 @@ export const getOrderDetails = createAsyncThunk(
 const shoppingOrderSlice = createSlice({
   name: "shoppingOrderSlice",
   initialState,
-  reducers: {},
+  reducers: {
+    resetOrderDetails: (state) => {
+      state.orderDetails = null;
+    },
+  },
   extraReducers: (builder) => {
     builder
       .addCase(createNewOrder.pending, (state) => {
@@ -98,7 +102,7 @@ const shoppingOrderSlice = createSlice({
         state.isLoading = false;
         state.orderList = [];
       })
-       .addCase(getOrderDetails.pending, (state) => {
+      .addCase(getOrderDetails.pending, (state) => {
         state.isLoading = true;
       })
       .addCase(getOrderDetails.fulfilled, (state, action) => {
@@ -111,5 +115,7 @@ const shoppingOrderSlice = createSlice({
       });
   },
 });
+
+export const { resetOrderDetails } = shoppingOrderSlice.actions;
 
 export default shoppingOrderSlice.reducer;
