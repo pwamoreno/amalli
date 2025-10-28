@@ -5,6 +5,7 @@ import { useDispatch, useSelector } from "react-redux";
 import UserCartContent from "@/components/shopping-view/cart-content";
 import { Button } from "@/components/ui/button";
 import { createNewOrder } from "@/store/shop/order-slice";
+import { toast } from "sonner";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -30,8 +31,25 @@ const ShoppingCheckout = () => {
       : 0;
 
   function handlePaystackPayment() {
+    if (cartItems.length === 0) {
+      toast("Cart empty. Add items to proceed.", {
+        style: { background: "#fa113d", color: "white" },
+      });
+
+      return;
+    }
+
+    if (currentSelectedAddress === null) {
+      toast("Select or input an address to proceed.", {
+        style: { background: "#fa113d", color: "white" },
+      });
+
+      return;
+    }
+
     const orderData = {
-      userId: user?.email,
+      userId: user?.id,
+      email: user?.email,
       cartId: cartItems?._id,
       cartItems: cartItems.items.map((item) => ({
         productId: item?.productId,

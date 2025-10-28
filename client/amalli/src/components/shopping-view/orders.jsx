@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Button } from "../ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Dialog } from "../ui/dialog";
@@ -11,9 +11,24 @@ import {
   TableRow,
 } from "../ui/table";
 import ShoppingOrderDetails from "./orders-details";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrdersByUserId } from "@/store/shop/order-slice";
 
 const ShoppingOrders = () => {
   const [open, setOpen] = useState(false);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
+  const { orderList } = useSelector(state => state.shopOrder)
+
+  console.log(user)
+
+  useEffect(() => {
+    dispatch(getAllOrdersByUserId(user?.id))
+  }, [dispatch, user])
+
+  console.log("orderList: ", orderList);
+  
+
   return (
     <Card>
       <CardHeader>

@@ -5,6 +5,7 @@ const createOrder = async (req, res) => {
   try {
     const {
       userId,
+      email,
       cartId,
       cartItems,
       addressInfo,
@@ -20,6 +21,7 @@ const createOrder = async (req, res) => {
 
     const newOrder = new Order({
       userId,
+      email,
       cartItems,
       addressInfo,
       totalAmount,
@@ -48,7 +50,7 @@ const createOrder = async (req, res) => {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          email: userId,
+          email: email,
           amount: amountInKobo,
           channels: ["card"],
           callback_url: "http://localhost:5173/shop/payment-verification",
@@ -112,7 +114,7 @@ const verifyPayment = async (req, res) => {
 
     if (data.status === "success") {
       const updatedOrder = await Order.findOneAndUpdate(
-        {_id: orderId},
+        { _id: orderId },
         {
           paymentId: data.reference,
           payerId: data.customer.customer_code,
@@ -128,7 +130,7 @@ const verifyPayment = async (req, res) => {
         await Cart.findByIdAndDelete(getCartId);
       }
 
-    //   await updatedOrder.save();
+      //   await updatedOrder.save();
 
       return res.status(200).json({
         success: true,
@@ -147,7 +149,51 @@ const verifyPayment = async (req, res) => {
   }
 };
 
+const getAllOrdersByUserId = async (req, res) => {
+  try {
+    const { userId } = req.params;
+
+    const orders = await Order.find({ userId });
+
+    if (!orders.length) {
+      return res
+        .status(404)
+        .json({ success: false, message: "No orders found" });
+    }
+
+    res.status(200).json({ success: true, data: orders });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get all user orders." });
+  }
+};
+
+const getOrderDetails = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const order = await Order.findById(id);
+
+    if (!order) {
+      return res
+        .status(404)
+        .json({ success: false, message: "Order not found" });
+    }
+
+    res.status(200).json({ suuccess: true, data: order });
+  } catch (error) {
+    console.log(error);
+    res
+      .status(500)
+      .json({ success: false, message: "Failed to get order details." });
+  }
+};
+
 module.exports = {
   createOrder,
   verifyPayment,
+  getAllOrdersByUserId,
+  getOrderDetails
 };
