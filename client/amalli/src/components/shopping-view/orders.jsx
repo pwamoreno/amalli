@@ -64,7 +64,7 @@ const ShoppingOrders = () => {
           <TableBody>
             {orderList && orderList.length > 0
               ? orderList.map((orderItem) => (
-                  <TableRow>
+                  <TableRow key={orderItem?._id}>
                     <TableCell>{orderItem?._id}</TableCell>
                     <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
                     <TableCell>
@@ -72,6 +72,8 @@ const ShoppingOrders = () => {
                         className={`py-1 px-3 ${
                           orderItem?.orderStatus === "verified"
                             ? "bg-green-400"
+                            : orderDetails?.orderStatus === "rejected"
+                            ? "bg-red-400"
                             : "bg-black"
                         }`}
                       >
@@ -95,7 +97,7 @@ const ShoppingOrders = () => {
                         >
                           View Details
                         </Button>
-                        <ShoppingOrderDetails orderDetails={orderDetails}/>
+                        <ShoppingOrderDetails orderDetails={orderDetails} />
                       </Dialog>
                     </TableCell>
                   </TableRow>

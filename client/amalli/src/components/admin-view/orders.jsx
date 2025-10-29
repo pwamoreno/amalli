@@ -9,11 +9,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Dialog } from "../ui/dialog";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import AdminOrdersDetails from "./orders-details";
+import { useDispatch, useSelector } from "react-redux";
+import { getAllOrders, getOrderDetailsAdmin } from "@/store/admin/order-slice";
+import { Badge } from "../ui/badge";
+import { resetOrderDetails } from "@/store/admin/order-slice";
 
 const AdminOrdersView = () => {
   const [open, setOpen] = useState(false);
+  const { orderList, orderDetails } = useSelector((state) => state.adminOrder);
+  const dispatch = useDispatch();
+
+  function handleFetchOrderDetails(getId) {
+    dispatch(getOrderDetailsAdmin(getId));
+  }
+
+  useEffect(() => {
+    dispatch(getAllOrders());
+  }, [dispatch]);
+
+  useEffect(() => {
+    if(orderDetails !== null){
+      setOpen(true)
+    }
+  }, [orderDetails])
+
+  console.log(orderDetails);
+
   return (
     <Card>
       <CardHeader>
@@ -33,23 +56,47 @@ const AdminOrdersView = () => {
             </TableRow>
           </TableHeader>
           <TableBody>
-            <TableRow>
-              <TableCell>123456</TableCell>
-              <TableCell>10/08/2025</TableCell>
-              <TableCell>pending</TableCell>
-              <TableCell>1100</TableCell>
-              <TableCell>
-                <Dialog open={open} onOpenChange={setOpen}>
-                  <Button
-                    className="hover:cursor-pointer"
-                    onClick={() => setOpen(true)}
-                  >
-                    View Details
-                  </Button>
-                  <AdminOrdersDetails />
-                </Dialog>
-              </TableCell>
-            </TableRow>
+            {orderList && orderList.length > 0
+              ? orderList.map((orderItem) => (
+                  <TableRow key={orderItem?._id}>
+                    <TableCell>{orderItem?._id}</TableCell>
+                    <TableCell>{orderItem?.orderDate.split("T")[0]}</TableCell>
+                    <TableCell>
+                      <Badge
+                        className={`py-1 px-3 ${
+                          orderItem?.orderStatus === "verified"
+                            ? "bg-green-400"
+                            :orderDetails?.orderStatus === "rejected"
+                            ? "bg-red-400"
+                            : "bg-black"
+                        }`}
+                      >
+                        {orderItem?.orderStatus}
+                      </Badge>
+                    </TableCell>
+                    <TableCell>₦{orderItem?.totalAmount}</TableCell>
+                    <TableCell>
+                      <Dialog
+                        open={open}
+                        onOpenChange={() => {
+                          setOpen(false);
+                          dispatch(resetOrderDetails());
+                        }}
+                      >
+                        <Button
+                          className="hover:cursor-pointer"
+                          onClick={() =>
+                            handleFetchOrderDetails(orderItem?._id)
+                          }
+                        >
+                          View Details
+                        </Button>
+                        <AdminOrdersDetails orderDetails={orderDetails} />
+                      </Dialog>
+                    </TableCell>
+                  </TableRow>
+                ))
+              : null}
           </TableBody>
         </Table>
       </CardContent>
