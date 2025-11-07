@@ -1,5 +1,6 @@
 const Order = require("../../models/Order");
 const Cart = require("../../models/Cart");
+const Product = require("../../models/Product");
 
 const createOrder = async (req, res) => {
   try {
@@ -125,6 +126,23 @@ const verifyPayment = async (req, res) => {
         { new: true }
       );
 
+      for (let item of updatedOrder.cartItems) {
+        let product = await Product.findById(item.productId);
+
+        if (!product) {
+          return res
+            .status(404)
+            .json({
+              success: false,
+              message: `Product not found. ${product.title}`,
+            });
+        }
+
+        product.totalStock -= item.quantity
+
+        await product.save()
+      }
+
       const getCartId = updatedOrder.cartId;
       if (getCartId) {
         await Cart.findByIdAndDelete(getCartId);
@@ -195,5 +213,5 @@ module.exports = {
   createOrder,
   verifyPayment,
   getAllOrdersByUserId,
-  getOrderDetails
+  getOrderDetails,
 };

@@ -21,6 +21,7 @@ import { checkAuth } from "./store/auth-slice";
 import { Skeleton } from "@/components/ui/skeleton";
 import PayStackPaymentVerification from "./pages/shopping-view/payment-verification";
 import PaystackSuccessPage from "./pages/shopping-view/payment-success";
+import SearchProducts from "./pages/shopping-view/search";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -87,6 +88,7 @@ function App() {
           <Route path="listing" element={<ShoppingListing />} />
           <Route path="payment-verification" element={<PayStackPaymentVerification />} />
           <Route path="payment-success" element={<PaystackSuccessPage />} />
+          <Route path="search" element={<SearchProducts />} />
         </Route>
 
           //replacement code for unauthing the shop

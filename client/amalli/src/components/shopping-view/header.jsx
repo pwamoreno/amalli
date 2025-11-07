@@ -1,4 +1,9 @@
-import { Link, useNavigate } from "react-router-dom";
+import {
+  Link,
+  useLocation,
+  useNavigate,
+  useSearchParams,
+} from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
   House,
@@ -6,6 +11,7 @@ import {
   ShoppingCart,
   User,
   DoorOpen,
+  Search,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
 import { Button } from "../ui/button";
@@ -24,16 +30,25 @@ import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
+import SearchProducts from "@/pages/shopping-view/search";
 
 function MenuItems() {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
+  const location = useLocation();
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  function handleNavigate(getCurrentItem){
-    sessionStorage.removeItem("filters")
-    const currentFilter = getCurrentItem.id !== "home" ? {category: [getCurrentItem.id]} : null
+  function handleNavigate(getCurrentItem) {
+    sessionStorage.removeItem("filters");
+    const currentFilter =
+      getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
+        ? { category: [getCurrentItem.id] }
+        : null;
 
-    sessionStorage.setItem("filters", JSON.stringify(currentFilter))
-    navigate(getCurrentItem.path)
+    sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+    location.pathname.includes("listing") && currentFilter !== null
+      ? setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`))
+      : navigate(getCurrentItem.path);
   }
 
   return (
@@ -71,6 +86,14 @@ function HeaderRightContent({ className }) {
       className={`flex lg:items-center lg:flex-row flex-col gap-4 ${className}`}
     >
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
+        <Button
+          onClick={() => navigate("search")}
+          variant="outline"
+          size="icon"
+          className="hover:cursor-pointer"
+        >
+          <Search className="h-6 w-6" />
+        </Button>
         <Button
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
@@ -120,6 +143,12 @@ function HeaderRightContent({ className }) {
 const ShoppingHeader = () => {
   // const { isAuthenticated } = useSelector((state) => state.auth);
 
+  // const [showSearchPage, setShowSearchPage] = useState(false);
+
+  // if (showSearchPage) {
+  //   return <SearchProducts onClose={() => setShowSearchPage(false)} />;
+  // }
+
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
@@ -135,7 +164,9 @@ const ShoppingHeader = () => {
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-full max-w-xs">
-            <HeaderRightContent className="flex-row items-center justify-between mx-4 mt-12" />
+            <HeaderRightContent
+              className="flex-row items-center justify-between mx-4 mt-12"
+            />
             <MenuItems />
           </SheetContent>
         </Sheet>

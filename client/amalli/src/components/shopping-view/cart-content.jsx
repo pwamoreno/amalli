@@ -10,8 +10,10 @@ import { toast } from "sonner";
 
 const UserCartContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
+  const { productList } = useSelector((state) => state.shopProducts);
 
   const dispatch = useDispatch();
+  const { cartItems } = useSelector((state) => state.shopCart);
 
   function handleCartItemDelete(getCartItem) {
     dispatch(
@@ -26,6 +28,32 @@ const UserCartContent = ({ cartItem }) => {
   }
 
   function handleUpdateQuantity(getCartItem, typeOfAction) {
+    if (typeOfAction === "plus") {
+      let getCartItems = cartItems.items || [];
+
+      if (getCartItems.length) {
+        const indexOfCurrentCartItem = getCartItems.findIndex(
+          (item) => item.productId === getCartItem.productId
+        );
+
+        const getCurrentProductIndex = productList.findIndex(
+          (product) => product._id === getCartItem?.productId
+        );
+
+        const getTotalStock = productList[getCurrentProductIndex].totalStock
+
+        if (indexOfCurrentCartItem > -1) {
+          const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
+          if (getQuantity + 1 > getTotalStock) {
+            toast(`Only ${getQuantity} items can be added.`, {
+              style: { background: "#fa113d", color: "white" },
+            });
+
+            return;
+          }
+        }
+      }
+    }
     dispatch(
       updateCartItemQuantity({
         userId: user?.id,

@@ -5,6 +5,7 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { useDispatch } from "react-redux";
 import { Badge } from "../ui/badge";
+import { toast } from "sonner";
 import {
   getAllOrders,
   getOrderDetailsAdmin,
@@ -32,6 +33,13 @@ const AdminOrdersDetails = ({ orderDetails }) => {
         dispatch(getOrderDetailsAdmin(orderDetails?._id));
         dispatch(getAllOrders());
         setFormData(initialFormData);
+        toast(`${data?.payload?.message}`, {
+          style: { background: "#22c55e", color: "white" },
+        });
+      } else {
+        toast(`${data?.payload?.message}`, {
+          style: { background: "#fa113d", color: "white" },
+        });
       }
     });
   }
@@ -59,7 +67,7 @@ const AdminOrdersDetails = ({ orderDetails }) => {
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "verified"
                     ? "bg-green-400"
-                    :orderDetails?.orderStatus === "rejected"
+                    : orderDetails?.orderStatus === "rejected"
                     ? "bg-red-400"
                     : "bg-black"
                 }`}
