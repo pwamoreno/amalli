@@ -3,6 +3,7 @@ import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 import { Button } from "../ui/button";
 import UserCartContent from "./cart-content";
 import { useNavigate } from "react-router-dom";
+import { addCommasToNumbers } from "@/lib/utils";
 
 const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
   const navigate = useNavigate();
@@ -35,7 +36,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
       <div className="mt-8 space-y-4">
         <div className="flex justify-between mx-5">
           <span className="font-bold">Total</span>
-          <span className="font-bold">{cartTotal.toFixed(2)}</span>
+          <span className="font-bold">₦{addCommasToNumbers(cartTotal.toFixed(2))}</span>
         </div>
       </div>
       <Button

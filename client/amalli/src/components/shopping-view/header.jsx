@@ -31,6 +31,7 @@ import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
 import SearchProducts from "@/pages/shopping-view/search";
+import { AmalliLogo } from "../icons/AmalliLogo";
 
 function MenuItems() {
   const navigate = useNavigate();
@@ -153,8 +154,8 @@ const ShoppingHeader = () => {
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
-          <House className="h-6 w-6" />
-          <span className="font-bold">amalli</span>
+          <AmalliLogo size={80}/>
+          {/* <span className="font-bold">amalli</span> */}
         </Link>
         <Sheet>
           <SheetTrigger asChild>

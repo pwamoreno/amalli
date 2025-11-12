@@ -1,15 +1,25 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { ArrowLeft, Search, X } from "lucide-react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
-
+import { toast } from "sonner";
+import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
+import ProductDetailsDialog from "@/components/shopping-view/product-details";
+import { fetchProductDetails } from "@/store/shop/products-slice";
+import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 
 const SearchProducts = () => {
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState("");
-  const { productList } = useSelector((state) => state.shopProducts);
-  const [filteredItems, setFilteredItems] = useState(productList);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
+  const [filteredItems, setFilteredItems] = useState([]);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const { user } = useSelector((state) => state.auth);
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   // console.log(productList, productDetails);
 
@@ -26,6 +36,74 @@ const SearchProducts = () => {
       setFilteredItems(filtered);
     }
   };
+
+  function handleGetProductDetails(getCurrentProductId) {
+    // console.log(getCurrentProductId);
+    dispatch(fetchProductDetails(getCurrentProductId));
+  }
+
+  function handleAddToCart(getCurrentProductId, getTotalStock) {
+    console.log(cartItems);
+
+    let getCartItems = cartItems.items || [];
+
+    if (getCartItems.length) {
+      const indexOfCurrentItem = getCartItems.findIndex(
+        (item) => item.productId === getCurrentProductId
+      );
+
+      if (indexOfCurrentItem > -1) {
+        const getQuantity = getCartItems[indexOfCurrentItem].quantity;
+        if (getQuantity + 1 > getTotalStock) {
+          toast(`Only ${getQuantity} items can be added.`, {
+            style: { background: "#fa113d", color: "white" },
+          });
+
+          return;
+        }
+      }
+    }
+
+    dispatch(
+      addToCart({
+        userId: user?.id,
+        productId: getCurrentProductId,
+        quantity: 1,
+      })
+    ).then((data) => {
+      if (data?.payload.success) {
+        dispatch(fetchCartItems(user?.id));
+        toast("Product added to cart successfully.", {
+          style: { background: "#22c55e", color: "white" },
+        });
+      }
+    });
+  }
+
+  useEffect(() => {
+    if (!productList || productList.length === 0) {
+      dispatch(fetchAllFilteredProducts({}));
+    }
+  }, [dispatch, productList]);
+
+  useEffect(() => {
+    if (searchQuery.trim() === "") {
+      setFilteredItems(productList);
+    } else {
+      const filtered = productList.filter(
+        (item) =>
+          item?.title?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+          item?.category?.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+      setFilteredItems(filtered);
+    }
+  }, [productList, searchQuery]);
+
+  useEffect(() => {
+    if (productDetails !== null) {
+      setOpenDetailsDialog(true);
+    }
+  }, [productDetails]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -73,11 +151,28 @@ const SearchProducts = () => {
           </p>
         )}
 
-        {filteredItems.length > 0 ? (
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-            {filteredItems.map((item) => (
-              <ShoppingProductTile key={item._id} product={item} />
-            ))}
+        {productList.length === 0 ? (
+          <div className="text-center py-12">
+            <div className="animate-spin h-12 w-12 border-4 border-black border-t-transparent rounded-full mx-auto mb-4"></div>
+            <p className="text-gray-500">Loading products...</p>
+          </div>
+        ) : filteredItems.length > 0 ? (
+          <div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              {filteredItems.map((item) => (
+                <ShoppingProductTile
+                  handleAddToCart={handleAddToCart}
+                  handleGetProductDetails={handleGetProductDetails}
+                  key={item._id}
+                  product={item}
+                />
+              ))}
+            </div>
+            <ProductDetailsDialog
+              open={openDetailsDialog}
+              setOpen={setOpenDetailsDialog}
+              productDetails={productDetails}
+            />
           </div>
         ) : (
           <div className="text-center py-12">

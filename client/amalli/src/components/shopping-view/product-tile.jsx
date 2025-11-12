@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
 import { Button } from "../ui/button";
+import { addCommasToNumbers } from "@/lib/utils";
 
 const ShoppingProductTile = ({
   product,
@@ -47,11 +48,11 @@ const ShoppingProductTile = ({
                 product.salePrice > 0 ? "line-through" : ""
               } text-lg font-semibold text-primary`}
             >
-              {product?.price}
+              ₦{addCommasToNumbers(product?.price)}
             </span>
             {product.salePrice > 0 ? (
               <span className="text-lg font-semibold text-primary">
-                {product?.salePrice}
+                ₦{addCommasToNumbers(product?.salePrice)}
               </span>
             ) : null}
           </div>

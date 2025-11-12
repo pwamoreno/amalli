@@ -8,11 +8,23 @@ import { useDispatch, useSelector } from "react-redux";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { toast } from "sonner";
 import { setProductDetails } from "@/store/shop/products-slice";
+import { Label } from "../ui/label";
+import StarRating from "../common/star-rating";
+import { useState } from "react";
+import { addCommasToNumbers } from "@/lib/utils";
+import { addReview } from "@/store/shop/review-slice";
 
 const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
+  const [reviewMessage, setReviewMessage] = useState("");
+  const [rating, setRating] = useState(0);
+
   const dispatch = useDispatch();
   const { user } = useSelector((state) => state.auth);
-  const { cartItems } = useSelector(state => state.shopCart)
+  const { cartItems } = useSelector((state) => state.shopCart);
+
+  function handleRatingChange(getRating) {
+    setRating(getRating);
+  }
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
     // console.log(getCurrentProductId);
@@ -34,7 +46,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         }
       }
     }
-    
+
     dispatch(
       addToCart({
         userId: user?.id,
@@ -54,6 +66,20 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   function handleDialogClose() {
     setOpen(false);
     dispatch(setProductDetails());
+  }
+
+  function handleAddReview() {
+    dispatch(
+      addReview({
+        productId: productDetails?._id,
+        userId: user?.id,
+        username: user?.username,
+        reviewMessage,
+        reviewValue: rating,
+      })
+    ).then((data) => {
+      console.log(data);
+    });
   }
 
   return (
@@ -78,14 +104,14 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
           <div className="flex items-center justify-between">
             <p
               className={`text-xl font-bold text-primary ${
-                productDetails?.salePrice > 0 ? "line-through" : ""
+                (productDetails?.salePrice ?? 0) > 0 ? "line-through" : ""
               }`}
             >
-              {productDetails?.price}
+              ₦{addCommasToNumbers(productDetails?.price ?? 0)}
             </p>
-            {productDetails?.salePrice > 0 ? (
+            {(productDetails?.salePrice ?? 0) > 0 ? (
               <p className="text-xl font-bold text-muted-foreground">
-                {productDetails?.salePrice}
+                ₦{addCommasToNumbers(productDetails?.salePrice ?? 0)}
               </p>
             ) : null}
           </div>
@@ -203,9 +229,27 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                 </div>
               </div>
             </div>
-            <div className="mt-6 flex gap-2">
-              <Input placeholder="Write a review..." />
-              <Button>Submit</Button>
+            <div className="mt-10 flex flex-col gap-2">
+              <Label>Write a review</Label>
+              <div className="flex gap-0.5">
+                <StarRating
+                  rating={rating}
+                  handleRatingChange={handleRatingChange}
+                />
+              </div>
+              <Input
+                name="reviewMessage"
+                value={reviewMessage}
+                onChange={(event) => setReviewMessage(event.target.value)}
+                placeholder="Write a review..."
+              />
+              <Button
+                onClick={handleAddReview}
+                disabled={reviewMessage.trim() === ""}
+                className="hover:bg-green-400 hover:cursor-pointer"
+              >
+                Submit
+              </Button>
             </div>
           </div>
         </div>

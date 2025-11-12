@@ -7,6 +7,7 @@ import {
   updateCartItemQuantity,
 } from "@/store/shop/cart-slice";
 import { toast } from "sonner";
+import { addCommasToNumbers } from "@/lib/utils";
 
 const UserCartContent = ({ cartItem }) => {
   const { user } = useSelector((state) => state.auth);
@@ -40,7 +41,7 @@ const UserCartContent = ({ cartItem }) => {
           (product) => product._id === getCartItem?.productId
         );
 
-        const getTotalStock = productList[getCurrentProductIndex].totalStock
+        const getTotalStock = productList[getCurrentProductIndex].totalStock;
 
         if (indexOfCurrentCartItem > -1) {
           const getQuantity = getCartItems[indexOfCurrentCartItem].quantity;
@@ -106,10 +107,14 @@ const UserCartContent = ({ cartItem }) => {
       </div>
       <div className="flex flex-col items-end">
         <p className="font-semibold">
-          {(
-            (cartItem?.salePrice > 0 ? cartItem?.salePrice : cartItem?.price) *
-            cartItem?.quantity
-          ).toFixed(2)}
+          ₦
+          {addCommasToNumbers(
+            (
+              (cartItem?.salePrice > 0
+                ? cartItem?.salePrice
+                : cartItem?.price) * cartItem?.quantity
+            ).toFixed(2)
+          )}
         </p>
         <Trash
           className="cursor-pointer mt-1"
