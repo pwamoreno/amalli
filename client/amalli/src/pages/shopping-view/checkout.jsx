@@ -101,7 +101,10 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address setCurrentSelectedAddress={setCurrentSelectedAddress} />
+        <Address
+          selectedId={currentSelectedAddress}
+          setCurrentSelectedAddress={setCurrentSelectedAddress}
+        />
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => <UserCartContent cartItem={item} />)
@@ -109,7 +112,7 @@ const ShoppingCheckout = () => {
           <div className="mt-8 space-y-4">
             <div className="flex justify-between mx-5">
               <span className="font-bold">Total</span>
-              <span className="font-bold">{cartTotal.toFixed(2)}</span>
+              <span className="font-bold">₦{cartTotal.toFixed(2)}</span>
             </div>
           </div>
           <div className="mt-4 w-full">
@@ -118,7 +121,7 @@ const ShoppingCheckout = () => {
               onClick={handlePaystackPayment}
               className="w-full hover:bg-green-500 hover:cursor-pointer"
             >
-              Checkout with paystack
+              {paymentStarted ? "Processing payment..." : "Checkout with paystack"}
             </Button>
           </div>
         </div>

@@ -10,8 +10,10 @@ const addProductReview = async (req, res) => {
     const order = await Order.findOne({
       userId,
       "cartItems.productId": productId,
-      orderStatus: "confirmed",
+      orderStatus: "verified",
     });
+
+    // console.log(order)
 
     if (!order) {
       return res.status(403).json({

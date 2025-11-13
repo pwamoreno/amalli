@@ -6,16 +6,16 @@ const initialState = {
   reviews: [],
 };
 
-export const addReview = createAsyncThunk("/review/addReview", async (data) => {
+export const addReview = createAsyncThunk("/review/addReview", async (formdata) => {
   const response = await axios.post(
     `http://localhost:5000/api/shop/review/add`,
-    { data }
+    formdata
   );
   return response.data;
 });
 
 export const getReviews = createAsyncThunk("/review/getReviews", async (id) => {
-  const response = await axios.post(
+  const response = await axios.get(
     `http://localhost:5000/api/shop/review/${id}`,
   );
   return response.data;
