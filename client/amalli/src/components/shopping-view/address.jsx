@@ -24,14 +24,30 @@ const Address = ({ setCurrentSelectedAddress, selectedId }) => {
   const [formData, setFormData] = useState(initialAddressFormData);
   const [currentEditedId, setCurrentEditedId] = useState(null);
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated } = useSelector((state) => state.auth);
   const { addressList } = useSelector((state) => state.shopAddress);
 
   function manageAddress(event) {
     event.preventDefault();
 
+    if (!isAuthenticated) {
+      if (!isFormValid()) {
+        toast("Please fill all address fields", {
+          style: { background: "#fa113d", color: "white" },
+        });
+        return;
+      }
+
+      // Pass the address data directly to checkout
+      setCurrentSelectedAddress(formData);
+      toast("Address added for checkout", {
+        style: { background: "#22c55e", color: "white" },
+      });
+      return;
+    }
+
     if (addressList.length >= 3 && currentEditedId === null) {
-        setFormData(initialAddressFormData)
+      setFormData(initialAddressFormData);
       toast("Only three addresses allowed!", {
         style: { background: "#fa113d", color: "white" },
       });
@@ -103,28 +119,30 @@ const Address = ({ setCurrentSelectedAddress, selectedId }) => {
   }
 
   useEffect(() => {
-    dispatch(fetchAllAddress(user?.id));
-  }, [dispatch, user?.id]);
+    if (isAuthenticated && user?.id) {
+      dispatch(fetchAllAddress(user?.id));
+    }
+  }, [dispatch, user?.id, isAuthenticated]);
 
   //   console.log(addressList);
 
   return (
     <Card className="py-0">
-      <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
-        {addressList && addressList.length > 0
-          ? addressList.map((address, index) => (
-              <AddressCard
-                selectedId={selectedId}
-                addressInfo={address}
-                index={index}
-                handleDeleteAddress={handleDeleteAddress}
-                handleEditAddress={handleEditAddress}
-                setCurrentSelectedAddress={setCurrentSelectedAddress}
-                key={index}
-              />
-            ))
-          : null}
-      </div>
+      {isAuthenticated && addressList && addressList.length > 0 && (
+        <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
+          {addressList.map((address, index) => (
+            <AddressCard
+              selectedId={selectedId}
+              addressInfo={address}
+              index={index}
+              handleDeleteAddress={handleDeleteAddress}
+              handleEditAddress={handleEditAddress}
+              setCurrentSelectedAddress={setCurrentSelectedAddress}
+              key={index}
+            />
+          ))}
+        </div>
+      )}
       <CardHeader>
         <CardTitle>
           {currentEditedId !== null ? "Edit Address" : "Add New Address"}

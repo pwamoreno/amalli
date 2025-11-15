@@ -6,16 +6,22 @@ import UserCartContent from "@/components/shopping-view/cart-content";
 import { Button } from "@/components/ui/button";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { toast } from "sonner";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { addCommasToNumbers } from "@/lib/utils";
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const { authorizationUrl } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const [paymentStarted, setPaymentStarted] = useState(false);
+  const [guestEmail, setGuestEmail] = useState("");
   const dispatch = useDispatch();
 
   // console.log(currentSelectedAddress);
+
+  const userId = isAuthenticated ? user?.id : guestId;
 
   const cartTotal =
     cartItems && cartItems.items && cartItems.items.length > 0
@@ -47,9 +53,26 @@ const ShoppingCheckout = () => {
       return;
     }
 
+    // Validate guest email
+    if (!isAuthenticated && !guestEmail.trim()) {
+      toast("Please enter your email address.", {
+        style: { background: "#fa113d", color: "white" },
+      });
+      return;
+    }
+
+    // Validate email format
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!isAuthenticated && !emailRegex.test(guestEmail)) {
+      toast("Please enter a valid email address.", {
+        style: { background: "#fa113d", color: "white" },
+      });
+      return;
+    }
+
     const orderData = {
-      userId: user?.id,
-      email: user?.email,
+      userId: userId,
+      email: isAuthenticated ? user?.email : guestEmail,
       cartId: cartItems?._id,
       cartItems: cartItems.items.map((item) => ({
         productId: item?.productId,
@@ -59,7 +82,7 @@ const ShoppingCheckout = () => {
         quantity: item?.quantity,
       })),
       addressInfo: {
-        addressId: currentSelectedAddress?._id,
+        addressId: currentSelectedAddress?._id || null,
         address: currentSelectedAddress?.address,
         city: currentSelectedAddress?.city,
         pincode: currentSelectedAddress?.pincode,
@@ -74,6 +97,7 @@ const ShoppingCheckout = () => {
       orderUpdateDate: new Date(),
       paymentId: "",
       payerId: "",
+      isGuest: !isAuthenticated,
     };
 
     // console.log(orderData);
@@ -101,10 +125,31 @@ const ShoppingCheckout = () => {
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
-        <Address
-          selectedId={currentSelectedAddress}
-          setCurrentSelectedAddress={setCurrentSelectedAddress}
-        />
+        <div className="flex flex-col gap-4">
+          {!isAuthenticated && (
+            <div className="space-y-2 p-4 border rounded-lg bg-muted/50">
+              <Label htmlFor="guest-email" className="text-base font-semibold">
+                Email Address *
+              </Label>
+              <Input
+                id="guest-email"
+                type="email"
+                placeholder="your@email.com"
+                value={guestEmail}
+                onChange={(e) => setGuestEmail(e.target.value)}
+                className="w-full"
+                required
+              />
+              <p className="text-sm text-muted-foreground">
+                We'll send your order confirmation to this email
+              </p>
+            </div>
+          )}
+          <Address
+            selectedId={currentSelectedAddress}
+            setCurrentSelectedAddress={setCurrentSelectedAddress}
+          />
+        </div>
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => <UserCartContent cartItem={item} />)
@@ -112,7 +157,7 @@ const ShoppingCheckout = () => {
           <div className="mt-8 space-y-4">
             <div className="flex justify-between mx-5">
               <span className="font-bold">Total</span>
-              <span className="font-bold">₦{cartTotal.toFixed(2)}</span>
+              <span className="font-bold">₦{addCommasToNumbers(cartTotal.toFixed(2))}</span>
             </div>
           </div>
           <div className="mt-4 w-full">
@@ -121,9 +166,20 @@ const ShoppingCheckout = () => {
               onClick={handlePaystackPayment}
               className="w-full hover:bg-green-500 hover:cursor-pointer"
             >
-              {paymentStarted ? "Processing payment..." : "Checkout with paystack"}
+              {paymentStarted
+                ? "Processing payment..."
+                : "Checkout with paystack"}
             </Button>
           </div>
+          {!isAuthenticated && (
+            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <p className="text-sm text-blue-900">
+                <strong>Want to track your order?</strong> Create an account
+                after checkout to view order history and save addresses for
+                faster checkout next time.
+              </p>
+            </div>
+          )}
         </div>
       </div>
     </div>

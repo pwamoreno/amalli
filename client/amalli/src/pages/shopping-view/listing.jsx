@@ -27,13 +27,15 @@ const ShoppingListing = () => {
     (state) => state.shopProducts
   );
   const { cartItems } = useSelector((state) => state.shopCart);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const [filters, setFilters] = useState({});
   const [sort, setSort] = useState(null);
   const [searchParams, setSearchParams] = useSearchParams();
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
 
   const categorySearchParam = searchParams.get("category");
+
+  const userId = isAuthenticated ? user?.id : guestId;
 
   function createSearchParamsHelper(filterParams) {
     const queryParams = [];
@@ -88,7 +90,7 @@ const ShoppingListing = () => {
   // console.log("filters", filters, searchParams);
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    console.log(cartItems);
+    // console.log(cartItems);
 
     let getCartItems = cartItems.items || [];
 
@@ -111,13 +113,13 @@ const ShoppingListing = () => {
     
     dispatch(
       addToCart({
-        userId: user?.id,
+        userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
       })
     ).then((data) => {
       if (data?.payload.success) {
-        dispatch(fetchCartItems(user?.id));
+        dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },
         });
@@ -149,6 +151,12 @@ const ShoppingListing = () => {
       setOpenDetailsDialog(true);
     }
   }, [productDetails]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCartItems(userId));
+    }
+  }, [dispatch, userId]);
 
   // console.log("productDetails:", productDetails);
 

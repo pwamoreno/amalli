@@ -47,12 +47,14 @@ const categoriesWithIcon = [
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
   const { productList, productDetails } = useSelector((state) => state.shopProducts);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const slides = [bannerOne, bannerTwo, bannerThree];
+
+  const userId = isAuthenticated ? user?.id : guestId;
 
   function handleNavigateToListingPage(getCurrentItem, section) {
     sessionStorage.removeItem("filters");
@@ -72,13 +74,13 @@ const ShoppingHome = () => {
     // console.log(getCurrentProductId);
     dispatch(
       addToCart({
-        userId: user?.id,
+        userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
       })
     ).then((data) => {
       if (data?.payload.success) {
-        dispatch(fetchCartItems(user?.id));
+        dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },
         });
@@ -108,6 +110,12 @@ const ShoppingHome = () => {
       })
     );
   }, [dispatch]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCartItems(userId));
+    }
+  }, [dispatch, userId]);
 
   return (
     <div className="flex flex-col min-h-screen">

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { ArrowLeft, Search, X } from "lucide-react";
+import { ArrowLeft, Search, ShoppingCart, X } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
 import { useNavigate } from "react-router-dom";
@@ -8,6 +8,9 @@ import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { fetchProductDetails } from "@/store/shop/products-slice";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
+import { Sheet } from "@/components/ui/sheet";
+import { Button } from "@/components/ui/button";
+import UserCartWrapper from "@/components/shopping-view/cart-wrapper";
 
 const SearchProducts = () => {
   const dispatch = useDispatch();
@@ -18,10 +21,12 @@ const SearchProducts = () => {
   );
   const [filteredItems, setFilteredItems] = useState([]);
   const { cartItems } = useSelector((state) => state.shopCart);
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
+  const [openCartSheet, setOpenCartSheet] = useState(false);
 
   // console.log(productList, productDetails);
+  const userId = isAuthenticated ? user?.id : guestId;
 
   const handleSearch = (query) => {
     setSearchQuery(query);
@@ -66,13 +71,13 @@ const SearchProducts = () => {
 
     dispatch(
       addToCart({
-        userId: user?.id,
+        userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
       })
     ).then((data) => {
       if (data?.payload.success) {
-        dispatch(fetchCartItems(user?.id));
+        dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },
         });
@@ -104,6 +109,12 @@ const SearchProducts = () => {
       setOpenDetailsDialog(true);
     }
   }, [productDetails]);
+
+  useEffect(() => {
+    if (userId) {
+      dispatch(fetchCartItems(userId));
+    }
+  }, [dispatch, userId]);
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -138,6 +149,35 @@ const SearchProducts = () => {
                 </button>
               )}
             </div>
+
+            <Sheet
+              open={openCartSheet}
+              onOpenChange={() => setOpenCartSheet(false)}
+            >
+              <Button
+                onClick={() => setOpenCartSheet(true)}
+                variant="outline"
+                size="icon"
+                className="relative hover:cursor-pointer"
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {/* Cart item count badge */}
+                {cartItems?.items?.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+                    {cartItems.items.length}
+                  </span>
+                )}
+                <span className="sr-only">Shopping cart</span>
+              </Button>
+              <UserCartWrapper
+                setOpenCartSheet={setOpenCartSheet}
+                cartItems={
+                  cartItems && cartItems.items && cartItems.items.length > 0
+                    ? cartItems.items
+                    : []
+                }
+              />
+            </Sheet>
           </div>
         </div>
       </div>

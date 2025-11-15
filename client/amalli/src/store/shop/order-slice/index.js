@@ -2,6 +2,8 @@ import axios from "axios";
 
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 
+const API = import.meta.env.VITE_API_URL;
+
 const initialState = {
   authorizationUrl: null,
   isLoading: false,
@@ -14,7 +16,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/order/create",
+      `${API}/shop/order/create`,
       orderData
     );
 
@@ -28,7 +30,7 @@ export const verifyPayment = createAsyncThunk(
   "/order/verifyPayment",
   async ({ reference, orderId }) => {
     const response = await axios.post(
-      "http://localhost:5000/api/shop/order/verify",
+      `${API}/shop/order/verify`,
       { reference, orderId }
     );
 
@@ -42,7 +44,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUser",
   async (userId) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/list/${userId}`
+      `${API}/shop/order/list/${userId}`
     );
 
     // console.log(response.data, "[res.data]");
@@ -55,7 +57,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:5000/api/shop/order/details/${id}`
+      `${API}/shop/order/details/${id}`
     );
 
     // console.log(response.data, "[res.data]");

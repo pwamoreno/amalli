@@ -19,9 +19,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   const [rating, setRating] = useState(0);
 
   const dispatch = useDispatch();
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const { reviews } = useSelector((state) => state.shopReview);
+
+  const userId = isAuthenticated ? user?.id : guestId;
 
   function handleRatingChange(getRating) {
     setRating(getRating);
@@ -50,13 +52,13 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
     dispatch(
       addToCart({
-        userId: user?.id,
+        userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
       })
     ).then((data) => {
       if (data?.payload.success) {
-        dispatch(fetchCartItems(user?.id));
+        dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },
         });
@@ -73,6 +75,13 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
   function handleAddReview() {
     // console.log(user?.userName);
+
+    if (!isAuthenticated) {
+      toast("Please sign in to leave a review.", {
+        style: { background: "#fa113d", color: "white" },
+      });
+      return;
+    }
 
     dispatch(
       addReview({
@@ -195,7 +204,8 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                 <h1>No Reviews</h1>
               )}
             </div>
-            <div className="mt-10 flex flex-col gap-2">
+            
+            {/* <div className="mt-10 flex flex-col gap-2">
               <Label>Write a review</Label>
               <div className="flex gap-0.5">
                 <StarRating
@@ -216,7 +226,45 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
               >
                 Submit
               </Button>
-            </div>
+            </div> */}
+
+            {isAuthenticated ? (
+              <div className="mt-10 flex flex-col gap-2">
+                <Label>Write a review</Label>
+                <div className="flex gap-0.5">
+                  <StarRating
+                    rating={rating}
+                    handleRatingChange={handleRatingChange}
+                  />
+                </div>
+                <Input
+                  name="reviewMessage"
+                  value={reviewMessage}
+                  onChange={(event) => setReviewMessage(event.target.value)}
+                  placeholder="Write a review..."
+                />
+                <Button
+                  onClick={handleAddReview}
+                  disabled={reviewMessage.trim() === ""}
+                  className="hover:bg-green-400 hover:cursor-pointer"
+                >
+                  Submit
+                </Button>
+              </div>
+            ) : (
+              <div className="mt-10 p-4 bg-muted rounded-lg text-center">
+                <p className="text-sm text-muted-foreground">
+                  <Button 
+                    variant="link" 
+                    className="p-0 h-auto font-semibold"
+                    onClick={() => window.location.href = '/auth/login'}
+                  >
+                    Sign in
+                  </Button>
+                  {" "}to write a review
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </DialogContent>

@@ -1,6 +1,9 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
+
+const API = import.meta.env.VITE_API_URL;
+
 const initialState = {
   isLoading: false,
   productList: [],
@@ -36,7 +39,7 @@ export const editProduct = createAsyncThunk(
   "/products/editProduct",
   async ({id, formData}) => {
     const result = await axios.put(
-      `http://localhost:5000/api/admin/products/edit/${id}`,
+      `${API}/admin/products/edit/${id}`,
       formData,
       {
         headers: {
@@ -69,7 +72,7 @@ const AdminProductSlice = createSlice({
     }).addCase(fetchAllProducts.fulfilled, (state, action) => {
         state.isLoading = false,
         state.productList = action.payload.data
-    }).addCase(fetchAllProducts.rejected, (state, action) => {
+    }).addCase(fetchAllProducts.rejected, (state) => {
         state.isLoading = false,
         state.productList = []
     })

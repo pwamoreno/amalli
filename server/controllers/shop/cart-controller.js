@@ -21,10 +21,12 @@ const addToCart = async (req, res) => {
       });
     }
 
+    const isGuest = typeof userId === "string" && userId.startsWith("guest_");
+
     let cart = await Cart.findOne({ userId });
 
     if (!cart) {
-      cart = new Cart({ userId, items: [] });
+      cart = new Cart({ userId, isGuest, items: [] });
     }
 
     const findCurrentProductIndex = cart.items.findIndex(
@@ -56,7 +58,7 @@ const fetchCartItems = async (req, res) => {
     const { userId } = req.params;
 
     if (!userId) {
-      return res.status(404).json({
+      return res.status(400).json({
         success: false,
         message: "User ID not found",
       });

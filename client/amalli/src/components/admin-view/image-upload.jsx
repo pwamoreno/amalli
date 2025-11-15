@@ -15,6 +15,7 @@ const ProductImageUpload = ({
   setImageLoadingState
 }) => {
   const inputRef = useRef(null);
+  const API = import.meta.env.VITE_API_URL;
 
   function handleImageFileChange(event) {
     // console.log(event.target.files);
@@ -48,7 +49,7 @@ const ProductImageUpload = ({
     setImageLoadingState(true)
     const data = new FormData()
     data.append("my_file", imageFile)
-    const response = await axios.post("http://localhost:5000/api/admin/products/upload-image", data)
+    const response = await axios.post(`${API}/admin/products/upload-image`, data)
     // console.log("response", response);
     
     if(response?.data?.success){

@@ -10,15 +10,17 @@ import { toast } from "sonner";
 import { addCommasToNumbers } from "@/lib/utils";
 
 const UserCartContent = ({ cartItem }) => {
-  const { user } = useSelector((state) => state.auth);
+  const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const { productList } = useSelector((state) => state.shopProducts);
 
   const dispatch = useDispatch();
   const { cartItems } = useSelector((state) => state.shopCart);
 
+  const userId = isAuthenticated ? user?.id : guestId;
+
   function handleCartItemDelete(getCartItem) {
     dispatch(
-      deleteCartItem({ userId: user?.id, productId: getCartItem?.productId })
+      deleteCartItem({ userId: userId, productId: getCartItem?.productId })
     ).then((data) => {
       if (data?.payload?.success) {
         toast("Cart item deleted successfully.", {
@@ -57,7 +59,7 @@ const UserCartContent = ({ cartItem }) => {
     }
     dispatch(
       updateCartItemQuantity({
-        userId: user?.id,
+        userId: userId,
         productId: getCartItem?.productId,
         quantity:
           typeOfAction === "plus"

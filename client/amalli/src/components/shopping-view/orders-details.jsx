@@ -5,7 +5,7 @@ import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 
 const ShoppingOrderDetails = ({ orderDetails }) => {
-  console.log(orderDetails);
+  // console.log(orderDetails);
 
   const { user } = useSelector((state) => state.auth);
 
