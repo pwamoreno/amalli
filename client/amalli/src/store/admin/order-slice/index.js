@@ -12,7 +12,7 @@ export const getAllOrders = createAsyncThunk(
   "/order/getAllOrders",
   async () => {
     const response = await axios.get(
-      `http://localhost:5000/api/admin/orders/get`
+      `${API}/api/admin/orders/get`
     );
 
     // console.log(response.data, "[res.data]");
@@ -25,7 +25,7 @@ export const getOrderDetailsAdmin = createAsyncThunk(
   "/order/getOrderDetailsAdmin",
   async (id) => {
     const response = await axios.get(
-      `http://localhost:5000/api/admin/orders/details/${id}`
+      `${API}/api/admin/orders/details/${id}`
     );
 
     // console.log(response.data, "[res.data]");
@@ -36,7 +36,7 @@ export const getOrderDetailsAdmin = createAsyncThunk(
 export const updateOrderStatus = createAsyncThunk(
   "/order/updateOrderStatus",
   async ({ id, orderStatus }) => {
-    const response = await axios.put(`{${API}}/admin/orders/update/${id}`, {
+    const response = await axios.put(`${API}/api/admin/orders/update/${id}`, {
       orderStatus,
     });
 

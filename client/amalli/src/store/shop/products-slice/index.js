@@ -16,9 +16,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
 
     const query = new URLSearchParams({ ...filterParams, sortBy: sortParams });
 
-    const result = await axios.get(
-      `${API}/shop/products/get?${query}`
-    );
+    const result = await axios.get(`${API}/api/shop/products/get?${query}`);
 
     // console.log(result);
 
@@ -29,9 +27,7 @@ export const fetchAllFilteredProducts = createAsyncThunk(
 export const fetchProductDetails = createAsyncThunk(
   "/products/fetchProductDetails",
   async (id) => {
-    const result = await axios.get(
-      `${API}/shop/products/get/${id}`
-    );
+    const result = await axios.get(`${API}/api/shop/products/get/${id}`);
 
     return result?.data;
   }
@@ -42,8 +38,8 @@ const shopProductSlice = createSlice({
   initialState,
   reducers: {
     setProductDetails: (state) => {
-      state.productDetails = null
-    }
+      state.productDetails = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -72,6 +68,6 @@ const shopProductSlice = createSlice({
   },
 });
 
-export const {setProductDetails} = shopProductSlice.actions;
+export const { setProductDetails } = shopProductSlice.actions;
 
 export default shopProductSlice.reducer;

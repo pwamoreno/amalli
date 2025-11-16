@@ -8,18 +8,16 @@ const initialState = {
   reviews: [],
 };
 
-export const addReview = createAsyncThunk("/review/addReview", async (formdata) => {
-  const response = await axios.post(
-    `${API}/shop/review/add`,
-    formdata
-  );
-  return response.data;
-});
+export const addReview = createAsyncThunk(
+  "/review/addReview",
+  async (formdata) => {
+    const response = await axios.post(`${API}/api/shop/review/add`, formdata);
+    return response.data;
+  }
+);
 
 export const getReviews = createAsyncThunk("/review/getReviews", async (id) => {
-  const response = await axios.get(
-    `${API}/shop/review/${id}`,
-  );
+  const response = await axios.get(`${API}/api/shop/review/${id}`);
   return response.data;
 });
 
@@ -43,4 +41,4 @@ const reviewSlice = createSlice({
   },
 });
 
-export default reviewSlice.reducer
+export default reviewSlice.reducer;

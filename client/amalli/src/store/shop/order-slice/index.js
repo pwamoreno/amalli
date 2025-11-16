@@ -16,7 +16,7 @@ export const createNewOrder = createAsyncThunk(
   "/order/createNewOrder",
   async (orderData) => {
     const response = await axios.post(
-      `${API}/shop/order/create`,
+      `${API}/api/shop/order/create`,
       orderData
     );
 
@@ -30,7 +30,7 @@ export const verifyPayment = createAsyncThunk(
   "/order/verifyPayment",
   async ({ reference, orderId }) => {
     const response = await axios.post(
-      `${API}/shop/order/verify`,
+      `${API}/api/shop/order/verify`,
       { reference, orderId }
     );
 
@@ -44,7 +44,7 @@ export const getAllOrdersByUserId = createAsyncThunk(
   "/order/getAllOrdersByUser",
   async (userId) => {
     const response = await axios.get(
-      `${API}/shop/order/list/${userId}`
+      `${API}/api/shop/order/list/${userId}`
     );
 
     // console.log(response.data, "[res.data]");
@@ -57,7 +57,7 @@ export const getOrderDetails = createAsyncThunk(
   "/order/getOrderDetails",
   async (id) => {
     const response = await axios.get(
-      `${API}/shop/order/details/${id}`
+      `${API}/api/shop/order/details/${id}`
     );
 
     // console.log(response.data, "[res.data]");
