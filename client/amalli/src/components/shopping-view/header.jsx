@@ -93,7 +93,7 @@ function HeaderRightContent({ className }) {
     >
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
-          onClick={() => navigate("search")}
+          onClick={() => navigate("/shop/search")}
           variant="outline"
           size="icon"
           className="hover:cursor-pointer"

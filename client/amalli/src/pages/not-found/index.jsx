@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Home, Search, ShoppingBag, ArrowLeft } from "lucide-react";
-import NotFoundIcon from "../../assets/not-found.svg"
+import NotFoundIcon from "../../assets/not-found.svg";
 
 const NotFound = () => {
   const navigate = useNavigate();
@@ -14,7 +14,7 @@ const NotFound = () => {
           <div className="relative">
             {/* Custom 404 Illustration */}
             <div className="mb-8 flex justify-center">
-             <img src={NotFoundIcon} alt="Not Found" className="w-96"/>
+              <img src={NotFoundIcon} alt="Not Found" className="w-96" />
             </div>
           </div>
         </div>
