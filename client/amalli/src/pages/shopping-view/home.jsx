@@ -1,7 +1,7 @@
 import { Button } from "@/components/ui/button";
-import bannerOne from "../../assets/banner1.jpg";
-import bannerTwo from "../../assets/banner2.jpg";
-import bannerThree from "../../assets/banner3.jpg";
+// import bannerOne from "../../assets/banner1.jpg";
+// import bannerTwo from "../../assets/banner2.jpg";
+// import bannerThree from "../../assets/banner3.jpg";
 import {
   Baby,
   ChevronLeft,
@@ -23,6 +23,7 @@ import { useNavigate } from "react-router-dom";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { addToCart, fetchCartItems } from "@/store/shop/cart-slice";
 import { toast } from "sonner";
+import { getFeatureImages } from "@/store/common-slice";
 
 const categoriesWithIcon = [
   { id: "men", label: "Men", icon: Shirt },
@@ -46,13 +47,17 @@ const categoriesWithIcon = [
 
 const ShoppingHome = () => {
   const [currentSlide, setCurrentSlide] = useState(0);
-  const { productList, productDetails } = useSelector((state) => state.shopProducts);
+  const { productList, productDetails } = useSelector(
+    (state) => state.shopProducts
+  );
+  const { featureImageList } = useSelector((state) => state.commonFeature);
+
   const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
-  const [openDetailsDialog, setOpenDetailsDialog] = useState(false)
+  const [openDetailsDialog, setOpenDetailsDialog] = useState(false);
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
-  const slides = [bannerOne, bannerTwo, bannerThree];
+  // const slides = [bannerOne, bannerTwo, bannerThree];
 
   const userId = isAuthenticated ? user?.id : guestId;
 
@@ -89,18 +94,18 @@ const ShoppingHome = () => {
   }
 
   useEffect(() => {
-    if(productDetails !== null){
-      setOpenDetailsDialog(true)
+    if (productDetails !== null) {
+      setOpenDetailsDialog(true);
     }
-  }, [productDetails])
+  }, [productDetails]);
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+      setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length);
     }, 5000);
 
     return () => clearInterval(timer);
-  }, [slides.length]);
+  }, [featureImageList.length]);
 
   useEffect(() => {
     dispatch(
@@ -117,26 +122,30 @@ const ShoppingHome = () => {
     }
   }, [dispatch, userId]);
 
+  useEffect(() => {
+      dispatch(getFeatureImages());
+    }, [dispatch]);
+
   return (
     <div className="flex flex-col min-h-screen">
       <div className="relative w-full h-[600px] overflow-hidden">
-        {slides.map((slide, index) => (
+        {featureImageList && featureImageList.length > 0 ? featureImageList.map((slide, index) => (
           <img
-            src={slide}
+            src={slide?.image}
             alt="banner-img"
             key={index}
             className={`${
               index === currentSlide ? "opacity-100" : "opacity-0"
             } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
           />
-        ))}
+        )): null}
         <Button
           variant="outline"
           size="icon"
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:cursor-pointer"
           onClick={() =>
             setCurrentSlide(
-              (prevSlide) => (prevSlide - 1 + slides.length) % slides.length
+              (prevSlide) => (prevSlide - 1 + featureImageList.length) % featureImageList.length
             )
           }
         >
@@ -147,7 +156,7 @@ const ShoppingHome = () => {
           size="icon"
           className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:cursor-pointer"
           onClick={() =>
-            setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length)
+            setCurrentSlide((prevSlide) => (prevSlide + 1) % featureImageList.length)
           }
         >
           <ChevronRight className="w-4 h-4" />
@@ -217,7 +226,7 @@ const ShoppingHome = () => {
           </div>
         </div>
       </section>
-      <ProductDetailsDialog 
+      <ProductDetailsDialog
         open={openDetailsDialog}
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}

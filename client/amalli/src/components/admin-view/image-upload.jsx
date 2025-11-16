@@ -12,7 +12,8 @@ const ProductImageUpload = ({
   // uploadedImageUrl,
   setUploadedImageUrl,
   imageLoadingState,
-  setImageLoadingState
+  setImageLoadingState,
+  isCustomStyled = false
 }) => {
   const inputRef = useRef(null);
   const API = import.meta.env.VITE_API_URL;
@@ -65,7 +66,7 @@ const ProductImageUpload = ({
   }, [imageFile])
 
   return (
-    <div className="w-full max-w-md mx-auto px-4 mt-4">
+    <div className={`w-full px-4 mt-4 ${isCustomStyled ? "" : "max-w-md mx-auto"}`}>
       <Label className="text-lg font-semibold mb-3 block">Upload Image</Label>
       <div
         className="border-2 border-dashed rounded-lg p-4"
