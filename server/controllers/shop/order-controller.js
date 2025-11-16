@@ -103,7 +103,7 @@ const verifyPayment = async (req, res) => {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PAYSTACK_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.VITE_PAYSTACK_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
       }
