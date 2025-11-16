@@ -18,6 +18,7 @@ const createOrder = async (req, res) => {
       orderUpdateDate,
       paymentId,
       payerId,
+      isGuest,
     } = req.body;
 
     const newOrder = new Order({
@@ -34,6 +35,7 @@ const createOrder = async (req, res) => {
       paymentId,
       payerId,
       cartId,
+      isGuest: isGuest || false,
     });
 
     const savedOrder = await newOrder.save();
@@ -54,11 +56,11 @@ const createOrder = async (req, res) => {
           email: email,
           amount: amountInKobo,
           channels: ["card"],
-          callback_url: "http://localhost:5173/shop/payment-verification",
+          callback_url: `${process.env.CLIENT_URL}/shop/payment-verification`,
           metadata: {
             items: cartItems,
             orderId: savedOrder._id,
-            cancel_action: "http://localhost:5173/shop",
+            cancel_action: `${process.env.CLIENT_URL}/shop/checkout`,
           },
         }),
       }

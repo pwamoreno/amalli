@@ -10,7 +10,7 @@ const PayStackPaymentVerification = () => {
   const param = new URLSearchParams(location.search);
   const reference = param.get("reference");
 
-  console.log(reference, "ref")
+  // console.log(reference, "ref")
 
   useEffect(() => {
     if (reference) {
@@ -28,6 +28,12 @@ const PayStackPaymentVerification = () => {
     <Card>
       <CardHeader>
         <CardTitle>Verifying payment...</CardTitle>
+        <div className="flex justify-center mt-4">
+          <div className="animate-spin h-8 w-8 border-4 border-primary border-t-transparent rounded-full"></div>
+        </div>
+        <p className="text-center text-muted-foreground mt-4">
+          Please wait while we verify your payment with Paystack.
+        </p>
       </CardHeader>
     </Card>
   );

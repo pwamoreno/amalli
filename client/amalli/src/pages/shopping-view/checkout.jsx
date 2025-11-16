@@ -105,6 +105,23 @@ const ShoppingCheckout = () => {
     dispatch(createNewOrder(orderData)).then((data) => {
       // console.log(data), "[paystack_resp]";
       if (data?.payload?.success) {
+        // Store order ID for verification
+        sessionStorage.setItem(
+          "currentOrderId",
+          JSON.stringify(data.payload.orderId)
+        );
+
+        // Store order details for success page - ADD THIS
+        sessionStorage.setItem(
+          "lastOrderDetails",
+          JSON.stringify({
+            totalAmount: cartTotal,
+            email: isAuthenticated ? user?.email : guestEmail,
+            itemCount: cartItems.items.length,
+            orderDate: new Date().toISOString(),
+          })
+        );
+        
         setPaymentStarted(true);
       } else {
         setPaymentStarted(false);
@@ -157,7 +174,9 @@ const ShoppingCheckout = () => {
           <div className="mt-8 space-y-4">
             <div className="flex justify-between mx-5">
               <span className="font-bold">Total</span>
-              <span className="font-bold">₦{addCommasToNumbers(cartTotal.toFixed(2))}</span>
+              <span className="font-bold">
+                ₦{addCommasToNumbers(cartTotal.toFixed(2))}
+              </span>
             </div>
           </div>
           <div className="mt-4 w-full">
