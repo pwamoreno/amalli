@@ -9,6 +9,34 @@ const ShoppingProductTile = ({
   handleGetProductDetails,
   handleAddToCart,
 }) => {
+  // Check if product has multiple variant options
+  const hasMultipleColorOptions = product?.colors?.length > 1;
+  const hasMultipleSizeOptions = product?.sizes?.length > 1;
+  const hasMultipleVariantOptions =
+    hasMultipleColorOptions || hasMultipleSizeOptions;
+
+  // For personalizable products or products with multiple variants, open details dialog
+  const handlePersonalizeButtonClick = () => {
+    if (product?.isPersonalizable || hasMultipleVariantOptions) {
+      // Open dialog to personalize or select variants
+      handleGetProductDetails(product?._id);
+    } else {
+      // Regular add to cart (no variants or only single option for each)
+      handleAddToCart(product?._id, product?.totalStock);
+    }
+  };
+
+  // Determine button text based on product configuration
+  const getButtonText = () => {
+    if (product?.isPersonalizable) {
+      return "Personalize";
+    }
+    if (hasMultipleVariantOptions) {
+      return "Select";
+    }
+    return "Add to Cart";
+  };
+
   return (
     <Card className="w-full max-w-sm mx-auto pt-0">
       <div onClick={() => handleGetProductDetails(product?._id)}>
@@ -31,6 +59,12 @@ const ShoppingProductTile = ({
               Sale
             </Badge>
           ) : null}
+          {/* Personalization Badge - Bottom Center */}
+          {product?.isPersonalizable && (
+            <Badge className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 bg-[#02066f] shadow-lg">
+              Personalizable
+            </Badge>
+          )}
         </div>
         <CardContent className="p-4">
           <h2 className="text-xl font-bold mb-2">{product?.title}</h2>
@@ -60,17 +94,15 @@ const ShoppingProductTile = ({
       </div>
       <CardFooter>
         {product?.totalStock === 0 ? (
-          <Button
-            className="w-full opacity-60 cursor-not-allowed"
-          >
+          <Button className="w-full opacity-60 cursor-not-allowed">
             Out of stock
           </Button>
         ) : (
           <Button
-            onClick={() => handleAddToCart(product?._id, product?.totalStock)}
-            className="w-full hover:bg-green-500 hover:cursor-pointer"
+            onClick={handlePersonalizeButtonClick}
+            className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer"
           >
-            Add to cart
+            {getButtonText()}
           </Button>
         )}
       </CardFooter>

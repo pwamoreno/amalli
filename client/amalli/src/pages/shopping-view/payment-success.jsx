@@ -12,6 +12,8 @@ const PaystackSuccessPage = () => {
   const { isAuthenticated } = useSelector((state) => state.auth);
   const [orderDetails, setOrderDetails] = useState(null);
 
+  // console.log(orderDetails)
+
   useEffect(() => {
     // Get order details from sessionStorage if you stored them
     const lastOrder = JSON.parse(

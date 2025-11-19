@@ -90,9 +90,8 @@ const ShoppingListing = () => {
   // console.log("filters", filters, searchParams);
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    // console.log(cartItems);
 
-    let getCartItems = cartItems.items || [];
+    let getCartItems = cartItems?.items || [];
 
     if (getCartItems.length) {
       const indexOfCurrentItem = getCartItems.findIndex(
@@ -110,7 +109,7 @@ const ShoppingListing = () => {
         }
       }
     }
-    
+
     dispatch(
       addToCart({
         userId: userId,

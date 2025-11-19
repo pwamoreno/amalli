@@ -4,12 +4,16 @@ const Product = require("../../models/Product");
 
 const createOrder = async (req, res) => {
   try {
+    // console.log("=== CREATE ORDER REQUEST ===");
+    // console.log("Request body:", req.body);
     const {
       userId,
       email,
       cartId,
       cartItems,
       addressInfo,
+      shippingInfo,
+      shippingCost,
       totalAmount,
       orderStatus,
       paymentMethod,
@@ -21,11 +25,32 @@ const createOrder = async (req, res) => {
       isGuest,
     } = req.body;
 
+    // console.log("✅ Step 1: Destructured request body");
+    // console.log("Creating order for userId:", userId);
+    // console.log("Email:", email);
+    // console.log("Total amount:", totalAmount);
+
+    if (!userId || !email || !cartItems || cartItems.length === 0) {
+      return res.status(400).json({
+        success: false,
+        message: "Invalid or incomplete order data",
+      });
+    }
+
+    if (!shippingInfo || !shippingCost) {
+      return res.status(400).json({
+        success: false,
+        message: "Shipping information is required",
+      });
+    }
+
     const newOrder = new Order({
       userId,
       email,
       cartItems,
       addressInfo,
+      shippingInfo,
+      shippingCost,
       totalAmount,
       orderStatus,
       paymentMethod,
@@ -38,24 +63,34 @@ const createOrder = async (req, res) => {
       isGuest: isGuest || false,
     });
 
+    // console.log("✅ Step 2: Created order object");
+
     const savedOrder = await newOrder.save();
+    // console.log("✅ Step 3: Order saved successfully:", savedOrder._id);
 
     const amountInKobo = totalAmount * 100;
+    // console.log("✅ Step 4: Amount in kobo:", amountInKobo);
 
     // console.log("paystack sk: ", process.env.NEXT_PAYSTACK_SECRET_KEY)
+    // console.log("✅ Step 5: About to call Paystack API");
+    // console.log(
+    //   "PAYSTACK_SECRET_KEY exists:",
+    //   !!process.env.PAYSTACK_SECRET_KEY
+    // );
+    // console.log("CLIENT_URL:", process.env.CLIENT_URL);
 
     const session = await fetch(
       "https://api.paystack.co/transaction/initialize",
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.NEXT_PAYSTACK_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.VITE_PAYSTACK_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
           email: email,
           amount: amountInKobo,
-          channels: ["card"],
+          channels: ["card", "bank"],
           callback_url: `${process.env.CLIENT_URL}/shop/payment-verification`,
           metadata: {
             items: cartItems,
@@ -66,13 +101,18 @@ const createOrder = async (req, res) => {
       }
     );
 
+    // console.log("✅ Step 6: Paystack API called, status:", session.status);
+
     const data = await session.json();
+    // console.log("✅ Step 7: Paystack response:", data);
 
     if (!session.ok) {
       return res
         .status(500)
         .json({ success: false, message: "Checkout failed" });
     }
+
+    // console.log("✅ Step 8: Sending success response");
 
     res.status(200).json({
       success: true,
@@ -132,17 +172,15 @@ const verifyPayment = async (req, res) => {
         let product = await Product.findById(item.productId);
 
         if (!product) {
-          return res
-            .status(404)
-            .json({
-              success: false,
-              message: `Product not found. ${product.title}`,
-            });
+          return res.status(404).json({
+            success: false,
+            message: `Product not found. ${product.title}`,
+          });
         }
 
-        product.totalStock -= item.quantity
+        product.totalStock -= item.quantity;
 
-        await product.save()
+        await product.save();
       }
 
       const getCartId = updatedOrder.cartId;

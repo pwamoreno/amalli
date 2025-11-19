@@ -1,6 +1,6 @@
 import { useState } from "react";
 import CommonForm from "../common/form";
-import { DialogContent } from "../ui/dialog";
+import { DialogContent, DialogTitle } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 import { useDispatch } from "react-redux";
@@ -11,6 +11,7 @@ import {
   getOrderDetailsAdmin,
   updateOrderStatus,
 } from "@/store/admin/order-slice";
+import { addCommasToNumbers } from "@/lib/utils";
 
 const initialFormData = {
   status: "",
@@ -46,6 +47,7 @@ const AdminOrdersDetails = ({ orderDetails }) => {
 
   return (
     <DialogContent className="sm:max-w-[600px]">
+      <DialogTitle>Order Details</DialogTitle>
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -58,7 +60,7 @@ const AdminOrdersDetails = ({ orderDetails }) => {
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Price</p>
-            <Label>{orderDetails?.totalAmount}</Label>
+            <Label>₦{addCommasToNumbers(orderDetails?.totalAmount ?? 0)}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Status</p>
@@ -67,6 +69,8 @@ const AdminOrdersDetails = ({ orderDetails }) => {
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "verified"
                     ? "bg-green-400"
+                    : orderDetails?.orderStatus === "pending"
+                    ? "bg-amber-400"
                     : orderDetails?.orderStatus === "rejected"
                     ? "bg-red-400"
                     : "bg-black"
@@ -90,7 +94,7 @@ const AdminOrdersDetails = ({ orderDetails }) => {
                     >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
-                      <span>Price: ₦{item.price}</span>
+                      <span>Price: ₦{addCommasToNumbers(item.price)}</span>
                     </li>
                   ))
                 : null}

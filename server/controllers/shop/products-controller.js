@@ -2,6 +2,8 @@ const Product = require("../../models/Product");
 
 const getFilteredProducts = async (req, res) => {
   try {
+    // console.log("Working");
+    
     const { category = [], brand = [], sortBy = "price-lowtohigh" } = req.query;
 
     let filters = {};
@@ -35,6 +37,7 @@ const getFilteredProducts = async (req, res) => {
         break;
     }
 
+
     const products = await Product.find(filters).sort(sort);
 
     res.status(200).json({
@@ -50,30 +53,29 @@ const getFilteredProducts = async (req, res) => {
   }
 };
 
-const getProductsDetails = async(req, res) => {
+const getProductsDetails = async (req, res) => {
   try {
-    const { id } = req.params
-    const product = await Product.findById(id)
+    const { id } = req.params;
+    const product = await Product.findById(id);
 
-    if(!product){
+    if (!product) {
       return res.status(404).json({
         success: false,
-        message: "Product not found"
-      })
+        message: "Product not found",
+      });
     }
 
     res.status(200).json({
       success: true,
-      data: product
-    })
-
+      data: product,
+    });
   } catch (error) {
-    console.log(error)
+    console.log(error);
     res.status(500).json({
       success: false,
-      message: "Some error occured"
-    })
+      message: "Some error occured",
+    });
   }
-}
+};
 
 module.exports = { getFilteredProducts, getProductsDetails };

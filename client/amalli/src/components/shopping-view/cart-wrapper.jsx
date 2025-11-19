@@ -40,7 +40,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
         </div>
       </div>
       <Button
-        className="mt-6 mx-5 hover:cursor-pointer hover:bg-green-500"
+        className="mt-6 mx-5 hover:cursor-pointer bg-[#02066f] hover:bg-green-500"
         onClick={() => {
           navigate("/shop/checkout");
           setOpenCartSheet(false);

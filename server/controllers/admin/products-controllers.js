@@ -32,6 +32,12 @@ const addProduct = async (req, res) => {
       price,
       salePrice,
       totalStock,
+      isPersonalizable,
+      personalizationLabel,
+      personalizationMaxLength,
+      hasVariants,
+      colors,
+      sizes,
     } = req.body;
 
     const newProduct = new Product({
@@ -43,6 +49,13 @@ const addProduct = async (req, res) => {
       price,
       salePrice,
       totalStock,
+      isPersonalizable: isPersonalizable || false, // Make sure this is included
+      personalizationLabel:
+        personalizationLabel || "Add your personalization text",
+      personalizationMaxLength: personalizationMaxLength || 50,
+      hasVariants: hasVariants || false,
+      colors: colors || [],
+      sizes: sizes || [],
     });
 
     await newProduct.save();
@@ -81,8 +94,7 @@ const editProduct = async (req, res) => {
   try {
     const { id } = req.params;
 
-    console.log("ID:", id);
-    
+    // console.log("ID:", id);
 
     const {
       image,
@@ -93,6 +105,12 @@ const editProduct = async (req, res) => {
       price,
       salePrice,
       totalStock,
+      isPersonalizable,
+      personalizationLabel,
+      personalizationMaxLength,
+      hasVariants,
+      colors,
+      sizes,
     } = req.body;
 
     let findProduct = await Product.findById(id);
@@ -108,9 +126,19 @@ const editProduct = async (req, res) => {
     findProduct.category = category || findProduct.category;
     findProduct.brand = brand || findProduct.brand;
     findProduct.price = price === "" ? 0 : price || findProduct.price;
-    findProduct.salePrice = salePrice === "" ? 0 : salePrice || findProduct.salePrice;
+    findProduct.salePrice =
+      salePrice === "" ? 0 : salePrice || findProduct.salePrice;
     findProduct.totalStock = totalStock || findProduct.totalStock;
     findProduct.image = image || findProduct.image;
+    findProduct.isPersonalizable =
+      isPersonalizable || findProduct.isPersonalizable;
+    findProduct.personalizationLabel =
+      personalizationLabel || findProduct.personalizationLabel;
+    findProduct.personalizationMaxLength =
+      personalizationMaxLength || findProduct.personalizationMaxLength;
+    findProduct.hasVariants = hasVariants || findProduct.hasVariants;
+    findProduct.colors = colors || findProduct.colors;
+    findProduct.sizes = sizes || findProduct.sizes;
 
     await findProduct.save();
     res.status(200).json({
@@ -131,6 +159,7 @@ const deleteProduct = async (req, res) => {
   try {
     const { id } = req.params;
     const product = await Product.findByIdAndDelete(id);
+    console.log(product);
 
     if (!product) {
       return res.status(404).json({
@@ -140,10 +169,9 @@ const deleteProduct = async (req, res) => {
     }
 
     res.status(200).json({
-        success: true,
-        message: "Product successfully deleted"
-    })
-
+      success: true,
+      message: "Product successfully deleted",
+    });
   } catch (error) {
     console.log(error);
     res.status(500).json({

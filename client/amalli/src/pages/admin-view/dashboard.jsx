@@ -43,7 +43,7 @@ const AdminDashboard = () => {
         isCustomStyled={true}
         // currentIdToEdit={currentIdToEdit}
       />
-      <Button onClick={handleUploadFeatureImage} className="mt-5 w-full">
+      <Button onClick={handleUploadFeatureImage} className="mt-5 w-full bg-[#02066f]">
         Upload
       </Button>
       <div className="flex flex-col gap-4 mt-5">

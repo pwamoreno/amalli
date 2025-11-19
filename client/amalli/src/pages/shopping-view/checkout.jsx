@@ -1,5 +1,6 @@
 import { useState } from "react";
 import Address from "@/components/shopping-view/address";
+import ShippingSelector from "@/components/shopping-view/shipping-selector";
 import checkout from "../../assets/checkout.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartContent from "@/components/shopping-view/cart-content";
@@ -15,6 +16,7 @@ const ShoppingCheckout = () => {
   const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const { authorizationUrl } = useSelector((state) => state.shopOrder);
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
+  const [shippingInfo, setShippingInfo] = useState(null);
   const [paymentStarted, setPaymentStarted] = useState(false);
   const [guestEmail, setGuestEmail] = useState("");
   const dispatch = useDispatch();
@@ -35,6 +37,9 @@ const ShoppingCheckout = () => {
           0
         )
       : 0;
+
+  const shippingCost = shippingInfo?.price || 0;
+  const totalAmount = cartTotal + shippingCost;
 
   function handlePaystackPayment() {
     if (cartItems.length === 0) {
@@ -89,7 +94,9 @@ const ShoppingCheckout = () => {
         phone: currentSelectedAddress?.phone,
         notes: currentSelectedAddress?.notes,
       },
-      totalAmount: cartTotal,
+      shippingInfo: shippingInfo,
+      shippingCost: shippingCost,
+      totalAmount: totalAmount,
       orderStatus: "pending",
       paymentMethod: "paystack",
       paymentStatus: "pending",
@@ -115,7 +122,7 @@ const ShoppingCheckout = () => {
         sessionStorage.setItem(
           "lastOrderDetails",
           JSON.stringify({
-            totalAmount: cartTotal,
+            totalAmount: totalAmount,
             email: isAuthenticated ? user?.email : guestEmail,
             itemCount: cartItems.items.length,
             orderDate: new Date().toISOString(),
@@ -166,6 +173,14 @@ const ShoppingCheckout = () => {
             selectedId={currentSelectedAddress}
             setCurrentSelectedAddress={setCurrentSelectedAddress}
           />
+          {/* Shipping Selector */}
+          <div className="p-4 border rounded-lg bg-background">
+            <ShippingSelector
+              onShippingChange={setShippingInfo}
+              // selectedShipping={shippingInfo}
+            />
+          </div>
+
         </div>
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
@@ -178,16 +193,28 @@ const ShoppingCheckout = () => {
                 ₦{addCommasToNumbers(cartTotal.toFixed(2))}
               </span>
             </div>
+            <div className="flex justify-between mx-5">
+              <span className="text-muted-foreground">Shipping</span>
+              <span className={shippingCost > 0 ? "text-green-600 font-medium" : ""}>
+                {shippingCost > 0 ? `₦${addCommasToNumbers(shippingCost.toFixed(2))}` : "Select location"}
+              </span>
+            </div>
+            <div className="flex justify-between mx-5 pt-4 border-t">
+              <span className="font-bold text-lg">Total</span>
+              <span className="font-bold text-lg">₦{addCommasToNumbers(totalAmount.toFixed(2))}</span>
+            </div>
           </div>
           <div className="mt-4 w-full">
             {/*Might want to integrate more than one payment method for checkout. Primary focus obviously on Nigerian modes of payment. */}
             <Button
               onClick={handlePaystackPayment}
-              className="w-full hover:bg-green-500 hover:cursor-pointer"
+              className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer"
             >
               {paymentStarted
                 ? "Processing payment..."
-                : "Checkout with paystack"}
+                : shippingInfo
+                ? "Checkout with Paystack"
+                : "Select shipping location to continue"}
             </Button>
           </div>
           {!isAuthenticated && (

@@ -10,6 +10,7 @@ import {
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
 import { Button } from "../ui/button";
+import { Checkbox } from "../ui/checkbox";
 
 const CommonForm = ({
   formControls,
@@ -90,6 +91,29 @@ const CommonForm = ({
 
         break;
 
+      case "checkbox":
+        element = (
+          <div className="flex items-center space-x-2">
+            <Checkbox
+              id={getControlItem.name}
+              checked={formData[getControlItem.name] || false}
+              onCheckedChange={(checked) =>
+                setFormData({
+                  ...formData,
+                  [getControlItem.name]: checked,
+                })
+              }
+            />
+            <Label
+              htmlFor={getControlItem.name}
+              className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70 cursor-pointer"
+            >
+              {getControlItem.label}
+            </Label>
+          </div>
+        );
+        break;
+
       default:
         element = (
           <Input
@@ -116,12 +140,22 @@ const CommonForm = ({
       <div className="flex flex-col gap-3">
         {formControls.map((controlItem) => (
           <div className="grid w-full gap-1.5" key={controlItem.name}>
-            <Label className="mb-1">{controlItem.label}</Label>
+            <Label className="mb-1">
+              {controlItem.name === "isPersonalizable"
+                ? controlItem.header
+                : controlItem.name === "hasVariants"
+                ? controlItem.header
+                : controlItem.label}
+            </Label>
             {renderInputByComponentType(controlItem)}
           </div>
         ))}
       </div>
-      <Button disabled={isButtonDisabled} type="submit" className="mt-2 w-full">
+      <Button
+        disabled={isButtonDisabled}
+        type="submit"
+        className="mt-4 w-full bg-[#02066f]"
+      >
         {buttonText || "Submit"}
       </Button>
     </form>

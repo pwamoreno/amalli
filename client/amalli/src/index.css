@@ -72,6 +72,26 @@ button:focus-visible {
   }
 } */
 
+.font-dancing {
+  font-family: "Dancing Script", cursive;
+}
+
+.font-brush{
+  font-family: "Brush_Script_MT", cursive;
+}
+
+.font-pacifico{
+  font-family: "Pacifico", cursive;
+}
+
+.font-vibes{
+  font-family: "Great_Vibes", cursive;
+}
+
+.font-alex{
+  font-family: "Alex_Brush", cursive;
+}
+
 @theme inline {
 
   --radius-sm: calc(var(--radius) - 4px);

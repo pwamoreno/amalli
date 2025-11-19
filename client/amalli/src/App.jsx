@@ -16,29 +16,61 @@ import ShoppingListing from "./pages/shopping-view/listing";
 import CheckAuth from "./components/common/check-auth";
 import Unauth from "./pages/unauth";
 import { useDispatch, useSelector } from "react-redux";
-import { useEffect } from "react";
+import { useEffect, useRef, useState } from "react";
 import { checkAuth } from "./store/auth-slice";
-import { Skeleton } from "@/components/ui/skeleton";
 import PayStackPaymentVerification from "./pages/shopping-view/payment-verification";
 import PaystackSuccessPage from "./pages/shopping-view/payment-success";
 import SearchProducts from "./pages/shopping-view/search";
+import AboutUs from "./pages/shopping-view/about";
+import FAQPage from "./pages/shopping-view/faqs";
+import LoadingPage from "./components/common/loading-page";
+import HolidayGreeting from "./components/common/holiday-greeting";
+import { getTodayHoliday } from "./lib/utils";
+import TermsOfServicePage from "./components/shopping-view/terms-of-service";
+import ScrollToTop from "./components/common/scroll-to-top";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
     (state) => state.auth
   );
   const dispatch = useDispatch();
+  const [showGreeting, setShowGreeting] = useState(false);
+  const [greetingMessage, setGreetingMessage] = useState("");
+  const hasInitialized = useRef(false);
 
   useEffect(() => {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  useEffect(() => {
+    // Only run ONCE, when loading finishes the first time
+    if (!isLoading && !hasInitialized.current) {
+      hasInitialized.current = true;
+
+      const alreadyShown = localStorage.getItem("holiday_greeting_shown");
+      const msg = getTodayHoliday();
+
+      if (!alreadyShown && msg) {
+        setGreetingMessage(msg);
+        setShowGreeting(true);
+        localStorage.setItem("holiday_greeting_shown", "true");
+      }
+    }
+  }, [isLoading]);
+
   if (isLoading) {
-    return <Skeleton className="h-[600px] w-[600px]" />;
+    return <LoadingPage />;
   }
 
   return (
     <div className="flex flex-col overflow-hidden bg-white">
+      {showGreeting && (
+        <HolidayGreeting
+          message={greetingMessage}
+          onClose={() => setShowGreeting(false)}
+        />
+      )}
+      <ScrollToTop />
       <Routes>
         <Route
           path="/auth"
@@ -69,14 +101,20 @@ function App() {
         {/* Shop routes - accessible to everyone */}
         <Route path="/shop" element={<ShoppingLayout />}>
           <Route path="home" element={<ShoppingHome />} />
+          <Route path="about" element={<AboutUs />} />
           <Route path="listing" element={<ShoppingListing />} />
+          <Route path="faqs" element={<FAQPage />} />
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="search" element={<SearchProducts />} />
-          
+          <Route path="terms-of-service" element={<TermsOfServicePage />} />
+
           {/* Payment routes - MUST be accessible to guests */}
-          <Route path="payment-verification" element={<PayStackPaymentVerification />} />
+          <Route
+            path="payment-verification"
+            element={<PayStackPaymentVerification />}
+          />
           <Route path="payment-success" element={<PaystackSuccessPage />} />
-          
+
           {/* Only account needs authentication */}
           <Route
             path="account"
@@ -101,15 +139,6 @@ function App() {
 }
 
 export default App;
-
-
-
-
-
-
-
-
-
 
 // import { Route, Routes } from "react-router-dom";
 // import AuthLayout from "./components/auth/layout";

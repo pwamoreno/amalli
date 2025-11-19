@@ -31,7 +31,7 @@ import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
-import SearchProducts from "@/pages/shopping-view/search";
+// import SearchProducts from "@/pages/shopping-view/search";
 import { AmalliLogo } from "../icons/AmalliLogo";
 
 function MenuItems() {
@@ -39,8 +39,34 @@ function MenuItems() {
   const location = useLocation();
   const [_searchParams, setSearchParams] = useSearchParams();
 
+  // function handleNavigate(getCurrentItem) {
+  //   sessionStorage.removeItem("filters");
+  //   const currentFilter =
+  //     getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
+  //       ? { category: [getCurrentItem.id] }
+  //       : null;
+
+  //   sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+  //   location.pathname.includes("listing") && currentFilter !== null
+  //     ? setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`))
+  //     : navigate(getCurrentItem.path);
+  // }
+
   function handleNavigate(getCurrentItem) {
+    // Clear filters from sessionStorage
     sessionStorage.removeItem("filters");
+
+    // Pages that should NOT have search params
+    const noParamPages = ["about", "faq", "home"];
+
+    if (noParamPages.includes(getCurrentItem.id)) {
+      setSearchParams({});
+      navigate(getCurrentItem.path);
+      return;
+    }
+
+    // Regular filter logic for product pages
     const currentFilter =
       getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
         ? { category: [getCurrentItem.id] }
@@ -48,9 +74,28 @@ function MenuItems() {
 
     sessionStorage.setItem("filters", JSON.stringify(currentFilter));
 
-    location.pathname.includes("listing") && currentFilter !== null
-      ? setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`))
-      : navigate(getCurrentItem.path);
+    if (location.pathname.includes("listing") && currentFilter !== null) {
+      setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`));
+    }
+
+    // // If navigating to about/faq, clear search params
+    // if (getCurrentItem.id === "about" || getCurrentItem.id === "faq") {
+    //   setSearchParams({}); // Clear all params
+    // } else {
+    //   // Normal filter logic for other pages
+    //   const currentFilter =
+    //     getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
+    //       ? { category: [getCurrentItem.id] }
+    //       : null;
+
+    //   sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+
+    //   if (location.pathname.includes("listing") && currentFilter !== null) {
+    //     setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`));
+    //   }
+    // }
+
+    navigate(getCurrentItem.path);
   }
 
   return (

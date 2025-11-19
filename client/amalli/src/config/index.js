@@ -61,8 +61,11 @@ export const addProductFormElements = [
       { id: "men", label: "Men" },
       { id: "women", label: "Women" },
       { id: "kids", label: "Kids" },
-      { id: "accessories", label: "Accessories" },
-      { id: "footwear", label: "Footwear" },
+      { id: "necklaces", label: "Necklaces" },
+      { id: "rings", label: "Rings" },
+      { id: "earrings", label: "Earrings" },
+      { id: "bracelets", label: "Bracelets" },
+      { id: "anklets", label: "Anklets" },
     ],
   },
   // {
@@ -99,6 +102,34 @@ export const addProductFormElements = [
     type: "number",
     placeholder: "Enter total stock",
   },
+  {
+    label: "Allow Personalization",
+    header: "Personalization",
+    name: "isPersonalizable",
+    componentType: "checkbox",
+  },
+  {
+    label: "Product has color/size variants",
+    header: "Variants",
+    name: "hasVariants",
+    componentType: "checkbox",
+  },
+  // {
+  //   label: "Personalization Prompt",
+  //   name: "personalizationLabel",
+  //   componentType: "input",
+  //   type: "text",
+  //   placeholder: "e.g., Enter name for engraving",
+  //   showIf: "isPersonalizable", // Conditional field
+  // },
+  // {
+  //   label: "Maximum Characters",
+  //   name: "personalizationMaxLength",
+  //   componentType: "input",
+  //   type: "number",
+  //   placeholder: "50",
+  //   showIf: "isPersonalizable", // Conditional field
+  // },
 ];
 
 export const shoppingViewHeaderMenuItems = [
@@ -108,6 +139,11 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/home",
   },
   {
+    id: "about",
+    label: "About Us",
+    path: "/shop/about",
+  },
+  {
     id: "products",
     label: "Products",
     path: "/shop/listing",
@@ -115,28 +151,33 @@ export const shoppingViewHeaderMenuItems = [
   {
     id: "men",
     label: "Men",
-    path: "/shop/listing",
+    path: "/shop/listing?category=men",
   },
   {
     id: "women",
     label: "Women",
-    path: "/shop/listing",
+    path: "/shop/listing?category=women",
   },
   {
     id: "kids",
     label: "Kids",
-    path: "/shop/listing",
+    path: "/shop/listing?category=kids",
   },
   {
-    id: "accessories",
-    label: "Accessories",
-    path: "/shop/listing",
+    id: "faq",
+    label: "FAQs",
+    path: "/shop/faqs",
   },
-  {
-    id: "footwear",
-    label: "Footwear",
-    path: "/shop/listing",
-  },
+  // {
+  //   id: "accessories",
+  //   label: "Accessories",
+  //   path: "/shop/listing",
+  // },
+  // {
+  //   id: "footwear",
+  //   label: "Footwear",
+  //   path: "/shop/listing",
+  // },
 ];
 
 export const filterOptions = {
@@ -144,17 +185,20 @@ export const filterOptions = {
     { id: "men", label: "Men" },
     { id: "women", label: "Women" },
     { id: "kids", label: "Kids" },
-    { id: "accessories", label: "Accessories" },
-    { id: "footwear", label: "Footwear" },
+    { id: "necklaces", label: "Necklaces" },
+    { id: "rings", label: "Rings" },
+    { id: "earrings", label: "Earrings" },
+    { id: "bracelets", label: "Bracelets" },
+    { id: "anklets", label: "Anklets" },
   ],
-  brand: [
-    { id: "nike", label: "Nike" },
-    { id: "adidas", label: "Adidas" },
-    { id: "puma", label: "Puma" },
-    { id: "levi", label: "Levi's" },
-    { id: "zara", label: "Zara" },
-    { id: "h&m", label: "H&M" },
-  ],
+  // brand: [
+  //   { id: "nike", label: "Nike" },
+  //   { id: "adidas", label: "Adidas" },
+  //   { id: "puma", label: "Puma" },
+  //   { id: "levi", label: "Levi's" },
+  //   { id: "zara", label: "Zara" },
+  //   { id: "h&m", label: "H&M" },
+  // ],
 };
 
 export const sortOptions = [
@@ -199,4 +243,266 @@ export const addressFormControls = [
     componentType: "textarea",
     placeholder: "Enter any additional notes",
   },
+];
+
+export const faqs = [
+  {
+    question: "What if my payment doesn't work?",
+    answer:
+      "First, make sure your information is correct and all required fields are filled. Try another payment method or check your network. If issues persist, reach out to us and we'll help.",
+  },
+  {
+    question: "How long will it take my jewelry to arrive?",
+    answer:
+      "Delivery within Lagos takes 1–3 days. Nationwide delivery typically takes 3–7 business days.",
+  },
+  {
+    question: "Where in the world do you ship to?",
+    answer:
+      "We ship locally and internationally. Shipping fees vary depending on destination.",
+  },
+  {
+    question: "How do I track my delivery?",
+    answer:
+      "Once your order ships, a tracking link will be sent to your email or phone number.",
+  },
+  {
+    question: "How much does shipping cost?",
+    answer:
+      "Shipping fees depend on your location and are shown at checkout before payment.",
+  },
+];
+
+// export const lagosShippingZones = [
+//   {
+//     id: "mainland-a",
+//     name: "MAINLAND A",
+//     price: 2500,
+//     areas: [
+//       "Surulere",
+//       "Costain",
+//       "Ojuelegba",
+//       "Mushin",
+//       "Palmgrove",
+//       "Yaba",
+//       "Bariga",
+//       "Gbagada",
+//       "Ajao Estate",
+//       "Oshodi",
+//       "Ikeja",
+//       "Ojota",
+//       "Ogudu",
+//       "Oworonshoki",
+//       "Somolu",
+//       "Ikosi-Ketu",
+//       "Alapere",
+//     ],
+//   },
+//   {
+//     id: "mainland-b",
+//     name: "MAINLAND B",
+//     price: 3000,
+//     areas: [
+//       "Ogba",
+//       "Magodo 1",
+//       "Magodo 2",
+//       "Omole Phase 1",
+//       "Omole Phase 2",
+//       "Ojodu Berger",
+//       "Fagba",
+//       "Iju-Ishaga",
+//     ],
+//   },
+//   {
+//     id: "mainland-c",
+//     name: "MAINLAND C",
+//     price: 3500,
+//     areas: [
+//       "Orile",
+//       "Amuwo Odofin",
+//       "Festac",
+//       "Alakija",
+//       "Satellite",
+//       "Apapa",
+//       "Navy Town",
+//       "Mile 2",
+//       "Isolo",
+//       "Ago Palace",
+//     ],
+//   },
+//   {
+//     id: "mainland-d",
+//     name: "MAINLAND D",
+//     price: 3500,
+//     areas: ["Egbeda", "Idimu", "Igando", "Ayobo", "Aboru", "Ipaja", "Baruwa"],
+//   },
+//   {
+//     id: "mainland-e",
+//     name: "MAINLAND E",
+//     price: 4000,
+//     areas: ["Ijegun", "Jakande", "Oke Afa", "Ikotun"],
+//   },
+//   {
+//     id: "mainland-f",
+//     name: "MAINLAND F",
+//     price: 4000,
+//     areas: ["Abulegba", "Agege", "Ijaiye", "Ojokoro", "Alakuko", "Alagbado"],
+//   },
+//   {
+//     id: "mainland-g",
+//     name: "MAINLAND G",
+//     price: 4500,
+//     areas: ["Lasu", "Iba", "Ishashi", "Obadore"],
+//   },
+//   {
+//     id: "island-a",
+//     name: "ISLAND A",
+//     price: 3000,
+//     areas: [
+//       "Ikoyi",
+//       "Victoria Island",
+//       "Banana Island",
+//       "Obalende",
+//       "Parkview Estate",
+//       "Marina",
+//     ],
+//   },
+//   {
+//     id: "island-b",
+//     name: "ISLAND B",
+//     price: 3500,
+//     areas: [
+//       "Lekki Phase 1",
+//       "Ikate",
+//       "Jakande",
+//       "Osapa London",
+//       "Agungi",
+//       "Ologolo",
+//       "Marwa",
+//       "Oniru",
+//     ],
+//   },
+//   {
+//     id: "island-c",
+//     name: "ISLAND C",
+//     price: 4000,
+//     areas: [
+//       "Ikota",
+//       "Chevron",
+//       "VGC",
+//       "Ajah",
+//       "Sangotedo",
+//       "Badore",
+//       "Lekki Gardens Phase 2",
+//       "Abraham Adesanya",
+//       "LBS",
+//       "Addo Road",
+//       "Ogombo",
+//       "Ilaje",
+//       "Orchid Road",
+//       "Langbasa",
+//     ],
+//   },
+// ];
+
+export const nigeriaStatesShipping = [
+  { state: "Abia", price: 5000 },
+  { state: "Adamawa", price: 5800 },
+  { state: "Akwa Ibom", price: 6000 },
+  { state: "Anambra", price: 5000 },
+  { state: "Bauchi", price: 5800 },
+  { state: "Bayelsa", price: 5800 },
+  { state: "Benue", price: 5800 },
+  { state: "Borno", price: 5800 },
+  { state: "Cross River", price: 6000 },
+  { state: "Delta", price: 5800 },
+  { state: "Ebonyi", price: 5800},
+  { state: "Edo", price: 5000 },
+  { state: "Ekiti", price: 4000 },
+  { state: "Enugu", price: 5000 },
+  { state: "FCT", price: 5500 },
+  { state: "Gombe", price: 5800 },
+  { state: "Imo", price: 5000 },
+  { state: "Jigawa", price: 5800 },
+  { state: "Kaduna", price: 5800 },
+  { state: "Kano", price: 5800 },
+  { state: "Katsina", price: 5800 },
+  { state: "Kebbi", price: 5800 },
+  { state: "Kogi", price: 5800 },
+  { state: "Kwara", price: 5000 },
+  { state: "Lagos", price: 2500 }, // Base Lagos price
+  { state: "Nasarawa", price: 5800 },
+  { state: "Niger", price: 5800 },
+  { state: "Ogun", price: 4000},
+  { state: "Ondo", price: 4000 },
+  { state: "Osun", price: 4000 },
+  { state: "Oyo", price: 4000 },
+  { state: "Plateau", price: 5800 },
+  { state: "Rivers", price: 5000 },
+  { state: "Sokoto", price: 5800 },
+  { state: "Taraba", price: 5800 },
+  { state: "Yobe", price: 5800 },
+  { state: "Zamfara", price: 5800 },
+];
+
+export const holidays = [
+  { date: "12-25", message: "Merry Christmas 🎄✨" },
+  { date: "01-01", message: "Happy New Year 🎆🎉" },
+  { date: "02-14", message: "Happy Valentine's Day ❤️" },
+  { date: "11-18", message: "Happy Launch Day ❤️" },
+  // Add more holidays here...
+];
+
+export const HOLIDAYS = [
+  { name: "New Year's Day", month: 0, day: 1, greeting: "Happy New Year!" },
+  {
+    name: "Valentine's Day",
+    month: 1,
+    day: 14,
+    greeting: "Happy Valentine's Day!",
+  },
+  {
+    name: "International Women's Day",
+    month: 2,
+    day: 8,
+    greeting: "Happy Women's Day!",
+  },
+  { name: "Earth Day", month: 3, day: 22, greeting: "Happy Earth Day!" },
+  {
+    name: "International Workers' Day",
+    month: 4,
+    day: 1,
+    greeting: "Happy Workers' Day!",
+  },
+  {
+    name: "World Environment Day",
+    month: 5,
+    day: 5,
+    greeting: "Happy Environment Day!",
+  },
+  {
+    name: "International Youth Day",
+    month: 7,
+    day: 12,
+    greeting: "Happy Youth Day!",
+  },
+  {
+    name: "International Day of Peace",
+    month: 8,
+    day: 21,
+    greeting: "Wishing you peace today!",
+  },
+  {
+    name: "World Teachers' Day",
+    month: 9,
+    day: 5,
+    greeting: "Happy Teachers' Day!",
+  },
+  {
+    name: "Human Rights Day",
+    month: 11,
+    day: 10,
+    greeting: "Happy Human Rights Day!",
+  },
+  { name: "Christmas", month: 11, day: 25, greeting: "Merry Christmas!" },
 ];

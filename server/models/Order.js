@@ -21,6 +21,14 @@ const OrderSchema = new mongoose.Schema({
     phone: String,
     notes: String,
   },
+  shippingInfo: {
+    type: mongoose.Schema.Types.Mixed, // Flexible structure
+    required: true,
+  },
+  shippingCost: {
+    type: Number,
+    required: true,
+  },
   orderStatus: String,
   paymentMethod: String,
   paymentStatus: String,

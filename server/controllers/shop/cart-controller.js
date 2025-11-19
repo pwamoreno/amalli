@@ -3,7 +3,7 @@ const Product = require("../../models/Product");
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, productId, quantity } = req.body;
+    const { userId, productId, quantity, personalizationText } = req.body;
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -21,6 +21,14 @@ const addToCart = async (req, res) => {
       });
     }
 
+    // Validate personalization requirement
+    if (product.isPersonalizable && !personalizationText?.trim()) {
+      return res.status(400).json({
+        success: false,
+        message: "Personalization text is required for this product",
+      });
+    }
+
     const isGuest = typeof userId === "string" && userId.startsWith("guest_");
 
     let cart = await Cart.findOne({ userId });
@@ -29,14 +37,29 @@ const addToCart = async (req, res) => {
       cart = new Cart({ userId, isGuest, items: [] });
     }
 
-    const findCurrentProductIndex = cart.items.findIndex(
-      (item) => item.productId.toString() === productId
-    );
-
-    if (findCurrentProductIndex === -1) {
-      cart.items.push({ productId, quantity });
+    // For personalized products, always add as new item (different text = different item)
+    if (product.isPersonalizable && personalizationText) {
+      cart.items.push({
+        productId,
+        quantity,
+        personalizationText: personalizationText.trim(),
+      });
     } else {
-      cart.items[findCurrentProductIndex].quantity += quantity;
+      // Regular product logic - check if already in cart
+      const findCurrentProductIndex = cart.items.findIndex(
+        (item) =>
+          item.productId.toString() === productId && !item.personalizationText
+      );
+
+      if (findCurrentProductIndex === -1) {
+        cart.items.push({
+          productId,
+          quantity,
+          personalizationText: "",
+        });
+      } else {
+        cart.items[findCurrentProductIndex].quantity += quantity;
+      }
     }
 
     await cart.save();
@@ -92,6 +115,7 @@ const fetchCartItems = async (req, res) => {
       price: item.productId.price,
       salePrice: item.productId.salePrice,
       quantity: item.quantity,
+      personalizationText: item.personalizationText || "",
     }));
 
     res.status(200).json({
@@ -157,6 +181,7 @@ const updateCartItemQuantity = async (req, res) => {
       price: item.productId ? item.productId.price : null,
       salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity,
+      personalizationText: item.personalizationText || "",
     }));
 
     res.status(200).json({
@@ -216,6 +241,7 @@ const deleteCartItem = async (req, res) => {
       price: item.productId ? item.productId.price : null,
       salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity,
+      personalizationText: item.personalizationText || "",
     }));
 
     res.status(200).json({

@@ -20,7 +20,7 @@ const AdminHeader = ({ setOpen }) => {
       </Button>
       <div className="flex flex-1 justify-end">
         <Button
-          className="inline-flex gap-2 items-center rounded-md px-4 py-2 text-sm font-medium shadow hover:bg-red-400 hover:cursor-pointer"
+          className="inline-flex gap-2 items-center rounded-md px-4 py-2 text-sm font-medium shadow bg-[#02066f] hover:bg-red-400 hover:cursor-pointer"
           onClick={handleLogout}
         >
           <DoorOpen />

@@ -6,10 +6,42 @@ const ProductSchema = new mongoose.Schema(
     title: String,
     description: String,
     category: String,
-    brand: String,
     price: Number,
     salePrice: Number,
     totalStock: Number,
+    isPersonalizable: {
+      type: Boolean,
+      default: false,
+    },
+    personalizationLabel: {
+      type: String,
+      default: "Add your personalization text",
+    },
+    personalizationMaxLength: {
+      type: Number,
+      default: 50,
+    },
+    hasVariants: {
+      type: Boolean,
+      default: false,
+    },
+    colors: [
+      {
+        id: String,
+        name: String,
+        hex: String,
+      }
+    ],
+    sizes: [
+      {
+        id: String,
+        name: String,
+        inStock: {
+          type: Boolean,
+          default: true,
+        },
+      }
+    ],
   },
   { timestamps: true }
 );

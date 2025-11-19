@@ -2,6 +2,7 @@ import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Button } from "../ui/button";
 import { addCommasToNumbers } from "@/lib/utils";
+import { Badge } from "../ui/badge";
 
 const AdminProductTile = ({
   product,
@@ -10,6 +11,8 @@ const AdminProductTile = ({
   setCurrentIdToEdit,
   handleDelete,
 }) => {
+  // console.log(product);
+  
   return (
     <div>
       <Card className="w-full max-w-sm mx-auto pt-0">
@@ -19,6 +22,11 @@ const AdminProductTile = ({
             alt={product?.title}
             className="w-full h-[300px] object-cover rounded-t-lg"
           />
+          {product?.isPersonalizable && (
+            <Badge className="absolute top-2 right-2 bg-[#02066f]">
+              Personalizable
+            </Badge>
+          )}
         </div>
         <CardContent>
           <h2 className="text-xl font-bold mb-2">{product?.title}</h2>
@@ -39,7 +47,7 @@ const AdminProductTile = ({
         </CardContent>
         <CardFooter className="flex justify-between items-center">
           <Button
-            className="hover:cursor-pointer hover:bg-amber-400"
+            className="hover:cursor-pointer bg-[#02066f] hover:bg-amber-400"
             onClick={() => {
               setOpenCreateProductsDialog(true);
               setCurrentIdToEdit(product._id);
@@ -49,7 +57,7 @@ const AdminProductTile = ({
             Edit
           </Button>
           <Button
-            className="hover:cursor-pointer hover:bg-red-400"
+            className="hover:cursor-pointer bg-[#02066f] hover:bg-red-400"
             onClick={() => handleDelete(product?._id)}
           >
             Delete
