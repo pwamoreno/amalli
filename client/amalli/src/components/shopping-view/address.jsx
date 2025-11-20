@@ -127,7 +127,7 @@ const Address = ({ setCurrentSelectedAddress, selectedId }) => {
   //   console.log(addressList);
 
   return (
-    <Card className="py-0">
+    <Card className="py-4">
       {isAuthenticated && addressList && addressList.length > 0 && (
         <div className="mb-5 p-3 grid grid-cols-1 sm:grid-cols-2 gap-2">
           {addressList.map((address, index) => (

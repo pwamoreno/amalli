@@ -68,19 +68,6 @@ export const addProductFormElements = [
       { id: "anklets", label: "Anklets" },
     ],
   },
-  // {
-  //   label: "Brand",
-  //   name: "brand",
-  //   componentType: "select",
-  //   options: [
-  //     { id: "nike", label: "Nike" },
-  //     { id: "adidas", label: "Adidas" },
-  //     { id: "puma", label: "Puma" },
-  //     { id: "levi", label: "Levi's" },
-  //     { id: "zara", label: "Zara" },
-  //     { id: "h&m", label: "H&M" },
-  //   ],
-  // },
   {
     label: "Price",
     name: "price",
@@ -168,16 +155,6 @@ export const shoppingViewHeaderMenuItems = [
     label: "FAQs",
     path: "/shop/faqs",
   },
-  // {
-  //   id: "accessories",
-  //   label: "Accessories",
-  //   path: "/shop/listing",
-  // },
-  // {
-  //   id: "footwear",
-  //   label: "Footwear",
-  //   path: "/shop/listing",
-  // },
 ];
 
 export const filterOptions = {
@@ -272,6 +249,68 @@ export const faqs = [
       "Shipping fees depend on your location and are shown at checkout before payment.",
   },
 ];
+
+export const nigeriaStatesShipping = [
+  { state: "Abia", price: 5000 },
+  { state: "Adamawa", price: 5800 },
+  { state: "Akwa Ibom", price: 6000 },
+  { state: "Anambra", price: 5000 },
+  { state: "Bauchi", price: 5800 },
+  { state: "Bayelsa", price: 5800 },
+  { state: "Benue", price: 5800 },
+  { state: "Borno", price: 5800 },
+  { state: "Cross River", price: 6000 },
+  { state: "Delta", price: 5800 },
+  { state: "Ebonyi", price: 5800},
+  { state: "Edo", price: 5000 },
+  { state: "Ekiti", price: 4000 },
+  { state: "Enugu", price: 5000 },
+  { state: "FCT", price: 5500 },
+  { state: "Gombe", price: 5800 },
+  { state: "Imo", price: 5000 },
+  { state: "Jigawa", price: 5800 },
+  { state: "Kaduna", price: 5800 },
+  { state: "Kano", price: 5800 },
+  { state: "Katsina", price: 5800 },
+  { state: "Kebbi", price: 5800 },
+  { state: "Kogi", price: 5800 },
+  { state: "Kwara", price: 5000 },
+  { state: "Lagos", price: 2500 },
+  { state: "Nasarawa", price: 5800 },
+  { state: "Niger", price: 5800 },
+  { state: "Ogun", price: 4000},
+  { state: "Ondo", price: 4000 },
+  { state: "Osun", price: 4000 },
+  { state: "Oyo", price: 4000 },
+  { state: "Plateau", price: 5800 },
+  { state: "Rivers", price: 5000 },
+  { state: "Sokoto", price: 5800 },
+  { state: "Taraba", price: 5800 },
+  { state: "Yobe", price: 5800 },
+  { state: "Zamfara", price: 5800 },
+];
+
+export const holidays = [
+  { date: "01-01", message: "Happy New Year!" },
+  {
+    date: "02-14",
+    message: "Happy Valentine's Day!",
+  },
+  {
+    date: "03-08",
+    message: "Happy Women's Day!",
+  },
+  {
+    date: "05-01",
+    message: "Happy Workers' Day!",
+  },
+  {
+    date: "10-05",
+    message: "Happy Teachers' Day!",
+  },
+  { date: "12-25", message: "Merry Christmas!" },
+];
+
 
 // export const lagosShippingZones = [
 //   {
@@ -404,105 +443,3 @@ export const faqs = [
 //     ],
 //   },
 // ];
-
-export const nigeriaStatesShipping = [
-  { state: "Abia", price: 5000 },
-  { state: "Adamawa", price: 5800 },
-  { state: "Akwa Ibom", price: 6000 },
-  { state: "Anambra", price: 5000 },
-  { state: "Bauchi", price: 5800 },
-  { state: "Bayelsa", price: 5800 },
-  { state: "Benue", price: 5800 },
-  { state: "Borno", price: 5800 },
-  { state: "Cross River", price: 6000 },
-  { state: "Delta", price: 5800 },
-  { state: "Ebonyi", price: 5800},
-  { state: "Edo", price: 5000 },
-  { state: "Ekiti", price: 4000 },
-  { state: "Enugu", price: 5000 },
-  { state: "FCT", price: 5500 },
-  { state: "Gombe", price: 5800 },
-  { state: "Imo", price: 5000 },
-  { state: "Jigawa", price: 5800 },
-  { state: "Kaduna", price: 5800 },
-  { state: "Kano", price: 5800 },
-  { state: "Katsina", price: 5800 },
-  { state: "Kebbi", price: 5800 },
-  { state: "Kogi", price: 5800 },
-  { state: "Kwara", price: 5000 },
-  { state: "Lagos", price: 2500 }, // Base Lagos price
-  { state: "Nasarawa", price: 5800 },
-  { state: "Niger", price: 5800 },
-  { state: "Ogun", price: 4000},
-  { state: "Ondo", price: 4000 },
-  { state: "Osun", price: 4000 },
-  { state: "Oyo", price: 4000 },
-  { state: "Plateau", price: 5800 },
-  { state: "Rivers", price: 5000 },
-  { state: "Sokoto", price: 5800 },
-  { state: "Taraba", price: 5800 },
-  { state: "Yobe", price: 5800 },
-  { state: "Zamfara", price: 5800 },
-];
-
-export const holidays = [
-  { date: "12-25", message: "Merry Christmas 🎄✨" },
-  { date: "01-01", message: "Happy New Year 🎆🎉" },
-  { date: "02-14", message: "Happy Valentine's Day ❤️" },
-  { date: "11-18", message: "Happy Launch Day ❤️" },
-  // Add more holidays here...
-];
-
-export const HOLIDAYS = [
-  { name: "New Year's Day", month: 0, day: 1, greeting: "Happy New Year!" },
-  {
-    name: "Valentine's Day",
-    month: 1,
-    day: 14,
-    greeting: "Happy Valentine's Day!",
-  },
-  {
-    name: "International Women's Day",
-    month: 2,
-    day: 8,
-    greeting: "Happy Women's Day!",
-  },
-  { name: "Earth Day", month: 3, day: 22, greeting: "Happy Earth Day!" },
-  {
-    name: "International Workers' Day",
-    month: 4,
-    day: 1,
-    greeting: "Happy Workers' Day!",
-  },
-  {
-    name: "World Environment Day",
-    month: 5,
-    day: 5,
-    greeting: "Happy Environment Day!",
-  },
-  {
-    name: "International Youth Day",
-    month: 7,
-    day: 12,
-    greeting: "Happy Youth Day!",
-  },
-  {
-    name: "International Day of Peace",
-    month: 8,
-    day: 21,
-    greeting: "Wishing you peace today!",
-  },
-  {
-    name: "World Teachers' Day",
-    month: 9,
-    day: 5,
-    greeting: "Happy Teachers' Day!",
-  },
-  {
-    name: "Human Rights Day",
-    month: 11,
-    day: 10,
-    greeting: "Happy Human Rights Day!",
-  },
-  { name: "Christmas", month: 11, day: 25, greeting: "Merry Christmas!" },
-];

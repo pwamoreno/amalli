@@ -15,7 +15,7 @@ import {
 import { addCommasToNumbers } from "@/lib/utils";
 
 const ShippingSelector = ({ onShippingChange }) => {
-  const [shippingType, setShippingType] = useState("lagos"); // "lagos" or "interstate"
+  const [shippingType, setShippingType] = useState("interstate"); // "lagos" or "interstate"
   const [_selectedZone, setSelectedZone] = useState(null);
   const [selectedState, setSelectedState] = useState(null);
   const [_selectedArea, setSelectedArea] = useState("");
@@ -101,7 +101,7 @@ const ShippingSelector = ({ onShippingChange }) => {
       {shippingType === "interstate" && (
         <div className="space-y-4">
           <div>
-            <Label htmlFor="state">Select State</Label>
+            <Label htmlFor="state" className="mb-3">Select State</Label>
             <Select
               onValueChange={handleStateChange}
               value={selectedState?.state}
@@ -111,7 +111,7 @@ const ShippingSelector = ({ onShippingChange }) => {
               </SelectTrigger>
               <SelectContent>
                 {nigeriaStatesShipping
-                  .filter((s) => s.state !== "Lagos") // Exclude Lagos
+                  .filter((s) => s.state !== "") 
                   .map((state) => (
                     <SelectItem key={state.state} value={state.state}>
                       {state.state} - ₦{addCommasToNumbers(state.price)}

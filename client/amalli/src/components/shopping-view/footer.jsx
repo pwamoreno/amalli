@@ -15,6 +15,7 @@ import {
   Pinterest2,
   TikTok,
   WhatsApp,
+  X,
 } from "../icons/AmalliLogo";
 import { useNavigate } from "react-router-dom";
 import { getCurrentDateInfo } from "@/lib/utils";
@@ -48,25 +49,29 @@ const ShoppingFooter = () => {
   const socials = [
     {
       id: 1,
-      link: "facebook",
-      logo: Facebook,
-      aria: "Facebook",
+      link: "x",
+      path: "amallijewelry?s=21",
+      logo: X,
+      aria: "X",
     },
     {
       id: 2,
       link: "instagram",
+      path: "amallijewelry?igsh=Ym92MTRnMHQyeWV2&utm_source=qr",
       logo: Instagram,
       aria: "Instagram",
     },
     {
       id: 3,
       link: "tiktok",
+      path: "@amallijewelry",
       logo: TikTok,
       aria: "TikTok",
     },
     {
       id: 4,
       link: "pinterest",
+      path: "AmalliJewelry/",
       logo: Pinterest2,
       aria: "Pinterest",
     },
@@ -164,7 +169,7 @@ const ShoppingFooter = () => {
               </h3>
 
               <a
-                href="https://wa.me/"
+                href="https://wa.me/+2348104832511"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-orange-500 hover:text-orange-600 underline block mb-4 transition-colors"
@@ -175,10 +180,10 @@ const ShoppingFooter = () => {
               <div className="mb-6">
                 <span className="text-gray-700">Send us an email here: </span>
                 <a
-                  href="mailto:aveamalli@gmail.com"
+                  href="mailto:support@amalli.com"
                   className="text-gray-900 font-medium hover:text-gray-700 transition-colors"
                 >
-                  aveamalli@gmail.com
+                  support@amalli.com
                 </a>
               </div>
             </div>
@@ -189,7 +194,7 @@ const ShoppingFooter = () => {
             {socials.map((linkObj) => (
               <a
                 key={linkObj.id}
-                href={`https://${linkObj.link}.com`}
+                href={`https://${linkObj.link}.com/${linkObj.path}`}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="text-gray-700 hover:text-gray-900 transition-colors"

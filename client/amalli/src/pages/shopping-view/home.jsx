@@ -1,7 +1,4 @@
 import { Button } from "@/components/ui/button";
-// import bannerOne from "../../assets/banner1.jpg";
-// import bannerTwo from "../../assets/banner2.jpg";
-// import bannerThree from "../../assets/banner3.jpg";
 import {
   ChevronLeft,
   ChevronRight,
@@ -50,8 +47,6 @@ const ShoppingHome = () => {
   const navigate = useNavigate();
 
   // console.log(productList);
-
-  // const slides = [bannerOne, bannerTwo, bannerThree];
 
   const userId = isAuthenticated ? user?.id : guestId;
 

@@ -1,6 +1,8 @@
 const Order = require("../../models/Order");
-const Cart = require("../../models/Cart");
-const Product = require("../../models/Product");
+// const Cart = require("../../models/Cart");
+// const Product = require("../../models/Product");
+
+const { updateOrderAfterSuccessfulPayment } = require("../../helpers/paystack");
 
 const createOrder = async (req, res) => {
   try {
@@ -84,7 +86,7 @@ const createOrder = async (req, res) => {
       {
         method: "POST",
         headers: {
-          Authorization: `Bearer ${process.env.VITE_PAYSTACK_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
@@ -121,20 +123,98 @@ const createOrder = async (req, res) => {
       orderId: savedOrder._id,
     });
   } catch (error) {
-    console.log("Error creating order:", error.message);
+    // console.log("Error creating order:", error.message);
     res
       .status(500)
       .json({ success: false, message: "Failed to initialize payment" });
   }
 };
 
+// const verifyPayment = async (req, res) => {
+//   const { reference, orderId } = req.body;
+
+//   if (!reference) {
+//     return res
+//       .status(400)
+//       .json({ success: false, message: "Missing reference" });
+//   }
+
+//   try {
+//     const response = await fetch(
+//       `https://api.paystack.co/transaction/verify/${reference}`,
+//       {
+//         method: "GET",
+//         headers: {
+//           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
+//           "Content-Type": "application/json",
+//         },
+//       }
+//     );
+
+//     const responseData = await response.json();
+
+//     const data = responseData.data;
+
+//     // console.log("paystack verify data", data);
+
+//     if (data.status === "success") {
+//       const updatedOrder = await Order.findOneAndUpdate(
+//         { _id: orderId },
+//         {
+//           paymentId: data.reference,
+//           payerId: data.customer.customer_code,
+//           paymentStatus: "paid",
+//           orderStatus: "verified",
+//           orderUpdateDate: new Date(),
+//         },
+//         { new: true }
+//       );
+
+//       for (let item of updatedOrder.cartItems) {
+//         let product = await Product.findById(item.productId);
+
+//         if (!product) {
+//           return res.status(404).json({
+//             success: false,
+//             message: `Product not found. ${product.title}`,
+//           });
+//         }
+
+//         product.totalStock -= item.quantity;
+
+//         await product.save();
+//       }
+
+//       const getCartId = updatedOrder.cartId;
+//       if (getCartId) {
+//         await Cart.findByIdAndDelete(getCartId);
+//       }
+
+//       //   await updatedOrder.save();
+
+//       return res.status(200).json({
+//         success: true,
+//         message: "Payment verified successfully",
+//         order: updatedOrder,
+//       });
+//     }
+//   } catch (error) {
+//     console.error(
+//       "Error verifying payment: ",
+//       error.response?.data || error.message
+//     );
+//     res
+//       .status(500)
+//       .json({ success: false, message: "Payment verification failed" });
+//   }
+// };
+
+
 const verifyPayment = async (req, res) => {
   const { reference, orderId } = req.body;
 
-  if (!reference) {
-    return res
-      .status(400)
-      .json({ success: false, message: "Missing reference" });
+  if (!reference || !orderId) {
+    return res.status(400).json({ success: false, message: "Missing reference or orderId" });
   }
 
   try {
@@ -143,67 +223,35 @@ const verifyPayment = async (req, res) => {
       {
         method: "GET",
         headers: {
-          Authorization: `Bearer ${process.env.VITE_PAYSTACK_SECRET_KEY}`,
+          Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
           "Content-Type": "application/json",
         },
       }
     );
 
-    const responseData = await response.json();
+    const payload = await response.json();
+    const data = payload.data;
 
-    const data = responseData.data;
-
-    // console.log("paystack verify data", data);
-
-    if (data.status === "success") {
-      const updatedOrder = await Order.findOneAndUpdate(
-        { _id: orderId },
-        {
-          paymentId: data.reference,
-          payerId: data.customer.customer_code,
-          paymentStatus: "paid",
-          orderStatus: "verified",
-          orderUpdateDate: new Date(),
-        },
-        { new: true }
-      );
-
-      for (let item of updatedOrder.cartItems) {
-        let product = await Product.findById(item.productId);
-
-        if (!product) {
-          return res.status(404).json({
-            success: false,
-            message: `Product not found. ${product.title}`,
-          });
-        }
-
-        product.totalStock -= item.quantity;
-
-        await product.save();
-      }
-
-      const getCartId = updatedOrder.cartId;
-      if (getCartId) {
-        await Cart.findByIdAndDelete(getCartId);
-      }
-
-      //   await updatedOrder.save();
-
-      return res.status(200).json({
-        success: true,
-        message: "Payment verified successfully",
-        order: updatedOrder,
-      });
+    if (!data) {
+      return res.status(400).json({ success: false, message: "Invalid Paystack response" });
     }
+
+    // If webhook was slow, process the payment fallback
+    if (data.status === "success") {
+      const result = await updateOrderAfterSuccessfulPayment(orderId, data);
+      return res.status(200).json(result);
+    }
+
+    return res.status(200).json({
+      success: true,
+      status: data.status,
+      message: "Payment not successful",
+      data,
+    });
+
   } catch (error) {
-    console.error(
-      "Error verifying payment: ",
-      error.response?.data || error.message
-    );
-    res
-      .status(500)
-      .json({ success: false, message: "Payment verification failed" });
+    console.error("Verify Payment Error:", error.message);
+    return res.status(500).json({ success: false, message: "Payment verification failed" });
   }
 };
 

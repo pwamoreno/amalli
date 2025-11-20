@@ -58,6 +58,14 @@ const AuthLogin = () => {
           </Link>
         </p>
       </div>
+      <div className="text-center">
+        <Link
+          className="font-medium text-primary hover:underline"
+          to="/shop/home"
+        >
+          Back to Home
+        </Link>
+      </div>
     </div>
   );
 };

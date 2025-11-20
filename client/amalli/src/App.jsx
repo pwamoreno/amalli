@@ -28,6 +28,9 @@ import HolidayGreeting from "./components/common/holiday-greeting";
 import { getTodayHoliday } from "./lib/utils";
 import TermsOfServicePage from "./components/shopping-view/terms-of-service";
 import ScrollToTop from "./components/common/scroll-to-top";
+import RefundPolicyPage from "./components/shopping-view/refund-policy";
+import ContactPage from "./components/shopping-view/contact";
+import PrivacyPolicyPage from "./components/shopping-view/privacy-policy";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -107,6 +110,9 @@ function App() {
           <Route path="checkout" element={<ShoppingCheckout />} />
           <Route path="search" element={<SearchProducts />} />
           <Route path="terms-of-service" element={<TermsOfServicePage />} />
+          <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
+          <Route path="refund-policy" element={<RefundPolicyPage />} />
+          <Route path="contact" element={<ContactPage />} />
 
           {/* Payment routes - MUST be accessible to guests */}
           <Route

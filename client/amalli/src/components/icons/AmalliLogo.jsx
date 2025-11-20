@@ -179,6 +179,8 @@ export const Anklet = forwardRef((props, ref) => {
   );
 });
 
+AmalliLogo.displayName = "Anklet";
+
 export const WhatsApp = forwardRef((props, ref) => {
   const { size = 24, className = "", ...rest } = props;
 
@@ -196,6 +198,8 @@ export const WhatsApp = forwardRef((props, ref) => {
     </svg>
   );
 });
+
+AmalliLogo.displayName = "WhatsApp";
 
 export const Pinterest = forwardRef((props, ref) => {
   const { size = 24, className = "", ...rest } = props;
@@ -216,6 +220,29 @@ export const Pinterest = forwardRef((props, ref) => {
 });
 
 AmalliLogo.displayName = "Pinterest";
+
+export const X = forwardRef((props, ref) => {
+  const { size = 24, className = "", ...rest } = props;
+
+  return (
+    <svg
+      ref={ref}
+      xmlns="http://www.w3.org/2000/svg"
+      width={size}
+      className={className}
+      {...rest}
+      fill="currentColor"
+      viewBox="0 0 47.66 47.67"
+    >
+      <g>
+        <path d="M23.83 0C10.67 0 0 10.67 0 23.83s10.67 23.84 23.83 23.84S47.66 37 47.66 23.83 36.99 0 23.83 0m4.3 34.67-5.79-8.42-7.25 8.42h-1.87l8.29-9.63-8.29-12.07h6.32l5.48 7.98 6.86-7.98h1.88l-7.91 9.19 8.6 12.51z"></path>
+        <path d="M31.88 33.33h-2.87l-5.72-8.19-.84-1.2-6.69-9.56h2.88l5.39 7.72.84 1.2z"></path>
+      </g>{" "}
+    </svg>
+  );
+});
+
+AmalliLogo.displayName = "X";
 
 export const Pinterest2 = forwardRef((props, ref) => {
   const { size = 24, className = "", ...rest } = props;

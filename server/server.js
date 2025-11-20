@@ -14,7 +14,13 @@ const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
 
+// const webhookRouter = require("./routes/webhook/paystack-webhook-route")
+
 const commonFeatureRouter = require("./routes/common/feature-routes");
+
+const {
+  paystackWebhook,
+} = require("./controllers/webhook/paystack-webhook-controller");
 
 //database connection
 mongoose
@@ -40,6 +46,21 @@ app.use(
     credentials: true,
   })
 );
+
+
+app.post(
+  "/api/paystack/webhook",
+  express.raw({ type: "application/json" }),
+  paystackWebhook
+);
+
+// app.use("/api/paystack/webhook", express.raw({ type: 'application/json' }));
+// webhook MUST be here
+// app.post("/api/paystack/webhook", express.raw({ type: "*/*" }),webhookRouter);
+
+// then your normal JSON parsing
+app.use(express.json());
+
 
 app.use(cookieParser());
 app.use(express.json());

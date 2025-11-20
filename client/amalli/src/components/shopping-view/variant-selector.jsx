@@ -120,7 +120,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
             <Label className="text-sm font-semibold uppercase text-gray-700">
               Size
             </Label>
-            <Dialog>
+            {/* <Dialog>
               <DialogTrigger asChild>
                 <button className="text-xs text-blue-600 hover:underline uppercase tracking-wide">
                   Size Chart
@@ -199,7 +199,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
                   </div>
                 </div>
               </DialogContent>
-            </Dialog>
+            </Dialog> */}
           </div>
 
           <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">

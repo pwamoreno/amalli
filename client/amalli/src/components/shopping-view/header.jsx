@@ -6,7 +6,6 @@ import {
 } from "react-router-dom";
 import { useState, useEffect } from "react";
 import {
-  House,
   AlignJustify,
   ShoppingCart,
   User,
@@ -31,27 +30,12 @@ import { logoutUser } from "@/store/auth-slice";
 import UserCartWrapper from "./cart-wrapper";
 import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
-// import SearchProducts from "@/pages/shopping-view/search";
 import { AmalliLogo } from "../icons/AmalliLogo";
 
 function MenuItems() {
   const navigate = useNavigate();
   const location = useLocation();
   const [_searchParams, setSearchParams] = useSearchParams();
-
-  // function handleNavigate(getCurrentItem) {
-  //   sessionStorage.removeItem("filters");
-  //   const currentFilter =
-  //     getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
-  //       ? { category: [getCurrentItem.id] }
-  //       : null;
-
-  //   sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-
-  //   location.pathname.includes("listing") && currentFilter !== null
-  //     ? setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`))
-  //     : navigate(getCurrentItem.path);
-  // }
 
   function handleNavigate(getCurrentItem) {
     // Clear filters from sessionStorage
@@ -78,37 +62,51 @@ function MenuItems() {
       setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`));
     }
 
-    // // If navigating to about/faq, clear search params
-    // if (getCurrentItem.id === "about" || getCurrentItem.id === "faq") {
-    //   setSearchParams({}); // Clear all params
-    // } else {
-    //   // Normal filter logic for other pages
-    //   const currentFilter =
-    //     getCurrentItem.id !== "home" && getCurrentItem.id !== "products"
-    //       ? { category: [getCurrentItem.id] }
-    //       : null;
-
-    //   sessionStorage.setItem("filters", JSON.stringify(currentFilter));
-
-    //   if (location.pathname.includes("listing") && currentFilter !== null) {
-    //     setSearchParams(new URLSearchParams(`?category=${getCurrentItem.id}`));
-    //   }
-    // }
-
     navigate(getCurrentItem.path);
   }
 
   return (
     <nav className="flex flex-col mb-3 lg:mb-0 lg:items-center gap-6 lg:flex-row ml-4">
-      {shoppingViewHeaderMenuItems.map((menuItem) => (
-        <Label
-          key={menuItem.id}
-          className="text-sm font-medium cursor-pointer"
-          onClick={() => handleNavigate(menuItem)}
-        >
-          {menuItem.label}
-        </Label>
-      ))}
+      {shoppingViewHeaderMenuItems.map((menuItem) => {
+        let isActive = false;
+
+        const currentPath = location.pathname;
+        const currentSearch = location.search;
+
+        // SPLIT item path into path + query parts
+        const [itemPath, itemQuery] = menuItem.path.split("?");
+
+        if (!itemQuery) {
+          // No query in menu item
+          if (menuItem.id === "products") {
+            // PRODUCTS = listing WITHOUT query
+            isActive = currentPath === itemPath && currentSearch === "";
+          } else {
+            // Normal pages (home, about, faq)
+            isActive = currentPath === itemPath;
+          }
+        } else {
+          // Query exists → men, women, kids
+          isActive =
+            currentPath === itemPath && currentSearch === `?${itemQuery}`;
+        }
+        return (
+          <Label
+            key={menuItem.id}
+            className={`
+              text-sm font-medium cursor-pointer transition-all
+              ${
+                isActive
+                  ? "underline underline-offset-4 decoration-2"
+                  : "hover:underline hover:underline-offset-4 hover:decoration-2"
+              }
+            `}
+            onClick={() => handleNavigate(menuItem)}
+          >
+            {menuItem.label}
+          </Label>
+        );
+      })}
     </nav>
   );
 }
@@ -209,14 +207,6 @@ function HeaderRightContent({ className }) {
 }
 
 const ShoppingHeader = () => {
-  // const { isAuthenticated } = useSelector((state) => state.auth);
-
-  // const [showSearchPage, setShowSearchPage] = useState(false);
-
-  // if (showSearchPage) {
-  //   return <SearchProducts onClose={() => setShowSearchPage(false)} />;
-  // }
-
   return (
     <header className="sticky top-0 z-40 w-full border-b bg-background">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
