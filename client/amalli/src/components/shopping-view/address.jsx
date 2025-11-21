@@ -16,7 +16,7 @@ const initialAddressFormData = {
   address: "",
   city: "",
   phone: "",
-  pincode: "",
+  zipcode: "",
   notes: "",
 };
 
@@ -107,13 +107,15 @@ const Address = ({ setCurrentSelectedAddress, selectedId }) => {
       address: getAddress?.address,
       city: getAddress?.city,
       phone: getAddress?.phone,
-      pincode: getAddress?.pincode,
+      zipcode: getAddress?.zipcode,
       notes: getAddress?.notes,
     });
   }
 
   function isFormValid() {
+    const excludedFields = ["zipcode", "notes"];
     return Object.keys(formData)
+      .filter((key) => !excludedFields.includes(key))
       .map((key) => formData[key].trim() !== "")
       .every((item) => item);
   }

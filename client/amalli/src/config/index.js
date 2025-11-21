@@ -201,11 +201,11 @@ export const addressFormControls = [
     placeholder: "Enter your city",
   },
   {
-    label: "Pincode",
-    name: "pincode",
+    label: "zipcode",
+    name: "zipcode",
     componentType: "input",
     type: "text",
-    placeholder: "Enter your pincode",
+    placeholder: "Enter your zipcode",
   },
   {
     label: "Phone",

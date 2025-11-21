@@ -44,7 +44,7 @@ const ShoppingProductTile = ({
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-[300px] object-cover rounded-t-lg"
+            className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-t-lg"
           />
           {product?.totalStock === 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
@@ -79,7 +79,9 @@ const ShoppingProductTile = ({
           <div className="flex justify-between items-center mb-2">
             <span
               className={`${
-                product.salePrice > 0 ? "line-through text-muted-foreground" : ""
+                product.salePrice > 0
+                  ? "line-through text-muted-foreground"
+                  : ""
               } text-lg font-semibold`}
             >
               ₦{addCommasToNumbers(product?.price)}

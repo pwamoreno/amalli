@@ -90,7 +90,7 @@ const ShoppingCheckout = () => {
         addressId: currentSelectedAddress?._id || null,
         address: currentSelectedAddress?.address,
         city: currentSelectedAddress?.city,
-        pincode: currentSelectedAddress?.pincode,
+        zipcode: currentSelectedAddress?.zipcode,
         phone: currentSelectedAddress?.phone,
         notes: currentSelectedAddress?.notes,
       },

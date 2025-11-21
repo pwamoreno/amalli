@@ -227,7 +227,7 @@ const ShoppingFooter = () => {
           </div> */}
 
           {/* Copyright and Links */}
-          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-600">
+          <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-600 pb-16">
             <span>&copy; {currentYear}, AMALLI Jewelry</span>
             {legals.map((legal) => (
               <span

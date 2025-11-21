@@ -191,9 +191,9 @@ const ShoppingHome = () => {
           <h2 className="text-3xl font-bold text-center mb-8">
             Featured Products
           </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
+          <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">
             {productList && productList.length > 0
-              ? productList.map((productItem) => (
+              ? productList.slice(0, 4).map((productItem) => (
                   <ShoppingProductTile
                     key={productItem._id}
                     handleGetProductDetails={handleGetProductDetails}

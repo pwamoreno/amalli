@@ -36,18 +36,26 @@ const AddressCard = ({
           <strong>City:</strong>
           {addressInfo?.city}
         </Label>
-        <Label>
-          <strong>Pincode:</strong>
-          {addressInfo?.pincode}
-        </Label>
+        {addressInfo?.zipcode.length === 0 ? (
+          <Label className="hidden"></Label>
+        ) : (
+          <Label>
+            <strong>zipcode:</strong>
+            {addressInfo?.zipcode}
+          </Label>
+        )}
         <Label>
           <strong>Phone:</strong>
           {addressInfo?.phone}
         </Label>
-        <Label>
-          <strong>Note:</strong>
-          {addressInfo?.notes}
-        </Label>
+        {addressInfo?.notes.length === 0 ? (
+          <Label className="hidden"></Label>
+        ) : (
+          <Label>
+            <strong>Note:</strong>
+            {addressInfo?.notes}
+          </Label>
+        )}
       </CardContent>
       <CardFooter className="flex justify-between">
         <Button

@@ -32,7 +32,7 @@ import { fetchCartItems } from "@/store/shop/cart-slice";
 import { Label } from "../ui/label";
 import { AmalliLogo } from "../icons/AmalliLogo";
 
-function MenuItems() {
+function MenuItems({ onNavigate }) {
   const navigate = useNavigate();
   const location = useLocation();
   const [_searchParams, setSearchParams] = useSearchParams();
@@ -47,6 +47,8 @@ function MenuItems() {
     if (noParamPages.includes(getCurrentItem.id)) {
       setSearchParams({});
       navigate(getCurrentItem.path);
+      // Call onNavigate to close sheet
+      if (onNavigate) onNavigate();
       return;
     }
 
@@ -63,6 +65,7 @@ function MenuItems() {
     }
 
     navigate(getCurrentItem.path);
+    if (onNavigate) onNavigate();
   }
 
   return (
@@ -111,7 +114,7 @@ function MenuItems() {
   );
 }
 
-function HeaderRightContent({ className }) {
+function HeaderRightContent({ className, onNavigate }) {
   const { user, isAuthenticated, guestId } = useSelector((state) => state.auth);
   const { cartItems } = useSelector((state) => state.shopCart);
   const [openCartSheet, setOpenCartSheet] = useState(false);
@@ -122,6 +125,7 @@ function HeaderRightContent({ className }) {
 
   function handleLogout() {
     dispatch(logoutUser());
+    if (onNavigate) onNavigate();
   }
 
   useEffect(() => {
@@ -136,7 +140,10 @@ function HeaderRightContent({ className }) {
     >
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
         <Button
-          onClick={() => navigate("/shop/search")}
+          onClick={() => {
+            navigate("/shop/search");
+            if (onNavigate) onNavigate();
+          }}
           variant="outline"
           size="icon"
           className="hover:cursor-pointer"
@@ -180,7 +187,12 @@ function HeaderRightContent({ className }) {
               Logged in as <strong>{user?.userName}</strong>
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
-            <DropdownMenuItem onClick={() => navigate("/shop/account")}>
+            <DropdownMenuItem
+              onClick={() => {
+                navigate("/shop/account");
+                if (onNavigate) onNavigate();
+              }}
+            >
               <User className="mr-2 h-4 w-4" />
               Account
             </DropdownMenuItem>
@@ -194,7 +206,10 @@ function HeaderRightContent({ className }) {
       ) : (
         // Guest user - show login button
         <Button
-          onClick={() => navigate("/auth/login")}
+          onClick={() => {
+            navigate("/auth/login");
+            if (onNavigate) onNavigate();
+          }}
           variant="outline"
           className="hover:cursor-pointer"
         >
@@ -207,25 +222,74 @@ function HeaderRightContent({ className }) {
 }
 
 const ShoppingHeader = () => {
+  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const { cartItems } = useSelector((state) => state.shopCart);
+  const navigate = useNavigate();
+
+  const handleSheetClose = () => {
+    setIsSheetOpen(false);
+  };
+
   return (
-    <header className="sticky top-0 z-40 w-full border-b bg-background">
+    <header className="fixed top-0 z-50 w-full border-b bg-background shadow-sm">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
           <AmalliLogo size={80} />
           {/* <span className="font-bold">amalli</span> */}
         </Link>
-        <Sheet>
-          <SheetTrigger asChild>
-            <Button variant="outline" size="icon" className="lg:hidden">
-              <AlignJustify className="h-6 w-6" />
-              <span className="sr-only">Toggle header menu</span>
-            </Button>
-          </SheetTrigger>
-          <SheetContent side="left" className="w-full max-w-xs">
-            <HeaderRightContent className="flex-row items-center justify-between mx-4 mt-12" />
-            <MenuItems />
-          </SheetContent>
-        </Sheet>
+        <div className="flex items-center gap-2 lg:hidden">
+          <Button
+            onClick={() => navigate("/shop/search")}
+            variant="outline"
+            size="icon"
+            className="hover:cursor-pointer"
+          >
+            <Search className="h-6 w-6" />
+          </Button>
+
+          <Sheet>
+            <SheetTrigger asChild>
+              <Button
+                variant="outline"
+                size="icon"
+                className="relative hover:cursor-pointer"
+              >
+                <ShoppingCart className="h-6 w-6" />
+                {cartItems?.items?.length > 0 && (
+                  <span className="absolute -top-2 -right-2 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center font-semibold">
+                    {cartItems.items.length}
+                  </span>
+                )}
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="w-full max-w-xs">
+              <UserCartWrapper
+                cartItems={
+                  cartItems && cartItems.items && cartItems.items.length > 0
+                    ? cartItems.items
+                    : []
+                }
+              />
+            </SheetContent>
+          </Sheet>
+
+          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+            <SheetTrigger asChild>
+              <Button variant="outline" size="icon">
+                <AlignJustify className="h-6 w-6" />
+                <span className="sr-only">Toggle header menu</span>
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="left" className="w-full max-w-xs">
+              <HeaderRightContent
+                className="flex-row items-center justify-between mx-4 mt-12"
+                inSheet={true}
+                onNavigate={handleSheetClose}
+              />
+              <MenuItems onNavigate={handleSheetClose} />
+            </SheetContent>
+          </Sheet>
+        </div>
         <div className="hidden lg:block">
           <MenuItems />
         </div>
