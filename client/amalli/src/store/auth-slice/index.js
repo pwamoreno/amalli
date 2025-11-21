@@ -50,16 +50,25 @@ export const logoutUser = createAsyncThunk("/auth/logout", async () => {
   return response.data;
 });
 
-export const checkAuth = createAsyncThunk("/auth/checkauth", async () => {
-  const response = await axios.get(`${API}/api/auth/check-auth`, {
-    withCredentials: true,
-    headers: {
-      "Cache-Control": "no-store, no-cache, must-revalidate, proxy-revalidate",
-    },
-  });
+export const checkAuth = createAsyncThunk(
+  "/auth/checkauth",
+  async (_, { rejectWithValue }) => {
+    try {
+      const response = await axios.get(`${API}/api/auth/check-auth`, {
+        withCredentials: true,
+        headers: {
+          "Cache-Control":
+            "no-store, no-cache, must-revalidate, proxy-revalidate",
+        },
+      });
 
-  return response.data;
-});
+      return response.data;
+    } catch (error) {
+      // Handle 401 gracefully - user just isn't logged in
+      return rejectWithValue(error.response?.data);
+    }
+  }
+);
 
 const authSlice = createSlice({
   name: "auth",

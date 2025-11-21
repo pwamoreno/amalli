@@ -117,7 +117,7 @@ const ShoppingHome = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[600px] overflow-hidden">
+      <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
               <img
@@ -126,7 +126,7 @@ const ShoppingHome = () => {
                 key={index}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
-                } absolute top-0 left-0 w-full h-full object-cover transition-opacity duration-1000`}
+                } absolute top-0 left-0 w-full h-full max-md:h-auto max-md:object-contain object-cover transition-opacity duration-1000`}
               />
             ))
           : null}
@@ -159,10 +159,10 @@ const ShoppingHome = () => {
       </div>
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
+          <h2 className="text-3xl max-md:text-xl font-bold text-center mb-8">
             Shop by category
           </h2>
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4">
+          <div className="grid grid-cols-2 max-md:grid-cols-3 md:grid-cols-3 lg:grid-cols-5 gap-4 max-md:gap-1">
             {categoriesWithIcon.map((categoryItem, index) => (
               <Card
                 key={index}
@@ -188,7 +188,7 @@ const ShoppingHome = () => {
 
       <section className="py-12">
         <div className="container mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8">
+          <h2 className="text-3xl max-md:text-2xl font-bold text-center mb-8">
             Featured Products
           </h2>
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-4 gap-6">

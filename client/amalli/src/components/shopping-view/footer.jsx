@@ -100,7 +100,7 @@ const ShoppingFooter = () => {
   ];
 
   return (
-    <footer className="bg-[#faf9f7] mt-40">
+    <footer className="bg-[#faf9f7] mt-30">
       {/* Newsletter Section */}
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
         <h2 className="text-4xl font-serif mb-4">Sign up for our newsletter</h2>
@@ -168,22 +168,13 @@ const ShoppingFooter = () => {
                 Reach out to us
               </h3>
 
-              <a
-                href="https://wa.me/+2348104832511"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-orange-500 hover:text-orange-600 underline block mb-4 transition-colors"
-              >
-                Send us a message on WhatsApp
-              </a>
-
               <div className="mb-6">
                 <span className="text-gray-700">Send us an email here: </span>
                 <a
                   href="mailto:support@amalli.com"
-                  className="text-gray-900 font-medium hover:text-gray-700 transition-colors"
+                  className="text-gray-900 font-medium text-sm hover:text-gray-700 transition-colors"
                 >
-                  support@amalli.com
+                  support@amallijewelry.com
                 </a>
               </div>
             </div>
@@ -227,8 +218,8 @@ const ShoppingFooter = () => {
           </div> */}
 
           {/* Copyright and Links */}
+          
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-600 pb-16">
-            <span>&copy; {currentYear}, AMALLI Jewelry</span>
             {legals.map((legal) => (
               <span
                 key={legal.id}
@@ -238,6 +229,9 @@ const ShoppingFooter = () => {
                 {legal.name}
               </span>
             ))}
+          </div>
+          <div className="flex justify-center text-xs text-gray-600">
+            <span>&copy; {currentYear}, AMALLI Jewelry</span>
           </div>
         </div>
       </div>

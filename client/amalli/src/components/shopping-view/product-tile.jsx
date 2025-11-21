@@ -44,7 +44,7 @@ const ShoppingProductTile = ({
           <img
             src={product?.image}
             alt={product?.title}
-            className="w-full h-[200px] sm:h-[250px] md:h-[300px] object-cover rounded-t-lg"
+            className="w-full h-[200px] sm:h-[250px] max-md:h-[150px] object-cover rounded-t-lg"
           />
           {product?.totalStock === 0 ? (
             <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
@@ -67,7 +67,7 @@ const ShoppingProductTile = ({
           )}
         </div>
         <CardContent className="p-4">
-          <h2 className="text-xl font-bold mb-2">{product?.title}</h2>
+          <h2 className="text-xl max-md:text-sm font-bold md:font-semibold mb-2">{product?.title}</h2>
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-muted-foreground">
               {product?.category}
@@ -76,18 +76,18 @@ const ShoppingProductTile = ({
               {product?.brand}
             </span>
           </div>
-          <div className="flex justify-between items-center mb-2">
+          <div className="flex justify-between items-center mb-1">
             <span
               className={`${
                 product.salePrice > 0
                   ? "line-through text-muted-foreground"
                   : ""
-              } text-lg font-semibold`}
+              } text-lg font-semibold max-md:text-sm`}
             >
               ₦{addCommasToNumbers(product?.price)}
             </span>
             {product.salePrice > 0 ? (
-              <span className="text-lg font-semibold text-primary">
+              <span className="text-lg font-semibold text-primary max-md:text-sm">
                 ₦{addCommasToNumbers(product?.salePrice)}
               </span>
             ) : null}

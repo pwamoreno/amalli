@@ -45,6 +45,15 @@ function App() {
     dispatch(checkAuth());
   }, [dispatch]);
 
+  // useEffect(() => {
+  //   dispatch(checkAuth())
+  //     .unwrap()
+  //     .catch((error) => {
+  //       // User not authenticated - this is fine, just don't show error
+  //       console.log("User not authenticated", error);
+  //     });
+  // }, [dispatch]);
+
   useEffect(() => {
     // Only run ONCE, when loading finishes the first time
     if (!isLoading && !hasInitialized.current) {
