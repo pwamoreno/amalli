@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { Badge } from "../ui/badge";
-import { DialogContent } from "../ui/dialog";
+import { DialogContent, DialogTitle } from "../ui/dialog";
 import { Label } from "../ui/label";
 import { Separator } from "../ui/separator";
 
@@ -11,6 +11,7 @@ const ShoppingOrderDetails = ({ orderDetails }) => {
 
   return (
     <DialogContent className="sm:max-w-[600px]">
+      <DialogTitle>Order Details</DialogTitle>
       <div className="grid gap-6">
         <div className="grid gap-2">
           <div className="flex mt-6 items-center justify-between">
@@ -40,7 +41,9 @@ const ShoppingOrderDetails = ({ orderDetails }) => {
                 className={`py-1 px-3 ${
                   orderDetails?.orderStatus === "verified"
                     ? "bg-green-400"
-                    :orderDetails?.orderStatus === "rejected"
+                    : orderDetails?.orderStatus === "pending"
+                    ? "bg-amber-400"
+                    : orderDetails?.orderStatus === "rejected"
                     ? "bg-red-400"
                     : "bg-black"
                 }`}

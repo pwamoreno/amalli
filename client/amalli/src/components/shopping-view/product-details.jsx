@@ -34,28 +34,11 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
   const maxLength = productDetails?.personalizationMaxLength || 50;
 
-  // console.log(selectedVariant.color?.id, selectedVariant.size?.id);
-
-  // console.log("Product Details:", productDetails);
-  // console.log("hasVariants:", productDetails?.hasVariants);
-  // console.log("Colors:", productDetails?.colors);
-  // console.log("Sizes:", productDetails?.sizes);
-
   function handleRatingChange(getRating) {
     setRating(getRating);
   }
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    // Check if personalization is required but not provided
-    // if (productDetails?.isPersonalizable && !personalizationText.trim()) {
-    //   toast("Please enter personalization text before adding to cart.", {
-    //     style: { background: "#fa113d", color: "white" },
-    //   });
-    //   return;
-    // }
-    // console.log(getCurrentProductId);
-
-    // Check variant selection
     if (productDetails?.hasVariants) {
       if (productDetails.colors?.length > 0 && !selectedVariant.color) {
         toast("Please select a color.", {
@@ -130,8 +113,6 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
   }
 
   function handleAddReview() {
-    // console.log(user?.userName);
-
     if (!isAuthenticated) {
       toast("Please sign in to leave a review.", {
         style: { background: "#fa113d", color: "white" },
@@ -165,24 +146,53 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
     }
   }, [productDetails, dispatch]);
 
-  // console.log(reviews);
-
   const averageReview =
     reviews && reviews.length > 0
       ? reviews.reduce((sum, reviewItem) => sum + reviewItem.reviewValue, 0) /
         reviews.length
       : 0;
 
+  // Improved disabled logic with helper function
   const isAddToCartDisabled =
+    productDetails?.totalStock === 0 ||
     (productDetails?.isPersonalizable && !personalizationText.trim()) ||
     (productDetails?.hasVariants &&
       ((productDetails.colors?.length > 0 && !selectedVariant.color) ||
         (productDetails.sizes?.length > 0 && !selectedVariant.size)));
 
+  // Improved button text logic
+  const getButtonText = () => {
+    if (productDetails?.totalStock === 0) {
+      return "Out of stock";
+    }
+
+    if (productDetails?.isPersonalizable) {
+      return personalizationText.trim()
+        ? "Add Personalized Item to Cart"
+        : "Enter Personalization to Continue";
+    }
+
+    if (productDetails?.hasVariants) {
+      const needsColor =
+        productDetails.colors?.length > 0 && !selectedVariant.color;
+      const needsSize =
+        productDetails.sizes?.length > 0 && !selectedVariant.size;
+
+      if (needsColor && needsSize) return "Select Color & Size to Continue";
+      if (needsColor) return "Select Color to Continue";
+      if (needsSize) return "Select Size to Continue";
+
+      return "Add to Cart";
+    }
+
+    return "Add to Cart";
+  };
+
   return (
     <Dialog open={open} onOpenChange={handleDialogClose}>
-      <DialogContent className="grid grid-cols-2 gap-8 sm:p-12 max-w-[90vw] sm:max-w-[80vw] lg:max-w-[70vw]">
-        <div className="relative overflow-hidden rounded-lg">
+      <DialogContent className="grid grid-cols-1 lg:grid-cols-2 gap-6 p-4 sm:p-6 lg:p-8 max-w-[95vw] sm:max-w-[90vw] lg:max-w-[80vw] xl:max-w-[70vw] max-h-[90vh] overflow-y-auto [&>button]:absolute [&>button]:right-6 [&>button]:top-6 [&>button]:z-50 [&>button]:text-white [&>button]:bg-black/50 [&>button]:backdrop-blur-sm [&>button]:rounded-sm [&>button]:p-1.5 [&>button:hover]:bg-black/70">
+        {/* Image Section */}
+        <div className="relative overflow-hidden rounded-lg order-1 lg:order-1">
           <img
             src={productDetails?.image}
             alt={productDetails?.title}
@@ -191,43 +201,56 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
             className="aspect-square w-full object-cover"
           />
         </div>
-        <div className="flex flex-col justify-center gap-3">
-          <div>
-            <h1 className="text-3xl font-extrabold">{productDetails?.title}</h1>
-            {/* Personalization Badge inline with title */}
-            {productDetails?.isPersonalizable && (
-              <Badge className="bg-[#02066f]">Personalizable</Badge>
-            )}
-            <p className="text-muted-foreground">
+
+        {/* Content Section */}
+        <div className="flex flex-col gap-4 order-2 lg:order-2">
+          <div className="space-y-3">
+            <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-2">
+              <h1 className="text-2xl sm:text-3xl font-extrabold leading-tight">
+                {productDetails?.title}
+              </h1>
+              {productDetails?.isPersonalizable && (
+                <Badge className="bg-[#02066f] self-start">
+                  Personalizable
+                </Badge>
+              )}
+            </div>
+            <p className="text-muted-foreground text-sm sm:text-base leading-relaxed">
               {productDetails?.description}
             </p>
           </div>
+
+          {/* Price Section */}
           <div className="flex items-center justify-between">
             <p
-              className={`text-xl font-bold text-primary ${
-                (productDetails?.salePrice ?? 0) > 0 ? "line-through" : ""
+              className={`text-lg sm:text-xl font-bold ${
+                (productDetails?.salePrice ?? 0) > 0
+                  ? "line-through text-muted-foreground"
+                  : ""
               }`}
             >
               ₦{addCommasToNumbers(productDetails?.price ?? 0)}
             </p>
             {(productDetails?.salePrice ?? 0) > 0 ? (
-              <p className="text-xl font-bold text-muted-foreground">
+              <p className="text-lg sm:text-xl font-bold">
                 ₦{addCommasToNumbers(productDetails?.salePrice ?? 0)}
               </p>
             ) : null}
           </div>
-          <div className="flex items-center gap-2 mt-2">
+
+          {/* Rating */}
+          <div className="flex items-center gap-2">
             <div className="flex items-center gap-0.5">
               <StarRating rating={averageReview} />
             </div>
-            <span className="text-muted-foreground">
+            <span className="text-muted-foreground text-sm">
               ({averageReview.toFixed(2)})
             </span>
           </div>
 
           {/* Variant Selector */}
           {productDetails?.hasVariants && (
-            <div className="mt-4">
+            <div className="mt-2">
               <VariantSelector
                 product={productDetails}
                 onVariantChange={setSelectedVariant}
@@ -238,20 +261,18 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
           {/* Personalization Input Section */}
           {productDetails?.isPersonalizable && (
-            <div className="mt-4 mb-2 space-y-3 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <div className="flex items-start gap-2">
-                <div className="flex-1">
-                  <Label
-                    htmlFor="personalization"
-                    className="text-base font-semibold text-blue-900"
-                  >
-                    {productDetails?.personalizationLabel ||
-                      "Personalize this product"}
-                  </Label>
-                  <p className="text-sm text-blue-700 mt-1">
-                    Make this special with your custom text (required)
-                  </p>
-                </div>
+            <div className="mt-2 space-y-3 p-3 sm:p-4 bg-blue-50 border border-blue-200 rounded-lg">
+              <div className="space-y-2">
+                <Label
+                  htmlFor="personalization"
+                  className="text-sm sm:text-base font-semibold text-blue-900"
+                >
+                  {productDetails?.personalizationLabel ||
+                    "Personalize this product"}
+                </Label>
+                <p className="text-xs sm:text-sm text-blue-700">
+                  Make this special with your custom text (required)
+                </p>
               </div>
 
               <div className="space-y-2">
@@ -264,10 +285,10 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                       setPersonalizationText(e.target.value);
                     }
                   }}
-                  className="bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="bg-white border-blue-300 focus:border-blue-500 focus:ring-blue-500 text-sm sm:text-base"
                   maxLength={maxLength}
                 />
-                <div className="flex justify-between items-center text-sm">
+                <div className="flex justify-between items-center text-xs sm:text-sm">
                   <span
                     className={`${
                       personalizationText.length === maxLength
@@ -290,7 +311,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                     <p className="text-xs font-medium text-blue-900 mb-1">
                       Preview:
                     </p>
-                    <p className="text-base font-serif text-gray-800">
+                    <p className="text-sm sm:text-base font-serif text-gray-800">
                       "{personalizationText}"
                     </p>
                   </div>
@@ -298,77 +319,89 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
               </div>
             </div>
           )}
-          <div className="mt-5 mb-5">
-            {productDetails?.totalStock === 0 ? (
-              <Button className="w-full opacity-60 cursor-not-allowed">
-                Out of stock
-              </Button>
-            ) : (
-              <Button
-                className={`w-full ${
-                  isAddToCartDisabled
-                    ? "opacity-60 cursor-not-allowed"
-                    : "bg-[#02066f] hover:bg-green-400 hover:cursor-pointer"
-                }`}
-                onClick={() =>
-                  handleAddToCart(
-                    productDetails?._id,
-                    productDetails?.totalStock
-                  )
-                }
-                disabled={isAddToCartDisabled}
-              >
-                {productDetails?.isPersonalizable
-                  ? personalizationText.trim()
-                    ? "Add Personalized Item to Cart"
-                    : "Enter Personalization to Continue"
-                  : productDetails?.hasVariants
-                  ? selectedVariant.color?.id || selectedVariant.size?.id
-                    ? "Add to Cart"
-                    : "Select a size or color to continue"
-                  : "Add to Cart"}
-              </Button>
-            )}
-            {/* Helper text for personalization requirement */}
+
+          {/* Add to Cart Button */}
+          <div className="mt-4 mb-4">
+            <Button
+              className={`w-full text-sm sm:text-base ${
+                isAddToCartDisabled
+                  ? "opacity-60 cursor-not-allowed"
+                  : "bg-[#02066f] hover:bg-green-400 hover:cursor-pointer"
+              }`}
+              onClick={() =>
+                handleAddToCart(productDetails?._id, productDetails?.totalStock)
+              }
+              disabled={isAddToCartDisabled}
+              size="lg"
+            >
+              {getButtonText()}
+            </Button>
+
+            {/* Helper messages */}
             {productDetails?.isPersonalizable &&
               !personalizationText.trim() && (
                 <p className="text-xs text-center text-blue-600 mt-2">
-                  Personalization text is required before adding to cart
+                  Personalization text is required
                 </p>
               )}
+
+            {productDetails?.hasVariants && isAddToCartDisabled && (
+              <p className="text-xs text-center text-orange-600 mt-2">
+                {productDetails.colors?.length > 0 &&
+                  !selectedVariant.color &&
+                  "Please select a color"}
+                {productDetails.colors?.length > 0 &&
+                  !selectedVariant.color &&
+                  productDetails.sizes?.length > 0 &&
+                  !selectedVariant.size &&
+                  " and "}
+                {productDetails.sizes?.length > 0 &&
+                  !selectedVariant.size &&
+                  "Please select a size"}
+              </p>
+            )}
           </div>
+
           <Separator />
+
+          {/* Reviews Section */}
           <div className="max-h-[300px] overflow-auto">
-            <h2 className="text-xl font-bold mb-4">Reviews</h2>
-            <div className="grid gap-6">
+            <h2 className="text-lg sm:text-xl font-bold mb-4">Reviews</h2>
+            <div className="space-y-4">
               {reviews && reviews.length > 0 ? (
-                reviews.map((reviewItem) => (
-                  <div className="flex gap-4">
-                    <Avatar className="w-10 h-10 border">
+                reviews.map((reviewItem, index) => (
+                  <div key={index} className="flex gap-3">
+                    <Avatar className="w-8 h-8 sm:w-10 sm:h-10 border flex-shrink-0">
                       <AvatarFallback>
                         {reviewItem?.username[0].toUpperCase()}
                       </AvatarFallback>
                     </Avatar>
-                    <div className="grid gap-1">
+                    <div className="space-y-1 flex-1 min-w-0">
                       <div className="flex items-center gap-2">
-                        <h3 className="font-bold">{reviewItem?.username}</h3>
+                        <h3 className="font-bold text-sm sm:text-base truncate">
+                          {reviewItem?.username}
+                        </h3>
                       </div>
                       <div className="flex items-center gap-0.5">
                         <StarRating rating={reviewItem?.reviewValue} />
                       </div>
-                      <p className="text-muted-foreground">
+                      <p className="text-muted-foreground text-sm sm:text-base break-words">
                         {reviewItem?.reviewMessage}
                       </p>
                     </div>
                   </div>
                 ))
               ) : (
-                <h1>No Reviews</h1>
+                <p className="text-muted-foreground text-center py-4">
+                  No Reviews
+                </p>
               )}
             </div>
+
+            {/* Add Review Section */}
             {isAuthenticated ? (
-              <div className="mt-10 flex flex-col gap-2">
-                <Label>Write a review</Label>
+              <div className="mt-6 space-y-3">
+                <Label className="text-sm sm:text-base">Write a review</Label>
                 <div className="flex gap-0.5">
                   <StarRating
                     rating={rating}
@@ -380,21 +413,23 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                   value={reviewMessage}
                   onChange={(event) => setReviewMessage(event.target.value)}
                   placeholder="Write a review..."
+                  className="text-sm sm:text-base"
                 />
                 <Button
                   onClick={handleAddReview}
                   disabled={reviewMessage.trim() === ""}
-                  className="hover:bg-green-400 hover:cursor-pointer"
+                  className="hover:bg-green-400 hover:cursor-pointer w-full sm:w-auto"
+                  size="sm"
                 >
-                  Submit
+                  Submit Review
                 </Button>
               </div>
             ) : (
-              <div className="mt-10 p-4 bg-muted rounded-lg text-center">
-                <p className="text-sm text-muted-foreground">
+              <div className="mt-6 p-3 sm:p-4 bg-muted rounded-lg text-center">
+                <p className="text-xs sm:text-sm text-muted-foreground">
                   <Button
                     variant="link"
-                    className="p-0 h-auto font-semibold"
+                    className="p-0 h-auto font-semibold text-xs sm:text-sm"
                     onClick={() => (window.location.href = "/auth/login")}
                   >
                     Sign in
