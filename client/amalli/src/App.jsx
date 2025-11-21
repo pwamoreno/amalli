@@ -116,7 +116,7 @@ function App() {
 
           {/* Payment routes - MUST be accessible to guests */}
           <Route
-            path="payment-verification"
+            path="/shop/payment-verification"
             element={<PayStackPaymentVerification />}
           />
           <Route path="payment-success" element={<PaystackSuccessPage />} />
