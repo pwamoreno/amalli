@@ -7,7 +7,7 @@
       "phases": {
         "setup": {
           "cmds": [
-            "cd server && npm install"
+            "cd server && npm install --omit=dev"
           ]
         },
         "build": {
