@@ -93,7 +93,8 @@ const createOrder = async (req, res) => {
           email: email,
           amount: amountInKobo,
           channels: ["card", "bank"],
-          callback_url: `${process.env.CLIENT_URL}/shop/payment-verification`,
+          // callback_url: `${process.env.CLIENT_URL}/shop/payment-verification`,
+          callback_url: `${process.env.CLIENT_URL}/shop/payment-verification?orderId=${savedOrder._id}`,
           metadata: {
             items: cartItems,
             orderId: savedOrder._id,

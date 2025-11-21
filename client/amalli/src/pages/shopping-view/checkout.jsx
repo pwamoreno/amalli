@@ -110,7 +110,7 @@ const ShoppingCheckout = () => {
     // console.log(orderData);
 
     dispatch(createNewOrder(orderData)).then((data) => {
-      console.log(data), "[paystack_resp]";
+      // console.log(data), "[paystack_resp]";
       if (data?.payload?.success) {
         // Store order ID for verification
         sessionStorage.setItem(
