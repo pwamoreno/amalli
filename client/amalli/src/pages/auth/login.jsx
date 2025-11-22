@@ -1,4 +1,5 @@
 import CommonForm from "@/components/common/form";
+import { AmalliLogo } from "@/components/icons/AmalliLogo";
 import { loginFormControls } from "@/config";
 import { loginUser } from "@/store/auth-slice";
 import { useState } from "react";
@@ -33,6 +34,9 @@ const AuthLogin = () => {
 
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
+      <div className="flex justify-center mb-24">
+        <AmalliLogo size={90} />
+      </div>
       <div className="text-center">
         <h1 className="text-3xl font-bold tracking-tight text-foreground">
           Sign into your account

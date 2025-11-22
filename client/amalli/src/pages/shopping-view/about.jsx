@@ -12,11 +12,11 @@ const AboutUs = () => {
   setSearchParams({});
   // Clear filters from storage too
   sessionStorage.removeItem("filters");
-}, []);
+}, [setSearchParams]);
 
   return (
-    <div className="md:min-h-screen flex items-center justify-center px-4 py-6">
-      <div className="max-w-2xl w-full">
+    <div className="md:min-h-screen flex items-center justify-center px-4 py-6 max-md:text-sm">
+      <div className="max-w-2xl w-full mt-14">
         {/* About Us Title with underline */}
         <div className="text-center mb-8">
           <h1 className="text-4xl md:text-5xl font-serif mb-2">About Us</h1>

@@ -1,7 +1,7 @@
 import React, { useState } from "react";
-import { Send, ChevronDown } from "lucide-react";
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
+// import { Send, ChevronDown } from "lucide-react";
+// import { Button } from "@/components/ui/button";
+// import { Input } from "@/components/ui/input";
 // import {
 //   Select,
 //   SelectContent,
@@ -19,19 +19,14 @@ import {
 } from "../icons/AmalliLogo";
 import { useNavigate } from "react-router-dom";
 import { getCurrentDateInfo } from "@/lib/utils";
+import EmailSignupSystem from "@/pages/shopping-view/email-signup";
 
 const ShoppingFooter = () => {
   const navigate = useNavigate();
-  const [email, setEmail] = useState("");
   const [isWhatsAppMinimized, setIsWhatsAppMinimized] = useState(false);
   const [isWhatsAppHovered, setIsWhatsAppHovered] = useState(false);
   //   const [country, setCountry] = useState("nigeria");
 
-  const handleNewsletterSubmit = (event) => {
-    event.preventDefault();
-    console.log("Newsletter signup:", email);
-    setEmail("");
-  };
 
   // Minimize WhatsApp button after 5 seconds
   React.useEffect(() => {
@@ -101,40 +96,9 @@ const ShoppingFooter = () => {
 
   return (
     <footer className="bg-[#faf9f7] mt-30">
+      <EmailSignupSystem />
       {/* Newsletter Section */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
-        <h2 className="text-4xl font-serif mb-4">Sign up for our newsletter</h2>
-        <p className="text-gray-600 mb-8 max-w-md mx-auto">
-          Get exclusive deals, and be the first to see and get discounts on our
-          new jewelry.
-        </p>
-
-        <div className="max-w-sm mx-auto">
-          <div className="relative">
-            <Input
-              type="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-              className="w-full pr-12 h-12 bg-white border-gray-300"
-              onKeyDown={(e) => {
-                if (e.key === "Enter") {
-                  handleNewsletterSubmit(e);
-                }
-              }}
-            />
-            <Button
-              onClick={handleNewsletterSubmit}
-              size="icon"
-              variant="ghost"
-              className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent"
-            >
-              <Send className="h-4 w-4 text-gray-600" />
-            </Button>
-          </div>
-        </div>
-      </div>
+    
 
       {/* Links and Contact Section */}
       <div className="border-t border-gray-300">

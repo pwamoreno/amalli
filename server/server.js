@@ -13,6 +13,7 @@ const shopAddressRouter = require("./routes/shop/address-routes");
 const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
+const shopNewsletterRouter = require("./routes/shop/newsletter-routes")
 
 // const webhookRouter = require("./routes/webhook/paystack-webhook-route")
 
@@ -58,9 +59,6 @@ app.post(
 // webhook MUST be here
 // app.post("/api/paystack/webhook", express.raw({ type: "*/*" }),webhookRouter);
 
-// then your normal JSON parsing
-app.use(express.json());
-
 
 app.use(cookieParser());
 app.use(express.json());
@@ -74,6 +72,7 @@ app.use("/api/shop/address", shopAddressRouter);
 app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/review", shopReviewRouter);
+app.use("/api/shop/newsletter", shopNewsletterRouter);
 
 app.use("/api/common/feature", commonFeatureRouter);
 

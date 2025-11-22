@@ -18,9 +18,9 @@ export default function FAQPage() {
   setSearchParams({});
   // Clear filters from storage too
   sessionStorage.removeItem("filters");
-}, []);
+}, [setSearchParams]);
   return (
-    <div className="w-full max-w-2xl mx-auto px-4 py-12">
+    <div className="w-full max-w-2xl mx-auto px-4 py-12 max-md:text-sm mt-14">
       <h1 className="text-4xl font-semibold mb-8">FAQs</h1>
 
       <Accordion type="single" collapsible className="space-y-3">

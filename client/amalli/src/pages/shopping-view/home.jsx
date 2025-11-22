@@ -126,7 +126,7 @@ const ShoppingHome = () => {
                 key={index}
                 className={`${
                   index === currentSlide ? "opacity-100" : "opacity-0"
-                } absolute top-0 left-0 w-full h-full max-md:h-auto max-md:object-contain object-cover transition-opacity duration-1000`}
+                } absolute top-0 left-0 w-full h-full  max-md:object-cover object-cover transition-opacity duration-1000`}
               />
             ))
           : null}
@@ -158,7 +158,7 @@ const ShoppingHome = () => {
         </Button>
       </div>
       <section className="py-12 bg-gray-50">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-4 max-md:px-2">
           <h2 className="text-3xl max-md:text-xl font-bold text-center mb-8">
             Shop by category
           </h2>
