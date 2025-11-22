@@ -11,7 +11,11 @@ const transporter = nodemailer.createTransport({
     user: accountEmail,
     pass: process.env.EMAIL_PASSWORD,
   },
-  requireTLS: true,
+  pool: true,
+  maxConnections: 5,
+  maxMessages: 100,
+  rateDelta: 1000,
+  rateLimit: 5,
 });
 
 transporter.verify((error, success) => {
