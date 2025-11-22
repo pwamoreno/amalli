@@ -1,21 +1,16 @@
 const nodemailer = require("nodemailer");
 
-const accountEmail = "dontreader23@gmail.com";
-
 const transporter = nodemailer.createTransport({
-  host: "smtp.gmail.com",
-  port: 587, // Try 587 instead of 465
-  secure: false,
-  service: "gmail",
+  host: "smtp.hostinger.com",
+  port: 465, // Try 587 instead of 465
+  secure: true,
   auth: {
-    user: accountEmail,
-    pass: process.env.EMAIL_PASSWORD,
+    user: process.env.HOSTINGER_EMAIL,
+    pass: process.env.HOSTINGER_PASSWORD,
   },
-  pool: true,
-  maxConnections: 5,
-  maxMessages: 100,
-  rateDelta: 1000,
-  rateLimit: 5,
+  tls: {
+    rejectUnauthorized: true
+  }
 });
 
 transporter.verify((error, success) => {
