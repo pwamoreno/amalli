@@ -16,9 +16,9 @@ import { addCommasToNumbers } from "@/lib/utils";
 
 const ShippingSelector = ({ onShippingChange }) => {
   const [shippingType, setShippingType] = useState("interstate"); // "lagos" or "interstate"
-  const [_selectedZone, setSelectedZone] = useState(null);
-  const [selectedState, setSelectedState] = useState(null);
-  const [_selectedArea, setSelectedArea] = useState("");
+  // const [_selectedZone, setSelectedZone] = useState(null);
+  const [selectedState, setSelectedState] = useState("");
+  // const [_selectedArea, setSelectedArea] = useState("");
 
   // Handle Lagos zone selection
   // const handleZoneChange = (zoneId) => {
@@ -67,9 +67,9 @@ const ShippingSelector = ({ onShippingChange }) => {
   // Handle shipping type toggle
   const handleTypeChange = (type) => {
     setShippingType(type);
-    setSelectedZone(null);
-    setSelectedState(null);
-    setSelectedArea("");
+    // setSelectedZone(null);
+    setSelectedState("");
+    // setSelectedArea("");
     onShippingChange(null); // Reset shipping
   };
 
@@ -104,7 +104,7 @@ const ShippingSelector = ({ onShippingChange }) => {
             <Label htmlFor="state" className="mb-3">Select State</Label>
             <Select
               onValueChange={handleStateChange}
-              value={selectedState?.state}
+              value={selectedState?.state || ""}
             >
               <SelectTrigger className="w-full">
                 <SelectValue placeholder="Choose your state" />

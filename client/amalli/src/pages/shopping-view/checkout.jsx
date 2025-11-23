@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Address from "@/components/shopping-view/address";
 import ShippingSelector from "@/components/shopping-view/shipping-selector";
 import checkout from "../../assets/checkout.jpg";
@@ -18,6 +18,7 @@ const ShoppingCheckout = () => {
   const [currentSelectedAddress, setCurrentSelectedAddress] = useState(null);
   const [shippingInfo, setShippingInfo] = useState(null);
   const [paymentStarted, setPaymentStarted] = useState(false);
+  const [guestAddress, setGuestAddress] = useState(null);
   const [guestEmail, setGuestEmail] = useState("");
   const dispatch = useDispatch();
 
@@ -128,13 +129,28 @@ const ShoppingCheckout = () => {
             orderDate: new Date().toISOString(),
           })
         );
-        
+
         setPaymentStarted(true);
       } else {
         setPaymentStarted(false);
       }
     });
   }
+
+  useEffect(() => {
+    if (!isAuthenticated && guestEmail.trim() && currentSelectedAddress) {
+      setGuestAddress({
+        email: guestEmail,
+        address: currentSelectedAddress.address,
+        city: currentSelectedAddress.city,
+        zipcode: currentSelectedAddress.zipcode,
+        phone: currentSelectedAddress.phone,
+        notes: currentSelectedAddress.notes,
+      });
+    } else {
+      setGuestAddress(null);
+    }
+  }, [guestEmail, currentSelectedAddress, isAuthenticated]);
 
   if (authorizationUrl) {
     window.location.href = authorizationUrl;
@@ -173,6 +189,35 @@ const ShoppingCheckout = () => {
             selectedId={currentSelectedAddress}
             setCurrentSelectedAddress={setCurrentSelectedAddress}
           />
+
+          {guestAddress && (
+            <div className="p-4 border rounded-lg bg-muted/50 mt-4">
+              <h3 className="font-semibold text-base mb-2">
+                Added Address
+              </h3>
+              <p>
+                <strong>Email:</strong> {guestAddress.email}
+              </p>
+              <p>
+                <strong>Address:</strong> {guestAddress.address}
+              </p>
+              <p>
+                <strong>City:</strong> {guestAddress.city}
+              </p>
+              <p>
+                <strong>Zipcode:</strong> {guestAddress.zipcode}
+              </p>
+              <p>
+                <strong>Phone:</strong> {guestAddress.phone}
+              </p>
+              {guestAddress.notes && (
+                <p>
+                  <strong>Notes:</strong> {guestAddress.notes}
+                </p>
+              )}
+            </div>
+          )}
+
           {/* Shipping Selector */}
           <div className="p-4 border rounded-lg bg-background">
             <ShippingSelector
@@ -180,11 +225,12 @@ const ShoppingCheckout = () => {
               // selectedShipping={shippingInfo}
             />
           </div>
-
         </div>
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
-            ? cartItems.items.map((item) => <UserCartContent cartItem={item} />)
+            ? cartItems.items.map((item) => (
+                <UserCartContent key={item.productId} cartItem={item} />
+              ))
             : null}
           <div className="mt-8 space-y-4">
             <div className="flex justify-between mx-5">
@@ -195,13 +241,19 @@ const ShoppingCheckout = () => {
             </div>
             <div className="flex justify-between mx-5">
               <span className="text-muted-foreground">Shipping</span>
-              <span className={shippingCost > 0 ? "text-green-600 font-medium" : ""}>
-                {shippingCost > 0 ? `₦${addCommasToNumbers(shippingCost.toFixed(2))}` : "Select location"}
+              <span
+                className={shippingCost > 0 ? "text-green-600 font-medium" : ""}
+              >
+                {shippingCost > 0
+                  ? `₦${addCommasToNumbers(shippingCost.toFixed(2))}`
+                  : "Select location"}
               </span>
             </div>
             <div className="flex justify-between mx-5 pt-4 border-t">
               <span className="font-bold text-lg">Total</span>
-              <span className="font-bold text-lg">₦{addCommasToNumbers(totalAmount.toFixed(2))}</span>
+              <span className="font-bold text-lg">
+                ₦{addCommasToNumbers(totalAmount.toFixed(2))}
+              </span>
             </div>
           </div>
           <div className="mt-4 w-full">
@@ -217,7 +269,7 @@ const ShoppingCheckout = () => {
                 : "Select shipping location to continue"}
             </PressableButton>
           </div>
-          {!isAuthenticated && (
+          {/* {!isAuthenticated && (
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
               <p className="text-sm text-blue-900">
                 <strong>Want to track your order?</strong> Create an account
@@ -225,7 +277,7 @@ const ShoppingCheckout = () => {
                 faster checkout next time.
               </p>
             </div>
-          )}
+          )} */}
         </div>
       </div>
     </div>

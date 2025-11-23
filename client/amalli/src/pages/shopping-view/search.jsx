@@ -171,7 +171,7 @@ const SearchProducts = () => {
                 <span className="sr-only">Shopping cart</span>
               </PressableButton>
               <UserCartWrapper
-                setOpenCartSheet={setOpenCartSheet}
+                onClose={setOpenCartSheet}
                 cartItems={
                   cartItems && cartItems.items && cartItems.items.length > 0
                     ? cartItems.items

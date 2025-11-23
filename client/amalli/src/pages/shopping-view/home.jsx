@@ -158,36 +158,31 @@ const ShoppingHome = () => {
           Shop by category
         </h2>
         <div className="max-w-6xl mx-auto px-4">
-          <div className="flex gap-2 sm:gap-4 overflow-x-auto sm:grid sm:grid-cols-5 pb-2 sm:pb-0">
-          {categoriesWithIcon.map((categoryItem, index) => (
-            <Card
-              key={index}
-              className="cursor-pointer hover:shadow-lg transition-shadow flex-shrink-0 sm:flex-shrink"
-              onClick={() =>
-                handleNavigateToListingPage(categoryItem, "category")
-              }
-            >
-              <CardContent className="flex flex-col items-center justify-center p-3 sm:p-6 w-[70px] h-[70px] sm:w-auto sm:h-auto sm:aspect-auto aspect-square">
-                <categoryItem.icon
-                  className={`${
-                    categoryItem.icon === Bracelet
-                    // categoryItem.icon === Anklet
-                    //   ? "w-6 h-6 md:w-12 md:h-12"
-                    //   : "w-8 h-5 md:w-24 md:h-12"
-                  } w-8 h-8 sm:w-16 sm:h-16 mb-1 sm:mb-3 text-primary`}
-                />
-                <span className="font-bold text-center text-[10px] sm:text-base leading-tight">
-                  {categoryItem.label}
-                </span>
-              </CardContent>
-            </Card>
-          ))}
-        </div>
+          <div className="flex gap-2 sm:gap-4 overflow-x-auto sm:grid sm:grid-cols-5 pb-2 sm:pb-0 scrollbar-hide">
+            {categoriesWithIcon.map((categoryItem, index) => (
+              <Card
+                key={index}
+                className="cursor-pointer hover:shadow-lg transition-shadow flex-shrink-0 sm:flex-shrink"
+                onClick={() =>
+                  handleNavigateToListingPage(categoryItem, "category")
+                }
+              >
+                <CardContent className="flex flex-col items-center justify-center p-3 sm:p-6 w-[70px] h-[70px] sm:w-auto sm:h-auto sm:aspect-auto aspect-square">
+                  <categoryItem.icon
+                    className={`w-8 h-8 sm:w-16 sm:h-16 mb-1 sm:mb-3 text-primary`}
+                  />
+                  <span className="font-bold text-center text-[10px] sm:text-base leading-tight">
+                    {categoryItem.label}
+                  </span>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
 
       <section className="py-12">
-        <div className="container mx-auto px-4">
+        <div className="container mx-auto px-2 lg:px-4">
           <h2 className="text-xl lg:text-3xl font-bold text-center mb-8">
             Featured Products
           </h2>

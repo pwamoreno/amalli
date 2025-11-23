@@ -1,11 +1,11 @@
 import React from "react";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-import { PressableButton } from "../common/pressable-button"; 
+import { PressableButton } from "../common/pressable-button";
 import UserCartContent from "./cart-content";
 import { useNavigate } from "react-router-dom";
 import { addCommasToNumbers } from "@/lib/utils";
 
-const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
+const UserCartWrapper = ({ cartItems, onClose }) => {
   const navigate = useNavigate();
 
   const cartTotal =
@@ -22,7 +22,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
       : 0;
 
   return (
-    <SheetContent className="sm:max-w-md max-md:w-full">
+    <SheetContent className="sm:max-w-md w-full">
       <SheetHeader>
         <SheetTitle>Your Cart</SheetTitle>
       </SheetHeader>
@@ -36,14 +36,18 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
       <div className="mt-8 space-y-4">
         <div className="flex justify-between mx-5">
           <span className="font-bold">Total</span>
-          <span className="font-bold">₦{addCommasToNumbers(cartTotal.toFixed(2))}</span>
+          <span className="font-bold">
+            ₦{addCommasToNumbers(cartTotal.toFixed(2))}
+          </span>
         </div>
       </div>
       <PressableButton
         className="mt-6 mx-5 hover:cursor-pointer bg-[#02066f] hover:bg-green-500"
         onClick={() => {
-          navigate("/shop/checkout");
-          setOpenCartSheet(false);
+          onClose(false);
+          setTimeout(() => {
+            navigate("/shop/checkout");
+          }, 400);
         }}
       >
         Checkout

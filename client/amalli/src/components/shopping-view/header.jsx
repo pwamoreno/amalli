@@ -222,19 +222,20 @@ function HeaderRightContent({ className, onNavigate }) {
 }
 
 const ShoppingHeader = () => {
-  const [isSheetOpen, setIsSheetOpen] = useState(false);
+  const [isCartSheetOpen, setIsCartSheetOpen] = useState(false);
+  const [isMenuSheetOpen, setIsMenuSheetOpen] = useState(false);
   const { cartItems } = useSelector((state) => state.shopCart);
   const navigate = useNavigate();
 
-  const handleSheetClose = () => {
-    setIsSheetOpen(false);
-  };
+  // const handleSheetClose = () => {
+  //   setIsMenuSheetOpen(false);
+  // };
 
   return (
     <header className="fixed top-0 z-50 w-full border-b bg-background shadow-sm">
       <div className="flex h-16 items-center justify-between px-4 md:px-6">
         <Link to="/shop/home" className="flex items-center gap-2">
-          <AmalliLogo size={80} />
+          <AmalliLogo size={80} color="#FFD700" />
           {/* <span className="font-bold">amalli</span> */}
         </Link>
         <div className="flex items-center gap-2 lg:hidden">
@@ -247,7 +248,7 @@ const ShoppingHeader = () => {
             <Search className="h-6 w-6" />
           </PressableButton>
 
-          <Sheet>
+          <Sheet open={isCartSheetOpen} onOpenChange={setIsCartSheetOpen}>
             <SheetTrigger asChild>
               <PressableButton
                 variant="outline"
@@ -264,6 +265,7 @@ const ShoppingHeader = () => {
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs">
               <UserCartWrapper
+                onClose={setIsCartSheetOpen}
                 cartItems={
                   cartItems && cartItems.items && cartItems.items.length > 0
                     ? cartItems.items
@@ -273,21 +275,23 @@ const ShoppingHeader = () => {
             </SheetContent>
           </Sheet>
 
-          <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
+          <Sheet open={isMenuSheetOpen} onOpenChange={setIsMenuSheetOpen}>
             <SheetTrigger asChild>
               <PressableButton variant="outline" size="icon">
                 <AlignJustify className="h-6 w-6" />
                 <span className="sr-only">Toggle header menu</span>
               </PressableButton>
             </SheetTrigger>
-            <SheetContent side="left" className="w-full max-w-xs">
-              <HeaderRightContent
-                className="flex-row items-center justify-between mx-4 mt-12"
-                inSheet={true}
-                onNavigate={handleSheetClose}
-              />
-              <MenuItems onNavigate={handleSheetClose} />
-            </SheetContent>
+            {isMenuSheetOpen && (
+              <SheetContent side="left" className="w-full max-w-xs">
+                <HeaderRightContent
+                  className="flex-row items-center justify-between mx-4 mt-12"
+                  inSheet={true}
+                  onNavigate={() => setIsMenuSheetOpen(false)}
+                />
+                <MenuItems onNavigate={() => setIsMenuSheetOpen(false)} />
+              </SheetContent>
+            )}
           </Sheet>
         </div>
         <div className="hidden lg:block">

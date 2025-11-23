@@ -35,10 +35,10 @@ const AuthLogin = () => {
   return (
     <div className="mx-auto w-full max-w-md space-y-6">
       <div className="flex justify-center mb-24">
-        <AmalliLogo size={90} />
+        <AmalliLogo size={90} color="#FFD700" />
       </div>
       <div className="text-center">
-        <h1 className="text-3xl font-bold tracking-tight text-foreground">
+        <h1 className="text-xl lg:text-3xl font-bold tracking-tight text-foreground">
           Sign into your account
         </h1>
       </div>
@@ -52,7 +52,7 @@ const AuthLogin = () => {
       />
 
       <div className="text-center">
-        <p className="mt-2">
+        <p className="text-sm mt-2">
           Don't have an account?
           <Link
             className="font-medium ml-2 text-primary hover:underline"
@@ -64,7 +64,7 @@ const AuthLogin = () => {
       </div>
       <div className="text-center">
         <Link
-          className="font-medium text-primary hover:underline"
+          className="text-sm font-medium text-primary hover:underline"
           to="/shop/home"
         >
           Back to Home
