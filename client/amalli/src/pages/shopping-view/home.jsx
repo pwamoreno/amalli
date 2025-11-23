@@ -157,7 +157,7 @@ const ShoppingHome = () => {
         <h2 className="text-xl lg:text-3xl font-bold text-center mb-8">
           Shop by category
         </h2>
-        <div className="max-w-6xl mx-auto px-4">
+        <div className="max-w-6xl mx-auto px-2 lg:px-4">
           <div className="flex gap-2 sm:gap-4 overflow-x-auto sm:grid sm:grid-cols-5 pb-2 sm:pb-0 scrollbar-hide">
             {categoriesWithIcon.map((categoryItem, index) => (
               <Card
@@ -167,7 +167,7 @@ const ShoppingHome = () => {
                   handleNavigateToListingPage(categoryItem, "category")
                 }
               >
-                <CardContent className="flex flex-col items-center justify-center p-3 sm:p-6 w-[70px] h-[70px] sm:w-auto sm:h-auto sm:aspect-auto aspect-square">
+                <CardContent className="flex flex-col items-center justify-center p-3 sm:p-6 w-[90px] h-[70px] sm:w-auto sm:h-auto sm:aspect-auto aspect-square">
                   <categoryItem.icon
                     className={`w-8 h-8 sm:w-16 sm:h-16 mb-1 sm:mb-3 text-primary`}
                   />

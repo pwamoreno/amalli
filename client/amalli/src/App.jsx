@@ -31,6 +31,7 @@ import ScrollToTop from "./components/common/scroll-to-top";
 import RefundPolicyPage from "./components/shopping-view/refund-policy";
 import ContactPage from "./components/shopping-view/contact";
 import PrivacyPolicyPage from "./components/shopping-view/privacy-policy";
+import AdminNewsletter from "./pages/admin-view/send-newsletter";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -108,6 +109,7 @@ function App() {
           <Route path="features" element={<AdminFeatures />} />
           <Route path="orders" element={<AdminOrders />} />
           <Route path="products" element={<AdminProducts />} />
+          <Route path="newsletter" element={<AdminNewsletter />} />
         </Route>
 
         {/* Shop routes - accessible to everyone */}

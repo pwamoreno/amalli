@@ -12,6 +12,10 @@ const NewsletterSchema = new mongoose.Schema({
     type: Date,
     default: Date.now
   },
+  unsubscribedAt: {
+    type: Date,
+    default: null,
+  },
   active: {
     type: Boolean,
     default: true
@@ -19,7 +23,11 @@ const NewsletterSchema = new mongoose.Schema({
   lastEmailSent: {
     type: Date,
     default: null
-  }
+  },
+  unsubscribeToken: {
+    type: String,
+    index: true, // Index for faster lookups
+  },
 });
 
 module.exports = mongoose.model("Newsletter", NewsletterSchema)

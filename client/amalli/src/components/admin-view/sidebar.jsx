@@ -1,5 +1,5 @@
 import React, { Fragment } from "react";
-import { ChartLine, LayoutDashboard, ShoppingCart, Wallet } from "lucide-react";
+import { ChartLine, LayoutDashboard, ShoppingCart, Wallet, Mail } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
 
@@ -21,6 +21,12 @@ const adminSidebarMenuItems = [
     label: "Orders",
     path: "/admin/orders",
     icon: <Wallet />,
+  },
+  {
+    id: "newsletter",
+    label: "Newsletter",
+    path: "/admin/newsletter",
+    icon: <Mail />,
   },
 ];
 
