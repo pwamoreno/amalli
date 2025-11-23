@@ -4,7 +4,7 @@ import ShippingSelector from "@/components/shopping-view/shipping-selector";
 import checkout from "../../assets/checkout.jpg";
 import { useDispatch, useSelector } from "react-redux";
 import UserCartContent from "@/components/shopping-view/cart-content";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import { createNewOrder } from "@/store/shop/order-slice";
 import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
@@ -206,7 +206,7 @@ const ShoppingCheckout = () => {
           </div>
           <div className="mt-4 w-full">
             {/*Might want to integrate more than one payment method for checkout. Primary focus obviously on Nigerian modes of payment. */}
-            <Button
+            <PressableButton
               onClick={handlePaystackPayment}
               className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer"
             >
@@ -215,7 +215,7 @@ const ShoppingCheckout = () => {
                 : shippingInfo
                 ? "Checkout with Paystack"
                 : "Select shipping location to continue"}
-            </Button>
+            </PressableButton>
           </div>
           {!isAuthenticated && (
             <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">

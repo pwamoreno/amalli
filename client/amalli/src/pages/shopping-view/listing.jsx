@@ -1,7 +1,7 @@
 import ProductFilter from "@/components/shopping-view/filter";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button"; 
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -160,7 +160,7 @@ const ShoppingListing = () => {
   // console.log("productDetails:", productDetails);
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6">
+    <div className="grid grid-cols-1 md:grid-cols-[200px_1fr] gap-6 p-4 md:p-6 mt-14">
       <ProductFilter filters={filters} handleFilter={handleFilter} />
       <div className="bg-background w-full rounded-lg shadow-sm">
         <div className="p-4 border-b flex items-center justify-between">
@@ -172,14 +172,14 @@ const ShoppingListing = () => {
             </span>
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button
+                <PressableButton
                   variant="outline"
                   size="sm"
                   className="flex items-center gap-1"
                 >
                   <ArrowUpDown className="h-4 w-4" />
                   <span>Sort by</span>
-                </Button>
+                </PressableButton>
               </DropdownMenuTrigger>
               <DropdownMenuContent align="end" className="w-[200px]">
                 <DropdownMenuRadioGroup value={sort} onValueChange={handleSort}>

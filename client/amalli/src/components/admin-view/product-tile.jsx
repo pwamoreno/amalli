@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
-import { Button } from "../ui/button";
 import { addCommasToNumbers } from "@/lib/utils";
 import { Badge } from "../ui/badge";
+import { PressableButton } from "../common/pressable-button";
 
 const AdminProductTile = ({
   product,
@@ -46,7 +46,7 @@ const AdminProductTile = ({
           </div>
         </CardContent>
         <CardFooter className="flex justify-between items-center">
-          <Button
+          <PressableButton
             className="hover:cursor-pointer bg-[#02066f] hover:bg-amber-400"
             onClick={() => {
               setOpenCreateProductsDialog(true);
@@ -55,13 +55,13 @@ const AdminProductTile = ({
             }}
           >
             Edit
-          </Button>
-          <Button
+          </PressableButton>
+          <PressableButton
             className="hover:cursor-pointer bg-[#02066f] hover:bg-red-400"
             onClick={() => handleDelete(product?._id)}
           >
             Delete
-          </Button>
+          </PressableButton>
         </CardFooter>
       </Card>
     </div>

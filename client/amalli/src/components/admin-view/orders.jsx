@@ -1,4 +1,3 @@
-import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
   Table,
@@ -16,6 +15,7 @@ import { getAllOrders, getOrderDetailsAdmin } from "@/store/admin/order-slice";
 import { Badge } from "../ui/badge";
 import { resetOrderDetails } from "@/store/admin/order-slice";
 import { addCommasToNumbers } from "@/lib/utils";
+import { PressableButton } from "../common/pressable-button";
 
 const AdminOrdersView = () => {
   const [open, setOpen] = useState(false);
@@ -84,14 +84,14 @@ const AdminOrdersView = () => {
                         ₦{addCommasToNumbers(orderItem?.totalAmount)}
                       </TableCell>
                       <TableCell>
-                        <Button
+                        <PressableButton
                           className="hover:cursor-pointer bg-[#02066f]"
                           onClick={() =>
                             handleFetchOrderDetails(orderItem?._id)
                           }
                         >
                           View Details
-                        </Button>
+                        </PressableButton>
                       </TableCell>
                     </TableRow>
                   ))

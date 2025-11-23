@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import { CheckCircle2, Package, Mail, ArrowRight } from "lucide-react";
 import { AmalliLogo } from "@/components/icons/AmalliLogo";
 import { addCommasToNumbers } from "@/lib/utils";
@@ -119,37 +119,37 @@ const PaystackSuccessPage = () => {
           {/* Call to Action Buttons */}
           <div className="space-y-3 pt-4">
             {isAuthenticated ? (
-              <Button
+              <PressableButton
                 onClick={() => navigate("/shop/account")}
                 className="w-full h-12 text-base bg-green-600 hover:bg-green-700"
               >
                 View Order History
                 <ArrowRight className="ml-2 h-5 w-5" />
-              </Button>
+              </PressableButton>
             ) : (
               <div className="space-y-3">
                 <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-center">
                   <p className="text-sm font-medium text-blue-900 mb-3">
                     Want to track your order and enjoy faster checkout?
                   </p>
-                  <Button
+                  <PressableButton
                     onClick={() => navigate("/auth/register")}
                     className="w-full bg-blue-600 hover:bg-blue-700"
                   >
                     Create an Account
                     <ArrowRight className="ml-2 h-4 w-4" />
-                  </Button>
+                  </PressableButton>
                 </div>
               </div>
             )}
 
-            <Button
+            <PressableButton
               onClick={() => navigate("/shop/home")}
               variant="outline"
               className="w-full h-12 text-base"
             >
               Continue Shopping
-            </Button>
+            </PressableButton>
           </div>
 
           {/* Guest Note */}

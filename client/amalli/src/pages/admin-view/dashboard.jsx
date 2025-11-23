@@ -1,5 +1,5 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import { addFeatureImage, getFeatureImages } from "@/store/common-slice";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -43,9 +43,9 @@ const AdminDashboard = () => {
         isCustomStyled={true}
         // currentIdToEdit={currentIdToEdit}
       />
-      <Button onClick={handleUploadFeatureImage} className="mt-5 w-full bg-[#02066f]">
+      <PressableButton onClick={handleUploadFeatureImage} className="mt-5 w-full bg-[#02066f]">
         Upload
-      </Button>
+      </PressableButton>
       <div className="flex flex-col gap-4 mt-5">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((featureImageItem) => (

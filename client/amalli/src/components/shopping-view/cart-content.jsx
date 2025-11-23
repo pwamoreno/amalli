@@ -1,5 +1,5 @@
 import React from "react";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button";
 import { Minus, Plus, Trash } from "lucide-react";
 import { useDispatch, useSelector } from "react-redux";
 import {
@@ -85,7 +85,7 @@ const UserCartContent = ({ cartItem }) => {
       <div className="flex-1">
         <h3 className="font-extrabold">{cartItem?.title}</h3>
         <div className="flex items-center gap-2 mt-1">
-          <Button
+          <PressableButton
             variant="outline"
             size="icon"
             className="h-8 w-8 rounded-full hover:cursor-pointer"
@@ -94,9 +94,9 @@ const UserCartContent = ({ cartItem }) => {
           >
             <Minus className="w-4 h-4" />
             <span className="sr-only">Decrease</span>
-          </Button>
+          </PressableButton>
           <span className="font-semibold">{cartItem?.quantity}</span>
-          <Button
+          <PressableButton
             variant="outline"
             size="icon"
             className="h-8 w-8 rounded-full hover:cursor-pointer"
@@ -104,7 +104,7 @@ const UserCartContent = ({ cartItem }) => {
           >
             <Plus className="w-4 h-4" />
             <span className="sr-only">Increase</span>
-          </Button>
+          </PressableButton>
         </div>
       </div>
       <div className="flex flex-col items-end">

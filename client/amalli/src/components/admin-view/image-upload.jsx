@@ -2,9 +2,9 @@ import React, { useEffect, useRef } from "react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { FileIcon, UploadCloud, X } from "lucide-react";
-import { Button } from "../ui/button";
 import axios from "axios";
 import { Skeleton } from "../ui/skeleton";
+import { PressableButton } from "../common/pressable-button";
 
 const ProductImageUpload = ({
   imageFile,
@@ -96,7 +96,7 @@ const ProductImageUpload = ({
               <FileIcon className="w-8 h-8 text-primary mr-2" />
             </div>
             <p className="text-sm font-medium">{imageFile.name}</p>
-            <Button
+            <PressableButton
               variant="ghost"
               size="icon"
               className="text-muted-foreground hover:text-foreground"
@@ -104,7 +104,7 @@ const ProductImageUpload = ({
             >
               <X className="w-4 h-4" />
               <span className="sr-only">Remove File</span>
-            </Button>
+            </PressableButton>
           </div>
         )}
       </div>

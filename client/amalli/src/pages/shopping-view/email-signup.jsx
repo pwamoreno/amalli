@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Send } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button"; 
 import { Input } from "@/components/ui/input";
 import { useDispatch } from "react-redux";
 import { toast } from "sonner";
@@ -63,14 +63,14 @@ const EmailSignupSystem = () => {
               }
             }}
           />
-          <Button
+          <PressableButton
             onClick={handleNewsletterSubmit}
             size="icon"
             variant="ghost"
             className="absolute right-1 top-1/2 -translate-y-1/2 hover:bg-transparent"
           >
             <Send className="h-4 w-4 text-gray-600" />
-          </Button>
+          </PressableButton>
         </div>
       </div>
     </div>

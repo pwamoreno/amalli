@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import {
   ChevronLeft,
   ChevronRight,
@@ -130,7 +130,7 @@ const ShoppingHome = () => {
               />
             ))
           : null}
-        <Button
+        <PressableButton
           variant="outline"
           size="icon"
           className="absolute top-1/2 left-4 transform -translate-y-1/2 bg-white/80 hover:cursor-pointer"
@@ -143,8 +143,8 @@ const ShoppingHome = () => {
           }
         >
           <ChevronLeft className="w-4 h-4" />
-        </Button>
-        <Button
+        </PressableButton>
+        <PressableButton
           variant="outline"
           size="icon"
           className="absolute top-1/2 right-4 transform -translate-y-1/2 bg-white/80 hover:cursor-pointer"
@@ -155,7 +155,7 @@ const ShoppingHome = () => {
           }
         >
           <ChevronRight className="w-4 h-4" />
-        </Button>
+        </PressableButton>
       </div>
       <section className="py-12 bg-gray-50">
         <div className="container mx-auto px-4 max-md:px-2">

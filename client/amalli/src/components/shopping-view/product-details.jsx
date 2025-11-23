@@ -1,6 +1,6 @@
 import { StarIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button"; 
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
@@ -322,7 +322,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
 
           {/* Add to Cart Button */}
           <div className="mt-4 mb-4">
-            <Button
+            <PressableButton
               className={`w-full text-sm sm:text-base ${
                 isAddToCartDisabled
                   ? "opacity-60 cursor-not-allowed"
@@ -335,7 +335,7 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
               size="lg"
             >
               {getButtonText()}
-            </Button>
+            </PressableButton>
 
             {/* Helper messages */}
             {productDetails?.isPersonalizable &&
@@ -415,25 +415,25 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
                   placeholder="Write a review..."
                   className="text-sm sm:text-base"
                 />
-                <Button
+                <PressableButton
                   onClick={handleAddReview}
                   disabled={reviewMessage.trim() === ""}
                   className="hover:bg-green-400 hover:cursor-pointer w-full sm:w-auto"
                   size="sm"
                 >
                   Submit Review
-                </Button>
+                </PressableButton>
               </div>
             ) : (
               <div className="mt-6 p-3 sm:p-4 bg-muted rounded-lg text-center">
                 <p className="text-xs sm:text-sm text-muted-foreground">
-                  <Button
+                  <PressableButton
                     variant="link"
                     className="p-0 h-auto font-semibold text-xs sm:text-sm"
                     onClick={() => (window.location.href = "/auth/login")}
                   >
                     Sign in
-                  </Button>{" "}
+                  </PressableButton>{" "}
                   to write a review
                 </p>
               </div>
@@ -490,7 +490,7 @@ export default ProductDetailsDialog;
 //         {/* ... your existing JSX ... */}
 
 //         <div className="mt-5 mb-5">
-//           <Button
+//           <PressableButton
 //             className={`w-full ${
 //               isAddToCartDisabled
 //                 ? "opacity-60 cursor-not-allowed"

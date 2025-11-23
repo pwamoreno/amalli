@@ -5,7 +5,7 @@ import {
   MapPin,
   Calendar,
 } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import { Input } from "@/components/ui/input";
 import {
   Card,
@@ -120,7 +120,7 @@ const OrderTrackingPage = () => {
                     {error}
                   </div>
                 )}
-                <Button
+                <PressableButton
                   type="submit"
                   className="w-full bg-[#02066f]"
                   disabled={loading}
@@ -136,7 +136,7 @@ const OrderTrackingPage = () => {
                       Track Order
                     </>
                   )}
-                </Button>
+                </PressableButton>
               </form>
             </CardContent>
           </Card>
@@ -145,7 +145,7 @@ const OrderTrackingPage = () => {
         {/* Order Details */}
         {orderData && (
           <div className="space-y-6">
-            <Button
+            <PressableButton
               variant="outline"
               onClick={() => {
                 setOrderData(null);
@@ -155,7 +155,7 @@ const OrderTrackingPage = () => {
               className="mb-4"
             >
               ← Track Another Order
-            </Button>
+            </PressableButton>
 
             {/* Order Summary */}
             <Card>

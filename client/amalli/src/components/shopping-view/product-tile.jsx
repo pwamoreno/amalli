@@ -1,8 +1,8 @@
 import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Badge } from "../ui/badge";
-import { Button } from "../ui/button";
 import { addCommasToNumbers } from "@/lib/utils";
+import { PressableButton } from "../common/pressable-button";
 
 const ShoppingProductTile = ({
   product,
@@ -96,16 +96,16 @@ const ShoppingProductTile = ({
       </div>
       <CardFooter>
         {product?.totalStock === 0 ? (
-          <Button className="w-full opacity-60 cursor-not-allowed">
+          <PressableButton className="w-full opacity-60 cursor-not-allowed">
             Out of stock
-          </Button>
+          </PressableButton>
         ) : (
-          <Button
+          <PressableButton
             onClick={handlePersonalizeButtonClick}
             className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer"
           >
             {getButtonText()}
-          </Button>
+          </PressableButton>
         )}
       </CardFooter>
     </Card>

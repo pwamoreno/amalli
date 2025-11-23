@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "../common/pressable-button"; 
 import { Check } from "lucide-react";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
+// import {
+//   Dialog,
+//   DialogContent,
+//   DialogDescription,
+//   DialogHeader,
+//   DialogTitle,
+//   DialogTrigger,
+// } from "@/components/ui/dialog";
 
 const VariantSelector = ({ product, onVariantChange }) => {
   const [selectedColor, setSelectedColor] = useState(null);
@@ -82,7 +82,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
 
           <div className="flex gap-1.5 flex-wrap">
             {product.colors.map((color) => (
-              <button
+              <PressableButton
                 key={color.id}
                 onClick={() => handleColorChange(color)}
                 className={`
@@ -107,7 +107,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
                     />
                   </div>
                 )}
-              </button>
+              </PressableButton>
             ))}
           </div>
         </div>
@@ -122,7 +122,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
             </Label>
             {/* <Dialog>
               <DialogTrigger asChild>
-                <button className="text-xs text-blue-600 hover:underline uppercase tracking-wide">
+                <PressableButton className="text-xs text-blue-600 hover:underline uppercase tracking-wide">
                   Size Chart
                 </button>
               </DialogTrigger>
@@ -204,7 +204,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
 
           <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">
             {product.sizes.map((size) => (
-              <Button
+              <PressableButton
                 key={size.id}
                 onClick={() => handleSizeChange(size)}
                 variant="outline"
@@ -223,7 +223,7 @@ const VariantSelector = ({ product, onVariantChange }) => {
                 disabled={!size.inStock}
               >
                 {size.name}
-              </Button>
+              </PressableButton>
             ))}
           </div>
         </div>

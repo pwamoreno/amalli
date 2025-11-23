@@ -9,7 +9,7 @@ import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import { fetchProductDetails } from "@/store/shop/products-slice";
 import { fetchAllFilteredProducts } from "@/store/shop/products-slice";
 import { Sheet } from "@/components/ui/sheet";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import UserCartWrapper from "@/components/shopping-view/cart-wrapper";
 
 const SearchProducts = () => {
@@ -122,13 +122,13 @@ const SearchProducts = () => {
       <div className="bg-white shadow-sm sticky top-0 z-10">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <div className="flex items-center gap-4">
-            <button
+            <PressableButton
               onClick={() => navigate(-1)}
               className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               aria-label="Go back"
             >
               <ArrowLeft className="h-6 w-6 text-gray-700" />
-            </button>
+            </PressableButton>
 
             <div className="flex-1 relative">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
@@ -141,12 +141,12 @@ const SearchProducts = () => {
                 autoFocus
               />
               {searchQuery && (
-                <button
+                <PressableButton
                   onClick={() => handleSearch("")}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 p-1 hover:bg-gray-100 rounded"
                 >
                   <X className="h-4 w-4 text-gray-500" />
-                </button>
+                </PressableButton>
               )}
             </div>
 
@@ -154,7 +154,7 @@ const SearchProducts = () => {
               open={openCartSheet}
               onOpenChange={() => setOpenCartSheet(false)}
             >
-              <Button
+              <PressableButton
                 onClick={() => setOpenCartSheet(true)}
                 variant="outline"
                 size="icon"
@@ -168,7 +168,7 @@ const SearchProducts = () => {
                   </span>
                 )}
                 <span className="sr-only">Shopping cart</span>
-              </Button>
+              </PressableButton>
               <UserCartWrapper
                 setOpenCartSheet={setOpenCartSheet}
                 cartItems={

@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button";
 import { Home, Search, ShoppingBag, ArrowLeft } from "lucide-react";
 import NotFoundIcon from "../../assets/not-found.svg";
 
@@ -35,7 +35,7 @@ const NotFound = () => {
 
         {/* Action Buttons */}
         <div className="flex flex-col sm:flex-row gap-4 justify-center items-center mt-8">
-          <Button
+          <PressableButton
             onClick={() => navigate(-1)}
             variant="outline"
             className="w-full sm:w-auto"
@@ -43,18 +43,18 @@ const NotFound = () => {
           >
             <ArrowLeft className="mr-2 h-5 w-5" />
             Go Back
-          </Button>
+          </PressableButton>
 
-          <Button
+          <PressableButton
             onClick={() => navigate("/shop/home")}
             className="w-full sm:w-auto bg-black hover:bg-gray-800"
             size="lg"
           >
             <Home className="mr-2 h-5 w-5" />
             Home Page
-          </Button>
+          </PressableButton>
 
-          <Button
+          <PressableButton
             onClick={() => navigate("/shop/search")}
             variant="outline"
             className="w-full sm:w-auto"
@@ -62,31 +62,31 @@ const NotFound = () => {
           >
             <Search className="mr-2 h-5 w-5" />
             Search Products
-          </Button>
+          </PressableButton>
         </div>
 
         {/* Popular Links */}
         <div className="mt-12 pt-8 border-t border-gray-200">
           <p className="text-sm text-gray-500 mb-4">Looking for something?</p>
           <div className="flex flex-wrap justify-center gap-4">
-            <button
+            <PressableButton
               onClick={() => navigate("/shop/listing")}
               className="text-sm text-gray-600 hover:text-black underline"
             >
               All Products
-            </button>
-            <button
+            </PressableButton>
+            <PressableButton
               onClick={() => navigate("/shop/checkout")}
               className="text-sm text-gray-600 hover:text-black underline"
             >
               Checkout
-            </button>
-            <button
+            </PressableButton>
+            <PressableButton
               onClick={() => navigate("/shop/account")}
               className="text-sm text-gray-600 hover:text-black underline"
             >
               My Account
-            </button>
+            </PressableButton>
           </div>
         </div>
       </div>

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from "../ui/select";
 import { Textarea } from "../ui/textarea";
-import { Button } from "../ui/button";
+import { PressableButton } from "./pressable-button";
 import { Checkbox } from "../ui/checkbox";
 
 const CommonForm = ({
@@ -151,13 +151,13 @@ const CommonForm = ({
           </div>
         ))}
       </div>
-      <Button
+      <PressableButton
         disabled={isButtonDisabled}
         type="submit"
         className="mt-4 w-full bg-[#02066f]"
       >
         {buttonText || "Submit"}
-      </Button>
+      </PressableButton>
     </form>
   );
 };

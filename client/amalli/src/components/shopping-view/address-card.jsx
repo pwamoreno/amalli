@@ -1,7 +1,8 @@
 import React from "react";
 import { Card, CardContent, CardFooter } from "../ui/card";
 import { Label } from "../ui/label";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button"; 
+
 
 const AddressCard = ({
   addressInfo,
@@ -58,18 +59,18 @@ const AddressCard = ({
         )}
       </CardContent>
       <CardFooter className="flex justify-between">
-        <Button
+        <PressableButton
           className="hover:bg-amber-300 hover:cursor-pointer"
           onClick={() => handleEditAddress(addressInfo)}
         >
           Edit
-        </Button>
-        <Button
+        </PressableButton>
+        <PressableButton
           className="hover:bg-red-400 hover:cursor-pointer"
           onClick={() => handleDeleteAddress(addressInfo)}
         >
           Delete
-        </Button>
+        </PressableButton>
       </CardFooter>
     </Card>
   );

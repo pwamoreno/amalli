@@ -14,7 +14,7 @@ import {
   LogIn,
 } from "lucide-react";
 import { Sheet, SheetContent, SheetTrigger } from "../ui/sheet";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button";
 import { useDispatch, useSelector } from "react-redux";
 import { shoppingViewHeaderMenuItems } from "@/config";
 import {
@@ -139,7 +139,7 @@ function HeaderRightContent({ className, onNavigate }) {
       className={`flex lg:items-center lg:flex-row flex-col gap-4 ${className}`}
     >
       <Sheet open={openCartSheet} onOpenChange={() => setOpenCartSheet(false)}>
-        <Button
+        <PressableButton
           onClick={() => {
             navigate("/shop/search");
             if (onNavigate) onNavigate();
@@ -149,8 +149,8 @@ function HeaderRightContent({ className, onNavigate }) {
           className="hover:cursor-pointer"
         >
           <Search className="h-6 w-6" />
-        </Button>
-        <Button
+        </PressableButton>
+        <PressableButton
           onClick={() => setOpenCartSheet(true)}
           variant="outline"
           size="icon"
@@ -163,7 +163,7 @@ function HeaderRightContent({ className, onNavigate }) {
             </span>
           )}
           <span className="sr-only">User cart</span>
-        </Button>
+        </PressableButton>
         <UserCartWrapper
           setOpenCartSheet={setOpenCartSheet}
           cartItems={
@@ -205,7 +205,7 @@ function HeaderRightContent({ className, onNavigate }) {
         </DropdownMenu>
       ) : (
         // Guest user - show login button
-        <Button
+        <PressableButton
           onClick={() => {
             navigate("/auth/login");
             if (onNavigate) onNavigate();
@@ -215,7 +215,7 @@ function HeaderRightContent({ className, onNavigate }) {
         >
           <LogIn className="mr-2 h-4 w-4" />
           Sign In
-        </Button>
+        </PressableButton>
       )}
     </div>
   );
@@ -238,18 +238,18 @@ const ShoppingHeader = () => {
           {/* <span className="font-bold">amalli</span> */}
         </Link>
         <div className="flex items-center gap-2 lg:hidden">
-          <Button
+          <PressableButton
             onClick={() => navigate("/shop/search")}
             variant="outline"
             size="icon"
             className="hover:cursor-pointer"
           >
             <Search className="h-6 w-6" />
-          </Button>
+          </PressableButton>
 
           <Sheet>
             <SheetTrigger asChild>
-              <Button
+              <PressableButton
                 variant="outline"
                 size="icon"
                 className="relative hover:cursor-pointer"
@@ -260,7 +260,7 @@ const ShoppingHeader = () => {
                     {cartItems.items.length}
                   </span>
                 )}
-              </Button>
+              </PressableButton>
             </SheetTrigger>
             <SheetContent side="right" className="w-full max-w-xs">
               <UserCartWrapper
@@ -275,10 +275,10 @@ const ShoppingHeader = () => {
 
           <Sheet open={isSheetOpen} onOpenChange={setIsSheetOpen}>
             <SheetTrigger asChild>
-              <Button variant="outline" size="icon">
+              <PressableButton variant="outline" size="icon">
                 <AlignJustify className="h-6 w-6" />
                 <span className="sr-only">Toggle header menu</span>
-              </Button>
+              </PressableButton>
             </SheetTrigger>
             <SheetContent side="left" className="w-full max-w-xs">
               <HeaderRightContent

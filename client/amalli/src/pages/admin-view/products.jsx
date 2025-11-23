@@ -1,7 +1,7 @@
 import ProductImageUpload from "@/components/admin-view/image-upload";
 import AdminProductTile from "@/components/admin-view/product-tile";
 import CommonForm from "@/components/common/form";
-import { Button } from "@/components/ui/button";
+import { PressableButton } from "@/components/common/pressable-button"; 
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -181,12 +181,12 @@ const AdminProducts = () => {
   return (
     <Fragment>
       <div className="mb-5 flex justify-end">
-        <Button
+        <PressableButton
           onClick={() => setOpenCreateProductsDialog(true)}
           className="hover:cursor-pointer bg-[#02066f] hover:bg-green-400"
         >
           Add New Product
-        </Button>
+        </PressableButton>
       </div>
       <div className="grid gap-4 md:grid-cols-3 lg:grid-cols-4">
         {productList && productList.length > 0
@@ -243,14 +243,14 @@ const AdminProducts = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <Label className="text-sm font-medium">Colors</Label>
-                    <Button
+                    <PressableButton
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={addColor}
                     >
                       + Add Color
-                    </Button>
+                    </PressableButton>
                   </div>
 
                   <div className="space-y-2">
@@ -276,14 +276,14 @@ const AdminProducts = () => {
                             }
                             className="w-16 h-10 cursor-pointer"
                           />
-                          <Button
+                          <PressableButton
                             type="button"
                             variant="destructive"
                             size="icon"
                             onClick={() => removeColor(index)}
                           >
                             <X />
-                          </Button>
+                          </PressableButton>
                         </div>
                       </div>
                     ))}
@@ -299,14 +299,14 @@ const AdminProducts = () => {
                 <div className="space-y-3">
                   <div className="flex justify-between items-center">
                     <Label className="text-sm font-medium">Sizes</Label>
-                    <Button
+                    <PressableButton
                       type="button"
                       variant="outline"
                       size="sm"
                       onClick={addSize}
                     >
                       + Add Size
-                    </Button>
+                    </PressableButton>
                   </div>
 
                   <div className="space-y-2">
@@ -333,14 +333,14 @@ const AdminProducts = () => {
                           <Label className="text-sm whitespace-nowrap">
                             In Stock
                           </Label>
-                          <Button
+                          <PressableButton
                             type="button"
                             variant="destructive"
                             size="icon"
                             onClick={() => removeSize(index)}
                           >
                             <X />
-                          </Button>
+                          </PressableButton>
                         </div>
                       </div>
                     ))}

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button";
 import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
 import { Dialog } from "../ui/dialog";
 import {
@@ -87,14 +87,14 @@ const ShoppingOrders = () => {
                       </TableCell>
                       <TableCell>₦{orderItem?.totalAmount}</TableCell>
                       <TableCell>
-                        <Button
+                        <PressableButton
                           className="hover:cursor-pointer"
                           onClick={() =>
                             handleFetchOrderDetails(orderItem?._id)
                           }
                         >
                           View Details
-                        </Button>
+                        </PressableButton>
                       </TableCell>
                     </TableRow>
                   ))

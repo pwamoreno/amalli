@@ -1,6 +1,6 @@
 import React from "react";
 import { SheetContent, SheetHeader, SheetTitle } from "../ui/sheet";
-import { Button } from "../ui/button";
+import { PressableButton } from "../common/pressable-button"; 
 import UserCartContent from "./cart-content";
 import { useNavigate } from "react-router-dom";
 import { addCommasToNumbers } from "@/lib/utils";
@@ -39,7 +39,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
           <span className="font-bold">₦{addCommasToNumbers(cartTotal.toFixed(2))}</span>
         </div>
       </div>
-      <Button
+      <PressableButton
         className="mt-6 mx-5 hover:cursor-pointer bg-[#02066f] hover:bg-green-500"
         onClick={() => {
           navigate("/shop/checkout");
@@ -47,7 +47,7 @@ const UserCartWrapper = ({ cartItems, setOpenCartSheet }) => {
         }}
       >
         Checkout
-      </Button>
+      </PressableButton>
     </SheetContent>
   );
 };
