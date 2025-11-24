@@ -165,7 +165,7 @@ function HeaderRightContent({ className, onNavigate }) {
           <span className="sr-only">User cart</span>
         </PressableButton>
         <UserCartWrapper
-          setOpenCartSheet={setOpenCartSheet}
+          onClose={setOpenCartSheet}
           cartItems={
             cartItems && cartItems.items && cartItems.items.length > 0
               ? cartItems.items
