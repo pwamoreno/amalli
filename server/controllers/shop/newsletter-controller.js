@@ -165,6 +165,12 @@ const unsubscribe = async (req, res) => {
         .json({ success: false, message: "Email not found" });
     }
 
+    if (subscriber.active === false) {
+      return res
+        .status(200)
+        .json({ success: false, message: "Already unsubscribed" });
+    }
+
     subscriber.active = false;
     await subscriber.save();
 

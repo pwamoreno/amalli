@@ -27,7 +27,6 @@ const ShoppingFooter = () => {
   const [isWhatsAppHovered, setIsWhatsAppHovered] = useState(false);
   //   const [country, setCountry] = useState("nigeria");
 
-
   // Minimize WhatsApp button after 5 seconds
   React.useEffect(() => {
     const timer = setTimeout(() => {
@@ -39,7 +38,13 @@ const ShoppingFooter = () => {
 
   const { year: currentYear } = getCurrentDateInfo();
 
-  const footerNav = ["Search", "All Products", "Necklaces", "Earrings"];
+  const footerNav = [
+    "Search",
+    "All Products",
+    "Necklaces",
+    "Earrings",
+    "Unsubscribe from Newsletter",
+  ];
 
   const socials = [
     {
@@ -98,7 +103,6 @@ const ShoppingFooter = () => {
     <footer className="bg-[#faf9f7] mt-30">
       <EmailSignupSystem />
       {/* Newsletter Section */}
-    
 
       {/* Links and Contact Section */}
       <div className="border-t border-gray-300">
@@ -116,6 +120,8 @@ const ShoppingFooter = () => {
                     href={
                       navItem === "Search"
                         ? `/shop/${navItem.toLowerCase()}`
+                        : navItem === "Unsubscribe from Newsletter"
+                        ? "/shop/newsletter-unsubscribe"
                         : `/shop/listing?category=${navItem.toLowerCase()}`
                     }
                     className="text-gray-700 hover:underline transition-colors"
@@ -182,7 +188,7 @@ const ShoppingFooter = () => {
           </div> */}
 
           {/* Copyright and Links */}
-          
+
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-600 pb-16">
             {legals.map((legal) => (
               <span

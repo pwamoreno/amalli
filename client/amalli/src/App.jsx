@@ -32,6 +32,7 @@ import RefundPolicyPage from "./components/shopping-view/refund-policy";
 import ContactPage from "./components/shopping-view/contact";
 import PrivacyPolicyPage from "./components/shopping-view/privacy-policy";
 import AdminNewsletter from "./pages/admin-view/send-newsletter";
+import UnsubscribePage from "./pages/shopping-view/newsletter-unsubscribe";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -123,6 +124,7 @@ function App() {
           <Route path="terms-of-service" element={<TermsOfServicePage />} />
           <Route path="privacy-policy" element={<PrivacyPolicyPage />} />
           <Route path="refund-policy" element={<RefundPolicyPage />} />
+          <Route path="newsletter-unsubscribe" element={<UnsubscribePage />} />
           <Route path="contact" element={<ContactPage />} />
 
           {/* Payment routes - MUST be accessible to guests */}

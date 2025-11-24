@@ -5,6 +5,7 @@ cloudinary.config({
   cloud_name: "dta1affwu",
   api_key: "252854164953131",
   api_secret: "M9bqrZ4igPLY6S_wU59vAEqP48Q",
+  // secure: true, //use for https
 });
 
 const storage = new multer.memoryStorage();
