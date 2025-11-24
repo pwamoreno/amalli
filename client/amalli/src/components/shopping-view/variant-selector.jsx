@@ -1,15 +1,7 @@
 import { useState, useEffect } from "react";
 import { Label } from "@/components/ui/label";
-import { PressableButton } from "../common/pressable-button"; 
+import { PressableButton } from "../common/pressable-button";
 import { Check } from "lucide-react";
-// import {
-//   Dialog,
-//   DialogContent,
-//   DialogDescription,
-//   DialogHeader,
-//   DialogTitle,
-//   DialogTrigger,
-// } from "@/components/ui/dialog";
 
 const VariantSelector = ({ product, onVariantChange }) => {
   const [selectedColor, setSelectedColor] = useState(null);
@@ -83,10 +75,12 @@ const VariantSelector = ({ product, onVariantChange }) => {
           <div className="flex gap-1.5 flex-wrap">
             {product.colors.map((color) => (
               <PressableButton
+                variant="ghost"
                 key={color.id}
                 onClick={() => handleColorChange(color)}
+                style={{ backgroundColor: color.hex }}
                 className={`
-                  relative w-7 h-7 rounded-full border-2 transition-all
+                  relative w-7 h-7 min-w-[1.75rem] min-h-[1.75rem] rounded-full border-2 transition-all flex-shrink-0 overflow-hidden p-0 hover:bg-transparent aspect-square
                   ${
                     selectedColor?.id === color.id
                       ? "border-black scale-110 shadow-lg"
@@ -95,10 +89,6 @@ const VariantSelector = ({ product, onVariantChange }) => {
                 `}
                 title={color.name}
               >
-                <div
-                  className="w-full h-full rounded-full"
-                  style={{ backgroundColor: color.hex }}
-                />
                 {selectedColor?.id === color.id && (
                   <div className="absolute inset-0 flex items-center justify-center">
                     <Check
@@ -120,86 +110,6 @@ const VariantSelector = ({ product, onVariantChange }) => {
             <Label className="text-sm font-semibold uppercase text-gray-700">
               Size
             </Label>
-            {/* <Dialog>
-              <DialogTrigger asChild>
-                <PressableButton className="text-xs text-blue-600 hover:underline uppercase tracking-wide">
-                  Size Chart
-                </button>
-              </DialogTrigger>
-              <DialogContent className="max-w-2xl">
-                <DialogHeader>
-                  <DialogTitle>Size Chart</DialogTitle>
-                  <DialogDescription>
-                    Find your perfect fit with our size guide
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="mt-4">
-                  <div className="overflow-x-auto">
-                    <table className="w-full border-collapse">
-                      <thead>
-                        <tr className="border-b">
-                          <th className="text-left p-3 font-semibold">Size</th>
-                          <th className="text-left p-3 font-semibold">
-                            Chest (inches)
-                          </th>
-                          <th className="text-left p-3 font-semibold">
-                            Waist (inches)
-                          </th>
-                          <th className="text-left p-3 font-semibold">
-                            Hips (inches)
-                          </th>
-                        </tr>
-                      </thead>
-                      <tbody>
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium">XS</td>
-                          <td className="p-3">32-34</td>
-                          <td className="p-3">24-26</td>
-                          <td className="p-3">34-36</td>
-                        </tr>
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium">S</td>
-                          <td className="p-3">34-36</td>
-                          <td className="p-3">26-28</td>
-                          <td className="p-3">36-38</td>
-                        </tr>
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium">M</td>
-                          <td className="p-3">36-38</td>
-                          <td className="p-3">28-30</td>
-                          <td className="p-3">38-40</td>
-                        </tr>
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium">L</td>
-                          <td className="p-3">38-40</td>
-                          <td className="p-3">30-32</td>
-                          <td className="p-3">40-42</td>
-                        </tr>
-                        <tr className="border-b hover:bg-gray-50">
-                          <td className="p-3 font-medium">XL</td>
-                          <td className="p-3">40-42</td>
-                          <td className="p-3">32-34</td>
-                          <td className="p-3">42-44</td>
-                        </tr>
-                        <tr className="hover:bg-gray-50">
-                          <td className="p-3 font-medium">XXL</td>
-                          <td className="p-3">42-44</td>
-                          <td className="p-3">34-36</td>
-                          <td className="p-3">44-46</td>
-                        </tr>
-                      </tbody>
-                    </table>
-                  </div>
-                  <div className="mt-4 p-4 bg-blue-50 rounded-lg">
-                    <p className="text-sm text-gray-700">
-                      <strong>How to measure:</strong> Measure around the
-                      fullest part of your chest, natural waistline, and hips.
-                      Keep the tape measure parallel to the floor.
-                    </p>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog> */}
           </div>
 
           <div className="grid grid-cols-4 sm:grid-cols-6 gap-1.5">

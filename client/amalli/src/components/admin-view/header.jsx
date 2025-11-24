@@ -5,16 +5,18 @@ import { logoutUser } from "@/store/auth-slice";
 import { PressableButton } from "../common/pressable-button";
 
 const AdminHeader = ({ setOpen }) => {
+  const dispatch = useDispatch();
 
-  const dispatch = useDispatch()
-
-  function handleLogout(){
-    dispatch(logoutUser())
+  function handleLogout() {
+    dispatch(logoutUser());
   }
 
   return (
     <header className="flex items-center justify-between px-4 py-3 bg-background border-b">
-      <PressableButton className="lg:hidden sm:block" onClick={() => setOpen(true)}>
+      <PressableButton
+        className="lg:hidden sm:block"
+        onClick={() => setOpen(true)}
+      >
         <AlignJustify />
         <span className="sr-only">Toggle Menu</span>
       </PressableButton>
