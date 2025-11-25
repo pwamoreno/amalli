@@ -56,7 +56,7 @@ const ShoppingListing = () => {
   }
 
   function handleFilter(getSectionId, getCurrentOption) {
-    console.log(getSectionId, getCurrentOption);
+    // console.log(getSectionId, getCurrentOption);
 
     let copyFilters = { ...filters };
     const indexOfCurrentSection =
