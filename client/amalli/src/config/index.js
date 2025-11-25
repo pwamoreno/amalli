@@ -151,6 +151,11 @@ export const shoppingViewHeaderMenuItems = [
     path: "/shop/listing?category=kids",
   },
   {
+    id: "new-products",
+    label: "Kids",
+    path: "/shop/listing?category=new-products",
+  },
+  {
     id: "faq",
     label: "FAQs",
     path: "/shop/faqs",
@@ -167,6 +172,7 @@ export const filterOptions = {
     { id: "earrings", label: "Earrings" },
     { id: "bracelets", label: "Bracelets" },
     { id: "anklets", label: "Anklets" },
+    { id: "new-arrivals", label: "New Arrivals" },
   ],
   // brand: [
   //   { id: "nike", label: "Nike" },

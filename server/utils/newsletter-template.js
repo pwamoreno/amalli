@@ -138,8 +138,69 @@ const getUnsubscribeTemplate = () => {
     `;
 };
 
+const getConfirmationOrderEmailTemplate = (order) => {
+  const orderItemsHTML = order.cartItems
+    .map(
+      (item) => `
+      <tr>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${
+          item.title
+        }</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${
+          item.quantity
+        }</td>
+        <td style="padding: 10px; border-bottom: 1px solid #eee;">${Number(
+          item.price
+        ).toFixed(2)}</td>
+      </tr>
+    `
+    )
+    .join("");
+  return {
+    from: '"Amalli" <support@amallijewelry.com>',
+    to: order.email,
+    subject: `Order Confirmation - #${order._id}`,
+    html: `
+      <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
+        <h2 style="color: #333;">Order Confirmed!</h2>
+        <p>Dear Customer,</p>
+        <p>Thank you for your order. Your payment has been confirmed and your order is being processed.</p>
+        
+        <h3>Order Details:</h3>
+        <table style="width: 100%; border-collapse: collapse;">
+          <thead>
+            <tr>
+              <th style="text-align: left; padding: 10px; border-bottom: 2px solid #333;">Product</th>
+              <th style="text-align: left; padding: 10px; border-bottom: 2px solid #333;">Quantity</th>
+              <th style="text-align: left; padding: 10px; border-bottom: 2px solid #333;">Price</th>
+            </tr>
+          </thead>
+          <tbody>
+            ${orderItemsHTML}
+          </tbody>
+        </table>
+        
+        <div style="margin-top: 20px; padding: 15px; background: #f9f9f9;">
+          <strong>Total Amount: ₦ ${order.totalAmount.toFixed(2)}</strong><br>
+          <strong>Order ID: ${order._id}</strong><br>
+          <strong>Payment ID: ${order.paymentId}</strong>
+        </div>
+        
+        <p>Best regards,<br>Your Store Team</p>
+      </div>
+    `,
+  };
+};
+
 module.exports = {
   getNewsletterTemplate,
   getWelcomeTemplate,
   getUnsubscribeTemplate,
+  getConfirmationOrderEmailTemplate,
 };
+
+// ${
+//             <p style="margin-top: 20px;">
+//             You can track your order status from your account dashboard.
+//             </p>
+//         }

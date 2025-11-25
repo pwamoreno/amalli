@@ -3,6 +3,7 @@ const Order = require("../../models/Order");
 // const Product = require("../../models/Product");
 
 const { updateOrderAfterSuccessfulPayment } = require("../../helpers/paystack");
+const { sendOrderConfirmationEmail } = require("../../helpers/nodemailer");
 
 const createOrder = async (req, res) => {
   try {
@@ -209,12 +210,13 @@ const createOrder = async (req, res) => {
 //   }
 // };
 
-
 const verifyPayment = async (req, res) => {
   const { reference, orderId } = req.body;
 
   if (!reference || !orderId) {
-    return res.status(400).json({ success: false, message: "Missing reference or orderId" });
+    return res
+      .status(400)
+      .json({ success: false, message: "Missing reference or orderId" });
   }
 
   try {
@@ -233,12 +235,25 @@ const verifyPayment = async (req, res) => {
     const data = payload.data;
 
     if (!data) {
-      return res.status(400).json({ success: false, message: "Invalid Paystack response" });
+      return res
+        .status(400)
+        .json({ success: false, message: "Invalid Paystack response" });
     }
 
     // If webhook was slow, process the payment fallback
     if (data.status === "success") {
       const result = await updateOrderAfterSuccessfulPayment(orderId, data);
+
+      // Send order confirmation email
+      if (result.success) {
+        try {
+          const order = await Order.findById(orderId)
+          await sendOrderConfirmationEmail(order);
+        } catch (emailError) {
+          console.log("Email sending failed:", emailError);
+          // Don't fail the request if email fails
+        }
+      }
       return res.status(200).json(result);
     }
 
@@ -248,10 +263,11 @@ const verifyPayment = async (req, res) => {
       message: "Payment not successful",
       data,
     });
-
   } catch (error) {
     console.error("Verify Payment Error:", error.message);
-    return res.status(500).json({ success: false, message: "Payment verification failed" });
+    return res
+      .status(500)
+      .json({ success: false, message: "Payment verification failed" });
   }
 };
 

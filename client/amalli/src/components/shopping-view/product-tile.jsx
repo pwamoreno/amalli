@@ -51,7 +51,7 @@ const ShoppingProductTile = ({
               Out of stock
             </Badge>
           ) : product?.totalStock < 10 ? (
-            <Badge className="absolute top-2 left-2 bg-red-500 hover:bg-red-600">
+            <Badge className="absolute top-2 left-1 bg-red-500 hover:bg-red-600">
               {`Only ${product?.totalStock} items left`}
             </Badge>
           ) : product?.salePrice > 0 ? (
@@ -67,7 +67,9 @@ const ShoppingProductTile = ({
           )}
         </div>
         <CardContent className="p-4">
-          <h2 className="text-xl max-md:text-sm font-bold md:font-semibold mb-2">{product?.title}</h2>
+          <h2 className="md:text-xl text-sm font-bold md:font-semibold mb-2 line-clamp-1 min-h-[1.5rem] md:min-h-[2.5rem]">
+            {product?.title}
+          </h2>
           <div className="flex justify-between items-center mb-2">
             <span className="text-sm text-muted-foreground">
               {product?.category}

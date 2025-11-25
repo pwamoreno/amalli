@@ -1,3 +1,5 @@
+const { getConfirmationOrderEmailTemplate } = require("../utils/newsletter-template");
+
 const nodemailer = require("nodemailer");
 
 const transporter = nodemailer.createTransport({
@@ -18,4 +20,10 @@ transporter.verify((error, success) => {
   }
 });
 
-module.exports = { transporter };
+const sendOrderConfirmationEmail = async (order) => {
+  const mailOptions = getConfirmationOrderEmailTemplate(order);
+
+  await transporter.sendMail(mailOptions);
+};
+
+module.exports = { transporter, sendOrderConfirmationEmail };

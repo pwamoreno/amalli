@@ -25,8 +25,8 @@ const PaystackSuccessPage = () => {
   }, []);
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-white to-blue-100 flex items-center justify-center p-4">
-      <Card className="max-w-2xl w-full shadow-xl">
+    <div className="pt-24 flex items-center justify-center p-4">
+      <Card className="max-w-2xl w-full shadow-xl pt-12">
         {/* Success Icon - Large and Centered */}
         <div className="flex justify-center pt-12 pb-6">
           {/* <AmalliLogo size={60} /> */}
@@ -157,7 +157,7 @@ const PaystackSuccessPage = () => {
             <div className="bg-amber-50 border border-amber-200 rounded-lg p-4">
               <p className="text-sm text-amber-900">
                 <strong>Note:</strong> You checked out as a guest. We've sent
-                your order confirmation and tracking details to your email.
+                your order confirmation to your email.
                 Create an account to manage your orders easily!
               </p>
             </div>

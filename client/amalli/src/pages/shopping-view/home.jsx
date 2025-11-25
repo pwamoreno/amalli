@@ -1,5 +1,5 @@
 import { PressableButton } from "@/components/common/pressable-button";
-import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
@@ -20,6 +20,7 @@ import {
   Necklace,
   Ring,
 } from "@/components/icons/AmalliLogo";
+import NewArrivalsSection from "@/components/shopping-view/new-arrivals";
 
 const categoriesWithIcon = [
   { id: "necklaces", label: "Necklaces", icon: Necklace },
@@ -181,6 +182,12 @@ const ShoppingHome = () => {
         </div>
       </div>
 
+      <NewArrivalsSection
+        products={productList}
+        handleGetProductDetails={handleGetProductDetails}
+        handleAddToCart={handleAddToCart}
+      />
+
       <section className="py-12">
         <div className="container mx-auto px-2 lg:px-4">
           <h2 className="text-xl lg:text-3xl font-bold text-center mb-8">
@@ -207,6 +214,19 @@ const ShoppingHome = () => {
         setOpen={setOpenDetailsDialog}
         productDetails={productDetails}
       />
+
+      <div className="flex justify-center mt-8">
+        <PressableButton
+          onClick={() => {
+            sessionStorage.removeItem("filters");
+            window.location.href = "/shop/listing";
+          }}
+          className="group flex items-center gap-2 bg-[#02066f] text-white hover:bg-green-500 hover:cursor-pointer"
+        >
+          <span className="font-semibold">View More</span>
+          <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+        </PressableButton>
+      </div>
     </div>
   );
 };

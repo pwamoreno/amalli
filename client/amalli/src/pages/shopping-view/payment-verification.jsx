@@ -25,7 +25,7 @@ const PayStackPaymentVerification = () => {
   }, [reference, dispatch]);
 
   return (
-    <Card>
+    <Card className="pt-24">
       <CardHeader>
         <CardTitle>Verifying payment...</CardTitle>
         <div className="flex justify-center mt-4">
