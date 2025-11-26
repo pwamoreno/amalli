@@ -72,16 +72,24 @@ const loginUser = async (req, res) => {
     const isProduction = process.env.NODE_ENV === "production";
     console.log(isProduction);
 
-    res.cookie("token", token, { httpOnly: true, secure: isProduction }).json({
-      success: true,
-      message: "Logged in successfully",
-      user: {
-        email: checkUser.email,
-        role: checkUser.role,
-        id: checkUser._id,
-        userName: checkUser.username,
-      },
-    });
+    res
+      .cookie("token", token, {
+        httpOnly: true,
+        secure: isProduction,
+        //In prod
+        sameSite: "lax",
+        domain: ".amallijewelry.com",
+      })
+      .json({
+        success: true,
+        message: "Logged in successfully",
+        user: {
+          email: checkUser.email,
+          role: checkUser.role,
+          id: checkUser._id,
+          userName: checkUser.username,
+        },
+      });
   } catch (error) {
     console.log(error);
     res.status(500).json({
