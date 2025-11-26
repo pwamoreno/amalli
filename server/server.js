@@ -49,6 +49,8 @@ app.use(
   })
 );
 
+app.options('*', cors());
+
 app.post(
   "/api/paystack/webhook",
   express.raw({ type: "application/json" }),
