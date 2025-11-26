@@ -50,7 +50,7 @@ app.use(
 );
 
 // In prod
-app.options('/.*/', cors());
+app.options(/.*/, cors());
 
 app.post(
   "/api/paystack/webhook",
