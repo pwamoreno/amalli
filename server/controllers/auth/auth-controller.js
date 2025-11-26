@@ -63,20 +63,23 @@ const loginUser = async (req, res) => {
         id: checkUser._id,
         role: checkUser.role,
         email: checkUser.email,
-        userName: checkUser.username
+        userName: checkUser.username,
       },
-      "CLIENT_SECRET_KEY",
+      process.env.JWT_SECRET,
       { expiresIn: "60m" }
     );
 
-    res.cookie("token", token, { httpOnly: true, secure: false }).json({
+    const isProduction = process.env.NODE_ENV === "production";
+    console.log(isProduction);
+
+    res.cookie("token", token, { httpOnly: true, secure: isProduction }).json({
       success: true,
       message: "Logged in successfully",
       user: {
         email: checkUser.email,
         role: checkUser.role,
         id: checkUser._id,
-        userName: checkUser.username
+        userName: checkUser.username,
       },
     });
   } catch (error) {
@@ -107,7 +110,7 @@ const authMiddleware = async (req, res, next) => {
   }
 
   try {
-    const decoded = jwt.verify(token, "CLIENT_SECRET_KEY");
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
     req.user = decoded;
     next();
   } catch (error) {
