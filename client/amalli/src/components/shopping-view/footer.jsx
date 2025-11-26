@@ -141,8 +141,8 @@ const ShoppingFooter = () => {
               <div className="mb-6">
                 <span className="text-gray-700">Send us an email here: </span>
                 <a
-                  href="mailto:support@amalli.com"
-                  className="text-gray-900 font-medium text-sm hover:text-gray-700 transition-colors"
+                  href="mailto:support@amallijewelry.com"
+                  className="font-medium text-sm text-blue-600 hover:underline transition-colors"
                 >
                   support@amallijewelry.com
                 </a>
