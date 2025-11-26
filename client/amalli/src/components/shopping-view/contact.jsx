@@ -27,7 +27,7 @@ const ContactPage = () => {
                   href="mailto:support@amalli.com"
                   className="text-blue-600 hover:underline"
                 >
-                  support@amalli.com
+                  support@amallijewelry.com
                 </a>
               </p>
               <p>

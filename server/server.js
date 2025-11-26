@@ -49,6 +49,7 @@ app.use(
   })
 );
 
+// In prod
 app.options('*', cors());
 
 app.post(

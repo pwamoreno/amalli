@@ -89,7 +89,7 @@ const RefundPolicyPage = () => {
                     href="mailto:support@amalli.com"
                     className="text-blue-600 hover:underline"
                   >
-                    support@amalli.com
+                    support@amallijewelry.com
                   </a>{" "}
                   with photos and order details. We will arrange for a
                   replacement or resolution.

@@ -239,11 +239,11 @@ export const faqs = [
     answer:
       "We ship locally and internationally. Shipping fees vary depending on destination.",
   },
-  {
-    question: "How do I track my delivery?",
-    answer:
-      "Once your order ships, a tracking link will be sent to your email or phone number.",
-  },
+  // {
+  //   question: "How do I track my delivery?",
+  //   answer:
+  //     "Once your order ships, a tracking link will be sent to your email or phone number.",
+  // },
   {
     question: "How much does shipping cost?",
     answer:
