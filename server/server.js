@@ -13,7 +13,7 @@ const shopAddressRouter = require("./routes/shop/address-routes");
 const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
-const shopNewsletterRouter = require("./routes/shop/newsletter-routes")
+const shopNewsletterRouter = require("./routes/shop/newsletter-routes");
 
 // const webhookRouter = require("./routes/webhook/paystack-webhook-route")
 
@@ -35,11 +35,12 @@ const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: `${process.env.CLIENT_URL}`,
-    methods: ["GET", "POST", "DELETE", "PUT"],
+    origin: [`${process.env.CLIENT_URL}`, `${process.env.W_CLIENT_URL}`],
+    methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
       "Authorization",
+      "Cookie",
       "Cache-Control",
       "Expires",
       "Pragma",
@@ -47,7 +48,6 @@ app.use(
     credentials: true,
   })
 );
-
 
 app.post(
   "/api/paystack/webhook",
@@ -58,7 +58,6 @@ app.post(
 // app.use("/api/paystack/webhook", express.raw({ type: 'application/json' }));
 // webhook MUST be here
 // app.post("/api/paystack/webhook", express.raw({ type: "*/*" }),webhookRouter);
-
 
 app.use(cookieParser());
 app.use(express.json());
@@ -76,4 +75,6 @@ app.use("/api/shop/newsletter", shopNewsletterRouter);
 
 app.use("/api/common/feature", commonFeatureRouter);
 
-app.listen(PORT, '0.0.0.0', () => console.log(`Server is running on port ${PORT}`));
+app.listen(PORT, "0.0.0.0", () =>
+  console.log(`Server is running on port ${PORT}`)
+);
