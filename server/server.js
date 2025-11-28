@@ -15,8 +15,6 @@ const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
 const shopNewsletterRouter = require("./routes/shop/newsletter-routes");
 
-// const webhookRouter = require("./routes/webhook/paystack-webhook-route")
-
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
 const {
@@ -57,10 +55,6 @@ app.post(
   express.raw({ type: "application/json" }),
   paystackWebhook
 );
-
-// app.use("/api/paystack/webhook", express.raw({ type: 'application/json' }));
-// webhook MUST be here
-// app.post("/api/paystack/webhook", express.raw({ type: "*/*" }),webhookRouter);
 
 app.use(cookieParser());
 app.use(express.json());

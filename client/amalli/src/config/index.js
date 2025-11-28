@@ -262,7 +262,7 @@ export const nigeriaStatesShipping = [
   { state: "Borno", price: 5800 },
   { state: "Cross River", price: 6000 },
   { state: "Delta", price: 5800 },
-  { state: "Ebonyi", price: 5800},
+  { state: "Ebonyi", price: 5800 },
   { state: "Edo", price: 5000 },
   { state: "Ekiti", price: 4000 },
   { state: "Enugu", price: 5000 },
@@ -279,7 +279,7 @@ export const nigeriaStatesShipping = [
   { state: "Lagos", price: 2500 },
   { state: "Nasarawa", price: 5800 },
   { state: "Niger", price: 5800 },
-  { state: "Ogun", price: 4000},
+  { state: "Ogun", price: 4000 },
   { state: "Ondo", price: 4000 },
   { state: "Osun", price: 4000 },
   { state: "Oyo", price: 4000 },
@@ -309,9 +309,11 @@ export const holidays = [
     date: "10-05",
     message: "Happy Teachers' Day!",
   },
-  { date: "12-25", message: "Merry Christmas!" },
+  {
+    date: "12-25",
+    message: "Merry Christmas!",
+  },
 ];
-
 
 // export const lagosShippingZones = [
 //   {
