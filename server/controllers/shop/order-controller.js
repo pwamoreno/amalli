@@ -32,6 +32,7 @@ const createOrder = async (req, res) => {
     // console.log("Creating order for userId:", userId);
     // console.log("Email:", email);
     // console.log("Total amount:", totalAmount);
+    console.log("cartItems:", cartItems)
 
     if (!userId || !email || !cartItems || cartItems.length === 0) {
       return res.status(400).json({
@@ -93,7 +94,7 @@ const createOrder = async (req, res) => {
         body: JSON.stringify({
           email: email,
           amount: amountInKobo,
-          channels: ["card", "bank"],
+          channels: ["card", "bank", "ussd"],
           callback_url: `${process.env.CLIENT_URL}/shop/payment-verification`,
           metadata: {
             items: cartItems,
@@ -131,84 +132,6 @@ const createOrder = async (req, res) => {
   }
 };
 
-// const verifyPayment = async (req, res) => {
-//   const { reference, orderId } = req.body;
-
-//   if (!reference) {
-//     return res
-//       .status(400)
-//       .json({ success: false, message: "Missing reference" });
-//   }
-
-//   try {
-//     const response = await fetch(
-//       `https://api.paystack.co/transaction/verify/${reference}`,
-//       {
-//         method: "GET",
-//         headers: {
-//           Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}`,
-//           "Content-Type": "application/json",
-//         },
-//       }
-//     );
-
-//     const responseData = await response.json();
-
-//     const data = responseData.data;
-
-//     // console.log("paystack verify data", data);
-
-//     if (data.status === "success") {
-//       const updatedOrder = await Order.findOneAndUpdate(
-//         { _id: orderId },
-//         {
-//           paymentId: data.reference,
-//           payerId: data.customer.customer_code,
-//           paymentStatus: "paid",
-//           orderStatus: "verified",
-//           orderUpdateDate: new Date(),
-//         },
-//         { new: true }
-//       );
-
-//       for (let item of updatedOrder.cartItems) {
-//         let product = await Product.findById(item.productId);
-
-//         if (!product) {
-//           return res.status(404).json({
-//             success: false,
-//             message: `Product not found. ${product.title}`,
-//           });
-//         }
-
-//         product.totalStock -= item.quantity;
-
-//         await product.save();
-//       }
-
-//       const getCartId = updatedOrder.cartId;
-//       if (getCartId) {
-//         await Cart.findByIdAndDelete(getCartId);
-//       }
-
-//       //   await updatedOrder.save();
-
-//       return res.status(200).json({
-//         success: true,
-//         message: "Payment verified successfully",
-//         order: updatedOrder,
-//       });
-//     }
-//   } catch (error) {
-//     console.error(
-//       "Error verifying payment: ",
-//       error.response?.data || error.message
-//     );
-//     res
-//       .status(500)
-//       .json({ success: false, message: "Payment verification failed" });
-//   }
-// };
 
 const verifyPayment = async (req, res) => {
   const { reference, orderId } = req.body;

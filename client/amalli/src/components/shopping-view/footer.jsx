@@ -1,14 +1,5 @@
 import React, { useState } from "react";
-// import { Send, ChevronDown } from "lucide-react";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import {
-//   Select,
-//   SelectContent,
-//   SelectItem,
-//   SelectTrigger,
-//   SelectValue,
-// } from "@/components/ui/select";
+import { useNavigate, useLocation, useSearchParams } from "react-router-dom";
 import {
   Facebook,
   Instagram,
@@ -17,15 +8,15 @@ import {
   WhatsApp,
   X,
 } from "../icons/AmalliLogo";
-import { useNavigate } from "react-router-dom";
 import { getCurrentDateInfo } from "@/lib/utils";
 import EmailSignupSystem from "@/pages/shopping-view/email-signup";
 
 const ShoppingFooter = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const [_searchParams, setSearchParams] = useSearchParams();
   const [isWhatsAppMinimized, setIsWhatsAppMinimized] = useState(false);
   const [isWhatsAppHovered, setIsWhatsAppHovered] = useState(false);
-  //   const [country, setCountry] = useState("nigeria");
 
   // Minimize WhatsApp button after 5 seconds
   React.useEffect(() => {
@@ -39,12 +30,64 @@ const ShoppingFooter = () => {
   const { year: currentYear } = getCurrentDateInfo();
 
   const footerNav = [
-    "Search",
-    "All Products",
-    "Necklaces",
-    "Earrings",
-    "Unsubscribe from Newsletter",
+    { label: "Search", id: "search", path: "/shop/search" },
+    { label: "All Products", id: "products", path: "/shop/listing" },
+    {
+      label: "Necklaces",
+      id: "necklaces",
+      path: "/shop/listing?category=necklaces",
+    },
+    {
+      label: "Earrings",
+      id: "earrings",
+      path: "/shop/listing?category=earrings",
+    },
+    {
+      label: "Unsubscribe from Newsletter",
+      id: "unsubscribe",
+      path: "/shop/newsletter-unsubscribe",
+    },
   ];
+
+  const handleFooterNavigate = (navItem) => {
+    // Clear filters from sessionStorage
+    sessionStorage.removeItem("filters");
+
+    // Pages that should NOT have filters
+    const noFilterPages = ["search", "unsubscribe"];
+
+    if (noFilterPages.includes(navItem.id)) {
+      setSearchParams({});
+      navigate(navItem.path);
+      return;
+    }
+
+    // Set up filter for category pages
+    const currentFilter =
+      navItem.id !== "products" && navItem.id !== "search"
+        ? { category: [navItem.id] }
+        : null;
+
+    if (currentFilter) {
+      sessionStorage.setItem("filters", JSON.stringify(currentFilter));
+    }
+
+    // Navigate with appropriate search params
+    if (navItem.id === "products") {
+      // All Products - no filter
+      setSearchParams({});
+      navigate(navItem.path);
+    } else if (currentFilter) {
+      // Category-specific pages (necklaces, earrings)
+      if (location.pathname.includes("listing")) {
+        setSearchParams(new URLSearchParams(`?category=${navItem.id}`));
+      }
+      navigate(navItem.path);
+    } else {
+      // Other pages
+      navigate(navItem.path);
+    }
+  };
 
   const socials = [
     {
@@ -76,6 +119,7 @@ const ShoppingFooter = () => {
       aria: "Pinterest",
     },
   ];
+
   const legals = [
     {
       id: 1,
@@ -102,7 +146,6 @@ const ShoppingFooter = () => {
   return (
     <footer className="bg-[#faf9f7] mt-30">
       <EmailSignupSystem />
-      {/* Newsletter Section */}
 
       {/* Links and Contact Section */}
       <div className="border-t border-gray-300">
@@ -114,20 +157,14 @@ const ShoppingFooter = () => {
                 Quick links
               </h3>
               <nav className="flex flex-col space-y-3">
-                {footerNav.map((navItem, index) => (
-                  <a
-                    key={index}
-                    href={
-                      navItem === "Search"
-                        ? `/shop/${navItem.toLowerCase()}`
-                        : navItem === "Unsubscribe from Newsletter"
-                        ? "/shop/newsletter-unsubscribe"
-                        : `/shop/listing?category=${navItem.toLowerCase()}`
-                    }
-                    className="text-gray-700 hover:underline transition-colors"
+                {footerNav.map((navItem) => (
+                  <button
+                    key={navItem.id}
+                    onClick={() => handleFooterNavigate(navItem)}
+                    className="text-gray-700 hover:underline transition-colors text-left"
                   >
-                    {navItem}
-                  </a>
+                    {navItem.label}
+                  </button>
                 ))}
               </nav>
             </div>
@@ -171,24 +208,7 @@ const ShoppingFooter = () => {
       {/* Bottom Section */}
       <div className="border-t border-gray-300">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
-          {/* Country Selector */}
-          {/* <div className="mb-6">
-            <p className="text-sm text-gray-600 mb-2">Country/region</p>
-            <Select value={country} onValueChange={setCountry}>
-              <SelectTrigger className="w-48 bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="nigeria">Nigeria | NGN ₦</SelectItem>
-                <SelectItem value="usa">United States | USD $</SelectItem>
-                <SelectItem value="uk">United Kingdom | GBP £</SelectItem>
-                <SelectItem value="ghana">Ghana | GHS ₵</SelectItem>
-              </SelectContent>
-            </Select>
-          </div> */}
-
           {/* Copyright and Links */}
-
           <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs text-gray-600 pb-16">
             {legals.map((legal) => (
               <span

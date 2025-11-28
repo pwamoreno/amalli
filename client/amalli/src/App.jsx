@@ -33,6 +33,7 @@ import ContactPage from "./components/shopping-view/contact";
 import PrivacyPolicyPage from "./components/shopping-view/privacy-policy";
 import AdminNewsletter from "./pages/admin-view/send-newsletter";
 import UnsubscribePage from "./pages/shopping-view/newsletter-unsubscribe";
+import PromoSystem from "./pages/admin-view/promo-codes";
 
 function App() {
   const { user, isAuthenticated, isLoading } = useSelector(
@@ -111,6 +112,7 @@ function App() {
           <Route path="orders" element={<AdminOrders />} />
           <Route path="products" element={<AdminProducts />} />
           <Route path="newsletter" element={<AdminNewsletter />} />
+          <Route path="promos" element={<PromoSystem />} />
         </Route>
 
         {/* Shop routes - accessible to everyone */}

@@ -1,6 +1,6 @@
 import { StarIcon } from "lucide-react";
 import { Avatar, AvatarFallback } from "../ui/avatar";
-import { PressableButton } from "../common/pressable-button"; 
+import { PressableButton } from "../common/pressable-button";
 import { Dialog, DialogContent, DialogTitle } from "../ui/dialog";
 import { Separator } from "../ui/separator";
 import { Input } from "../ui/input";
@@ -72,6 +72,17 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
         }
       }
     }
+
+    const payload = {
+      userId: userId,
+      productId: getCurrentProductId,
+      quantity: 1,
+      personalizationText: personalizationText.trim() || "",
+      selectedColor: selectedVariant?.color,
+      selectedSize: selectedVariant?.size,
+    };
+
+    console.log("Sending to backend:", payload);
 
     dispatch(
       addToCart({

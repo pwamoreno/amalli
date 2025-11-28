@@ -2,16 +2,18 @@ import { configureStore } from "@reduxjs/toolkit";
 import authReducer from "./auth-slice";
 
 import AdminProductSlice from "./admin/product-slice";
-import adminOrderSlice from "./admin/order-slice"
+import adminOrderSlice from "./admin/order-slice";
+import adminPromoSlice from "./admin/promo-slice";
+import adminOffersSlice from "./admin/offer-slice";
 
 import shopProductSlice from "./shop/products-slice";
 import shopCartSlice from "./shop/cart-slice";
 import shopAddressSlice from "./shop/address-slice";
 import shopOrderSlice from "./shop/order-slice";
-import shopSearchSlice from "./shop/search-slice"
-import shopReviewSlice from "./shop/review-slice"
-import shopNewsletterSlice from "./shop/newsletter-slice"
-import commonFeatureSlice from "./common-slice"
+import shopSearchSlice from "./shop/search-slice";
+import shopReviewSlice from "./shop/review-slice";
+import shopNewsletterSlice from "./shop/newsletter-slice";
+import commonFeatureSlice from "./common-slice";
 
 const store = configureStore({
   reducer: {
@@ -19,6 +21,8 @@ const store = configureStore({
 
     adminProducts: AdminProductSlice,
     adminOrder: adminOrderSlice,
+    adminPromo: adminPromoSlice,
+    adminOffers: adminOffersSlice,
 
     shopProducts: shopProductSlice,
     shopCart: shopCartSlice,

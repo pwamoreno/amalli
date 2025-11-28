@@ -19,6 +19,20 @@ const CartSchema = new mongoose.Schema(
           required: true,
           min: 1,
         },
+        // Personalization field
+        personalizationText: {
+          type: String,
+          default: "",
+        },
+        selectedColor: {
+          id: String,
+          name: String,
+          hex: String,
+        },
+        selectedSize: {
+          id: String,
+          name: String,
+        },
       },
     ],
   },

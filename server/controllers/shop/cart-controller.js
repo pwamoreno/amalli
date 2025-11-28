@@ -3,7 +3,9 @@ const Product = require("../../models/Product");
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, productId, quantity, personalizationText } = req.body;
+    const { userId, productId, quantity, personalizationText, variant } = req.body;
+
+    console.log("Received request:", { userId, productId, quantity, personalizationText, variant });
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -29,6 +31,22 @@ const addToCart = async (req, res) => {
       });
     }
 
+    // Validate variant requirements
+    if (product.hasVariants) {
+      if (product.colors?.length > 0 && !variant?.color) {
+        return res.status(400).json({
+          success: false,
+          message: "Please select a color",
+        });
+      }
+      if (product.sizes?.length > 0 && !variant?.size) {
+        return res.status(400).json({
+          success: false,
+          message: "Please select a size",
+        });
+      }
+    }
+
     const isGuest = typeof userId === "string" && userId.startsWith("guest_");
 
     let cart = await Cart.findOne({ userId });
@@ -37,41 +55,78 @@ const addToCart = async (req, res) => {
       cart = new Cart({ userId, isGuest, items: [] });
     }
 
-    // For personalized products, always add as new item (different text = different item)
-    if (product.isPersonalizable && personalizationText) {
-      cart.items.push({
+    // Helper function to check if two items are the same
+    const isSameItem = (item) => {
+      // Must be same product
+      if (item.productId.toString() !== productId) return false;
+
+      // Check personalization match
+      const itemPersonalization = item.personalizationText?.trim() || "";
+      const newPersonalization = personalizationText?.trim() || "";
+      if (itemPersonalization !== newPersonalization) return false;
+
+      // Check variant match (color)
+      const itemColorId = item.selectedColor?.id || null;
+      const newColorId = variant?.color?.id || null;
+      if (itemColorId !== newColorId) return false;
+
+      // Check variant match (size)
+      const itemSizeId = item.selectedSize?.id || null;
+      const newSizeId = variant?.size?.id || null;
+      if (itemSizeId !== newSizeId) return false;
+
+      return true;
+    };
+
+    // Find existing item with same product, personalization, and variants
+    const existingItemIndex = cart.items.findIndex(isSameItem);
+
+    if (existingItemIndex === -1) {
+      // Add new item - properly structure the color and size objects
+      const newItem = {
         productId,
         quantity,
-        personalizationText: personalizationText.trim(),
-      });
-    } else {
-      // Regular product logic - check if already in cart
-      const findCurrentProductIndex = cart.items.findIndex(
-        (item) =>
-          item.productId.toString() === productId && !item.personalizationText
-      );
+        personalizationText: personalizationText?.trim() || "",
+      };
 
-      if (findCurrentProductIndex === -1) {
-        cart.items.push({
-          productId,
-          quantity,
-          personalizationText: "",
-        });
-      } else {
-        cart.items[findCurrentProductIndex].quantity += quantity;
+      // Only add color if it exists
+      if (variant?.color) {
+        newItem.selectedColor = {
+          id: variant.color.id,
+          name: variant.color.name,
+          hex: variant.color.hex,
+        };
       }
+
+      // Only add size if it exists
+      if (variant?.size) {
+        newItem.selectedSize = {
+          id: variant.size.id,
+          name: variant.size.name,
+        };
+      }
+
+      cart.items.push(newItem);
+      console.log("Adding new item:", newItem);
+    } else {
+      // Update quantity of existing item
+      cart.items[existingItemIndex].quantity += quantity;
+      console.log("Updating existing item quantity");
     }
 
     await cart.save();
+    console.log("Cart saved successfully");
+
     res.status(200).json({
       success: true,
       data: cart,
     });
   } catch (error) {
-    console.log(error);
+    console.log("Error in addToCart:", error);
     res.status(500).json({
       success: false,
       message: "Error adding to cart",
+      error: error.message,
     });
   }
 };
@@ -116,6 +171,8 @@ const fetchCartItems = async (req, res) => {
       salePrice: item.productId.salePrice,
       quantity: item.quantity,
       personalizationText: item.personalizationText || "",
+      selectedColor: item.selectedColor || null,
+      selectedSize: item.selectedSize || null,
     }));
 
     res.status(200).json({
@@ -182,6 +239,8 @@ const updateCartItemQuantity = async (req, res) => {
       salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity,
       personalizationText: item.personalizationText || "",
+      selectedColor: item.selectedColor || null,
+      selectedSize: item.selectedSize || null,
     }));
 
     res.status(200).json({
@@ -242,6 +301,8 @@ const deleteCartItem = async (req, res) => {
       salePrice: item.productId ? item.productId.salePrice : null,
       quantity: item.quantity,
       personalizationText: item.personalizationText || "",
+      selectedColor: item.selectedColor || null,
+      selectedSize: item.selectedSize || null,
     }));
 
     res.status(200).json({

@@ -56,7 +56,7 @@ const AdminOrdersDetails = ({ orderDetails }) => {
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Date</p>
-            <Label>{orderDetails?.orderDate}</Label>
+            <Label>{orderDetails?.orderDate.split("T")[0]}</Label>
           </div>
           <div className="flex mt-2 items-center justify-between">
             <p className="font-medium">Order Price</p>
@@ -89,12 +89,15 @@ const AdminOrdersDetails = ({ orderDetails }) => {
               {orderDetails?.cartItems && orderDetails?.cartItems.length > 0
                 ? orderDetails?.cartItems.map((item) => (
                     <li
-                      className="flex items-center justify-between"
+                      className="flex-col flex lg:grid lg:grid-cols-3 items-center justify-between"
                       key={item.productId}
                     >
                       <span>Title: {item.title}</span>
                       <span>Quantity: {item.quantity}</span>
                       <span>Price: ₦{addCommasToNumbers(item.price)}</span>
+                      <span>Custom Text: {item.personalizationText}</span>
+                      <span>Colour: {item.selectedColor?.name}</span>
+                      <span>Size: {item.selectedSize?.name}</span>
                     </li>
                   ))
                 : null}

@@ -76,6 +76,19 @@ const ShoppingCheckout = () => {
       return;
     }
 
+  //    console.log("=== DETAILED CART ITEM INSPECTION ===");
+  // cartItems.items.forEach((item, index) => {
+  //   console.log(`Item ${index + 1}:`, {
+  //     productId: item.productId,
+  //     title: item.title,
+  //     personalizationText: item.personalizationText,
+  //     selectedColor: item.selectedColor,
+  //     selectedSize: item.selectedSize,
+  //     hasColor: !!item.selectedColor,
+  //     hasSize: !!item.selectedSize,
+  //   });
+  // });
+
     const orderData = {
       userId: userId,
       email: isAuthenticated ? user?.email : guestEmail,
@@ -86,6 +99,20 @@ const ShoppingCheckout = () => {
         image: item?.image,
         price: item?.salePrice > 0 ? item?.salePrice : item?.price,
         quantity: item?.quantity,
+        personalizationText: item?.personalizationText || "",
+        ...(item?.selectedColor && {
+          selectedColor: {
+            id: item.selectedColor.id,
+            name: item.selectedColor.name,
+            hex: item.selectedColor.hex,
+          },
+        }),
+        ...(item?.selectedSize && {
+          selectedSize: {
+            id: item.selectedSize.id,
+            name: item.selectedSize.name,
+          },
+        }),
       })),
       addressInfo: {
         addressId: currentSelectedAddress?._id || null,
@@ -109,6 +136,9 @@ const ShoppingCheckout = () => {
     };
 
     // console.log(orderData);
+    // console.log("Cart Items from Redux:", cartItems.items);
+    // console.log("Formatted Order Data:", orderData);
+    // console.log("Cart Items for Order:", orderData.cartItems);
 
     dispatch(createNewOrder(orderData)).then((data) => {
       // console.log(data), "[paystack_resp]";
@@ -192,9 +222,7 @@ const ShoppingCheckout = () => {
 
           {guestAddress && (
             <div className="p-4 border rounded-lg bg-muted/50 mt-4">
-              <h3 className="font-semibold text-base mb-2">
-                Added Address
-              </h3>
+              <h3 className="font-semibold text-base mb-2">Added Address</h3>
               <p>
                 <strong>Email:</strong> {guestAddress.email}
               </p>

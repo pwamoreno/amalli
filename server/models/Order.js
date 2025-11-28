@@ -11,6 +11,21 @@ const OrderSchema = new mongoose.Schema({
       image: String,
       price: String,
       quantity: Number,
+       // Personalization fields
+      personalizationText: {
+        type: String,
+        default: null,
+      },
+      // Variant fields
+      selectedColor: {
+        id: String,
+        name: String,
+        hex: String,
+      },
+      selectedSize: {
+        id: String,
+        name: String,
+      },
     },
   ],
   addressInfo: {
