@@ -25,19 +25,25 @@ const {
   paystackWebhook,
 } = require("./controllers/webhook/paystack-webhook-controller");
 
+const PORT = process.env.PORT || 5000;
+
 //database connection
 mongoose
   .connect(process.env.MONGO_URI)
-  .then(() => console.log("MongoDB Connected!"))
-  .catch((error) => console.log(error));
+  .then(() => {
+    console.log("MongoDB Connected!")
+     app.listen(PORT, "0.0.0.0", () =>
+      console.log(`Server is running on port ${PORT}`)
+    );
+  })
+  .catch((error) => console.error("❌ Database Connection Failed:", error));
 
 const app = express();
 
-const PORT = process.env.PORT || 5000;
 
 app.use(
   cors({
-    origin: [`${process.env.CLIENT_URL}`, `${process.env.W_CLIENT_URL}`],
+    origin: [`${process.env.CLIENT_URL}`], //  `${process.env.W_CLIENT_URL}`
     methods: ["GET", "POST", "DELETE", "PUT", "OPTIONS"],
     allowedHeaders: [
       "Content-Type",
@@ -80,6 +86,6 @@ app.use("/api/shop/offer", shopOfferRouter);
 
 app.use("/api/common/feature", commonFeatureRouter);
 
-app.listen(PORT, "0.0.0.0", () =>
-  console.log(`Server is running on port ${PORT}`)
-);
+// app.listen(PORT, "0.0.0.0", () =>
+//   console.log(`Server is running on port ${PORT}`)
+// );
