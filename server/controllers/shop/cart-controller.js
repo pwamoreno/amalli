@@ -5,7 +5,7 @@ const addToCart = async (req, res) => {
   try {
     const { userId, productId, quantity, personalizationText, variant } = req.body;
 
-    console.log("Received request:", { userId, productId, quantity, personalizationText, variant });
+    // console.log("Received request:", { userId, productId, quantity, personalizationText, variant });
 
     if (!userId || !productId || quantity <= 0) {
       return res.status(400).json({
@@ -107,15 +107,15 @@ const addToCart = async (req, res) => {
       }
 
       cart.items.push(newItem);
-      console.log("Adding new item:", newItem);
+      // console.log("Adding new item:", newItem);
     } else {
       // Update quantity of existing item
       cart.items[existingItemIndex].quantity += quantity;
-      console.log("Updating existing item quantity");
+      // console.log("Updating existing item quantity");
     }
 
     await cart.save();
-    console.log("Cart saved successfully");
+    // console.log("Cart saved successfully");
 
     res.status(200).json({
       success: true,

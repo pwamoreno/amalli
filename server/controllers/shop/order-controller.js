@@ -17,6 +17,9 @@ const createOrder = async (req, res) => {
       addressInfo,
       shippingInfo,
       shippingCost,
+      promoCode,
+      discountAmount,
+      cartTotal,
       totalAmount,
       orderStatus,
       paymentMethod,
@@ -32,7 +35,7 @@ const createOrder = async (req, res) => {
     // console.log("Creating order for userId:", userId);
     // console.log("Email:", email);
     // console.log("Total amount:", totalAmount);
-    console.log("cartItems:", cartItems)
+    // console.log("cartItems:", cartItems)
 
     if (!userId || !email || !cartItems || cartItems.length === 0) {
       return res.status(400).json({
@@ -55,6 +58,9 @@ const createOrder = async (req, res) => {
       addressInfo,
       shippingInfo,
       shippingCost,
+      promoCode,
+      discountAmount,
+      cartTotal,
       totalAmount,
       orderStatus,
       paymentMethod,

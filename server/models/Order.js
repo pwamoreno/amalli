@@ -11,7 +11,7 @@ const OrderSchema = new mongoose.Schema({
       image: String,
       price: String,
       quantity: Number,
-       // Personalization fields
+      // Personalization fields
       personalizationText: {
         type: String,
         default: null,
@@ -44,10 +44,27 @@ const OrderSchema = new mongoose.Schema({
     type: Number,
     required: true,
   },
+  // Promo Code Fields
+  promoCode: {
+    type: String,
+    default: null,
+    uppercase: true,
+  },
+  discountAmount: {
+    type: Number,
+    default: 0,
+    min: 0,
+  },
+  cartTotal: {
+    type: Number,
+    required: true,
+    min: 0,
+  },
+  // End of Promo Code Fields
   orderStatus: String,
   paymentMethod: String,
   paymentStatus: String,
-  totalAmount: Number,
+  totalAmount: Number, // This should be: cartTotal - discountAmount + shippingCost
   orderDate: Date,
   orderUpdateDate: Date,
   paymentId: String,
@@ -57,5 +74,31 @@ const OrderSchema = new mongoose.Schema({
     default: false,
   },
 });
+
+// Add a virtual to verify total calculation
+OrderSchema.virtual('calculatedTotal').get(function() {
+  return (this.cartTotal || 0) - (this.discountAmount || 0) + (this.shippingCost || 0);
+});
+
+// Add a pre-save hook to validate total amount
+OrderSchema.pre('save', function(next) {
+  // Ensure cartTotal exists
+  if (!this.cartTotal) {
+    this.cartTotal = this.totalAmount - this.shippingCost + this.discountAmount;
+  }
+  
+  // Validate that discount doesn't exceed cart total
+  if (this.discountAmount > this.cartTotal) {
+    return next(new Error('Discount amount cannot exceed cart total'));
+  }
+  
+  next();
+});
+
+// Add indexes for better query performance
+OrderSchema.index({ userId: 1, orderDate: -1 });
+OrderSchema.index({ email: 1, orderDate: -1 });
+OrderSchema.index({ promoCode: 1 });
+OrderSchema.index({ orderStatus: 1 });
 
 module.exports = mongoose.model("Order", OrderSchema);

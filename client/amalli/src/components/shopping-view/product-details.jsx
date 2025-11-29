@@ -73,16 +73,16 @@ const ProductDetailsDialog = ({ open, setOpen, productDetails }) => {
       }
     }
 
-    const payload = {
-      userId: userId,
-      productId: getCurrentProductId,
-      quantity: 1,
-      personalizationText: personalizationText.trim() || "",
-      selectedColor: selectedVariant?.color,
-      selectedSize: selectedVariant?.size,
-    };
+    // const payload = {
+    //   userId: userId,
+    //   productId: getCurrentProductId,
+    //   quantity: 1,
+    //   personalizationText: personalizationText.trim() || "",
+    //   selectedColor: selectedVariant?.color,
+    //   selectedSize: selectedVariant?.size,
+    // };
 
-    console.log("Sending to backend:", payload);
+    // console.log("Sending to backend:", payload);
 
     dispatch(
       addToCart({

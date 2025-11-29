@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Tag, X } from "lucide-react";
 import Address from "@/components/shopping-view/address";
 import ShippingSelector from "@/components/shopping-view/shipping-selector";
 import checkout from "../../assets/checkout.jpg";
@@ -10,6 +11,9 @@ import { toast } from "sonner";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { addCommasToNumbers } from "@/lib/utils";
+import axios from "axios";
+
+const API = import.meta.env.VITE_API_URL;
 
 const ShoppingCheckout = () => {
   const { cartItems } = useSelector((state) => state.shopCart);
@@ -20,12 +24,17 @@ const ShoppingCheckout = () => {
   const [paymentStarted, setPaymentStarted] = useState(false);
   const [guestAddress, setGuestAddress] = useState(null);
   const [guestEmail, setGuestEmail] = useState("");
-  const dispatch = useDispatch();
 
-  // console.log(currentSelectedAddress);
+  // Promo Code State
+  const [promoCode, setPromoCode] = useState("");
+  const [appliedPromo, setAppliedPromo] = useState(null);
+  const [promoLoading, setPromoLoading] = useState(false);
+
+  const dispatch = useDispatch();
 
   const userId = isAuthenticated ? user?.id : guestId;
 
+  // Calculate cart total
   const cartTotal =
     cartItems && cartItems.items && cartItems.items.length > 0
       ? cartItems.items.reduce(
@@ -40,14 +49,94 @@ const ShoppingCheckout = () => {
       : 0;
 
   const shippingCost = shippingInfo?.price || 0;
-  const totalAmount = cartTotal + shippingCost;
+
+  // Calculate discount amount
+  const calculateDiscount = () => {
+    if (!appliedPromo) return 0;
+
+    let discount = 0;
+    if (appliedPromo.discountType === "percentage") {
+      discount = (cartTotal * appliedPromo.discountValue) / 100;
+      // Apply max discount cap if exists
+      if (appliedPromo.maxDiscount && discount > appliedPromo.maxDiscount) {
+        discount = appliedPromo.maxDiscount;
+      }
+    } else {
+      // Fixed amount discount
+      discount = appliedPromo.discountValue;
+    }
+
+    // Ensure discount doesn't exceed cart total
+    return Math.min(discount, cartTotal);
+  };
+
+  const discountAmount = calculateDiscount();
+  const totalAmount = cartTotal - discountAmount + shippingCost;
+
+  // Function to validate and apply promo code
+  const handleApplyPromo = async () => {
+    if (!promoCode.trim()) {
+      toast("Please enter a promo code", {
+        style: { background: "#fa113d", color: "white" },
+      });
+      return;
+    }
+
+    setPromoLoading(true);
+
+    try {
+      const response = await axios.post(`${API}/api/shop/promo/validate`, {
+        code: promoCode.toUpperCase(),
+        userId: userId,
+        cartTotal: cartTotal,
+        isGuest: !isAuthenticated,
+      });
+
+      if (response.data.success) {
+        setAppliedPromo(response.data.promo);
+        toast("Promo code applied successfully!", {
+          style: { background: "#10b981", color: "white" },
+        });
+      } else {
+        toast(response.data.message || "Invalid promo code", {
+          style: { background: "#fa113d", color: "white" },
+        });
+      }
+    } catch (error) {
+      toast(error.response?.data?.message || "Failed to apply promo code", {
+        style: { background: "#fa113d", color: "white" },
+      });
+    } finally {
+      setPromoLoading(false);
+    }
+  };
+
+  // Remove applied promo code
+  const handleRemovePromo = () => {
+    setAppliedPromo(null);
+    setPromoCode("");
+    toast("Promo code removed", {
+      style: { background: "#64748b", color: "white" },
+    });
+  };
+
+  // Apply promo code usage after successful payment
+  const applyPromoUsage = async (code, userId) => {
+    try {
+      await axios.post(`${API}/api/shop/promo/apply`, {
+        code: code,
+        userId: userId,
+      });
+    } catch (error) {
+      console.error("Failed to apply promo usage:", error);
+    }
+  };
 
   function handlePaystackPayment() {
     if (cartItems.length === 0) {
       toast("Cart empty. Add items to proceed.", {
         style: { background: "#fa113d", color: "white" },
       });
-
       return;
     }
 
@@ -55,11 +144,9 @@ const ShoppingCheckout = () => {
       toast("Select or input an address to proceed.", {
         style: { background: "#fa113d", color: "white" },
       });
-
       return;
     }
 
-    // Validate guest email
     if (!isAuthenticated && !guestEmail.trim()) {
       toast("Please enter your email address.", {
         style: { background: "#fa113d", color: "white" },
@@ -67,7 +154,6 @@ const ShoppingCheckout = () => {
       return;
     }
 
-    // Validate email format
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (!isAuthenticated && !emailRegex.test(guestEmail)) {
       toast("Please enter a valid email address.", {
@@ -75,19 +161,6 @@ const ShoppingCheckout = () => {
       });
       return;
     }
-
-  //    console.log("=== DETAILED CART ITEM INSPECTION ===");
-  // cartItems.items.forEach((item, index) => {
-  //   console.log(`Item ${index + 1}:`, {
-  //     productId: item.productId,
-  //     title: item.title,
-  //     personalizationText: item.personalizationText,
-  //     selectedColor: item.selectedColor,
-  //     selectedSize: item.selectedSize,
-  //     hasColor: !!item.selectedColor,
-  //     hasSize: !!item.selectedSize,
-  //   });
-  // });
 
     const orderData = {
       userId: userId,
@@ -124,6 +197,10 @@ const ShoppingCheckout = () => {
       },
       shippingInfo: shippingInfo,
       shippingCost: shippingCost,
+      // Include promo code information
+      promoCode: appliedPromo ? appliedPromo.code : null,
+      discountAmount: discountAmount,
+      cartTotal: cartTotal,
       totalAmount: totalAmount,
       orderStatus: "pending",
       paymentMethod: "paystack",
@@ -135,13 +212,7 @@ const ShoppingCheckout = () => {
       isGuest: !isAuthenticated,
     };
 
-    // console.log(orderData);
-    // console.log("Cart Items from Redux:", cartItems.items);
-    // console.log("Formatted Order Data:", orderData);
-    // console.log("Cart Items for Order:", orderData.cartItems);
-
     dispatch(createNewOrder(orderData)).then((data) => {
-      // console.log(data), "[paystack_resp]";
       if (data?.payload?.success) {
         // Store order ID for verification
         sessionStorage.setItem(
@@ -149,7 +220,7 @@ const ShoppingCheckout = () => {
           JSON.stringify(data.payload.orderId)
         );
 
-        // Store order details for success page - ADD THIS
+        // Store order details for success page
         sessionStorage.setItem(
           "lastOrderDetails",
           JSON.stringify({
@@ -157,8 +228,15 @@ const ShoppingCheckout = () => {
             email: isAuthenticated ? user?.email : guestEmail,
             itemCount: cartItems.items.length,
             orderDate: new Date().toISOString(),
+            discountAmount: discountAmount,
+            promoCode: appliedPromo?.code || null,
           })
         );
+
+        // Apply promo code usage if promo was used
+        if (appliedPromo) {
+          applyPromoUsage(appliedPromo.code, userId);
+        }
 
         setPaymentStarted(true);
       } else {
@@ -192,6 +270,7 @@ const ShoppingCheckout = () => {
         <img
           src={checkout}
           className="h-full w-full object-cover object-center"
+          alt="Checkout"
         />
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 mt-5 p-5">
@@ -215,6 +294,7 @@ const ShoppingCheckout = () => {
               </p>
             </div>
           )}
+
           <Address
             selectedId={currentSelectedAddress}
             setCurrentSelectedAddress={setCurrentSelectedAddress}
@@ -246,27 +326,100 @@ const ShoppingCheckout = () => {
             </div>
           )}
 
-          {/* Shipping Selector */}
           <div className="p-4 border rounded-lg bg-background">
-            <ShippingSelector
-              onShippingChange={setShippingInfo}
-              // selectedShipping={shippingInfo}
-            />
+            <ShippingSelector onShippingChange={setShippingInfo} />
           </div>
         </div>
+
         <div className="flex flex-col gap-4">
           {cartItems && cartItems.items && cartItems.items.length > 0
             ? cartItems.items.map((item) => (
                 <UserCartContent key={item.productId} cartItem={item} />
               ))
             : null}
+
+          {/* Promo Code Section */}
+          <div className="p-4 border rounded-lg bg-background">
+            <Label className="text-base font-semibold mb-2 flex items-center gap-2">
+              <Tag className="w-4 h-4" />
+              Promo Code
+            </Label>
+
+            {!appliedPromo ? (
+              <div className="flex gap-2 mt-2">
+                <Input
+                  type="text"
+                  placeholder="Enter promo code"
+                  value={promoCode}
+                  onChange={(e) => setPromoCode(e.target.value.toUpperCase())}
+                  className="flex-1"
+                  disabled={promoLoading}
+                  onKeyPress={(e) => {
+                    if (e.key === "Enter") {
+                      handleApplyPromo();
+                    }
+                  }}
+                />
+                <button
+                  onClick={handleApplyPromo}
+                  disabled={promoLoading}
+                  className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 disabled:bg-gray-400 disabled:cursor-not-allowed"
+                >
+                  {promoLoading ? "Applying..." : "Apply"}
+                </button>
+              </div>
+            ) : (
+              <div className="mt-2 p-3 bg-green-50 border border-green-200 rounded-lg">
+                <div className="flex justify-between items-center">
+                  <div>
+                    <p className="font-semibold text-green-800">
+                      {appliedPromo.code}
+                    </p>
+                    <p className="text-sm text-green-700">
+                      {appliedPromo.discountType === "percentage"
+                        ? `${appliedPromo.discountValue}% off`
+                        : `₦${addCommasToNumbers(
+                            appliedPromo.discountValue
+                          )} off`}
+                    </p>
+                    {appliedPromo.description && (
+                      <p className="text-xs text-green-600 mt-1">
+                        {appliedPromo.description}
+                      </p>
+                    )}
+                  </div>
+                  <button
+                    onClick={handleRemovePromo}
+                    className="p-1 hover:bg-green-100 rounded"
+                    title="Remove promo code"
+                  >
+                    <X className="w-5 h-5 text-green-800" />
+                  </button>
+                </div>
+              </div>
+            )}
+          </div>
+
+          {/* Order Summary */}
           <div className="mt-8 space-y-4">
             <div className="flex justify-between mx-5">
-              <span className="font-bold">Total</span>
+              <span className="font-bold">Subtotal</span>
               <span className="font-bold">
                 ₦{addCommasToNumbers(cartTotal.toFixed(2))}
               </span>
             </div>
+
+            {appliedPromo && discountAmount > 0 && (
+              <div className="flex justify-between mx-5">
+                <span className="text-green-600 font-medium">
+                  Discount ({appliedPromo.code})
+                </span>
+                <span className="text-green-600 font-medium">
+                  -₦{addCommasToNumbers(discountAmount.toFixed(2))}
+                </span>
+              </div>
+            )}
+
             <div className="flex justify-between mx-5">
               <span className="text-muted-foreground">Shipping</span>
               <span
@@ -277,18 +430,26 @@ const ShoppingCheckout = () => {
                   : "Select location"}
               </span>
             </div>
+
             <div className="flex justify-between mx-5 pt-4 border-t">
               <span className="font-bold text-lg">Total</span>
               <span className="font-bold text-lg">
                 ₦{addCommasToNumbers(totalAmount.toFixed(2))}
               </span>
             </div>
+
+            {appliedPromo && discountAmount > 0 && (
+              <div className="mx-5 p-2 bg-green-50 rounded text-center text-sm text-green-800">
+                You saved ₦{addCommasToNumbers(discountAmount.toFixed(2))}!
+              </div>
+            )}
           </div>
+
           <div className="mt-4 w-full">
-            {/*Might want to integrate more than one payment method for checkout. Primary focus obviously on Nigerian modes of payment. */}
             <PressableButton
               onClick={handlePaystackPayment}
-              className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer"
+              className="w-full bg-[#02066f] hover:bg-green-500 hover:cursor-pointer disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled={paymentStarted}
             >
               {paymentStarted
                 ? "Processing payment..."
@@ -297,15 +458,6 @@ const ShoppingCheckout = () => {
                 : "Select shipping location to continue"}
             </PressableButton>
           </div>
-          {/* {!isAuthenticated && (
-            <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">
-              <p className="text-sm text-blue-900">
-                <strong>Want to track your order?</strong> Create an account
-                after checkout to view order history and save addresses for
-                faster checkout next time.
-              </p>
-            </div>
-          )} */}
         </div>
       </div>
     </div>

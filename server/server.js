@@ -16,6 +16,8 @@ const shopOrderRouter = require("./routes/shop/order-routes");
 const shopSearchRouter = require("./routes/shop/search-routes");
 const shopReviewRouter = require("./routes/shop/review-routes");
 const shopNewsletterRouter = require("./routes/shop/newsletter-routes");
+const shopPromoRouter = require("./routes/shop/promo-routes")
+const shopOfferRouter = require("./routes/shop/offer-routes")
 
 const commonFeatureRouter = require("./routes/common/feature-routes");
 
@@ -73,6 +75,8 @@ app.use("/api/shop/order", shopOrderRouter);
 app.use("/api/shop/search", shopSearchRouter);
 app.use("/api/shop/review", shopReviewRouter);
 app.use("/api/shop/newsletter", shopNewsletterRouter);
+app.use("/api/shop/promo", shopPromoRouter);
+app.use("/api/shop/offer", shopOfferRouter);
 
 app.use("/api/common/feature", commonFeatureRouter);
 

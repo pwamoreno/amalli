@@ -48,7 +48,7 @@ const SearchProducts = () => {
   }
 
   function handleAddToCart(getCurrentProductId, getTotalStock) {
-    console.log(cartItems);
+    // console.log(cartItems);
 
     let getCartItems = cartItems.items || [];
 
