@@ -22,7 +22,14 @@ const ShoppingProductTile = ({
       handleGetProductDetails(product?._id);
     } else {
       // Regular add to cart (no variants or only single option for each)
-      handleAddToCart(product?._id, product?.totalStock);
+      // Build variant object with single options if they exist
+      const variant = {};
+
+      if (product?.colors?.length === 1) {
+        variant.color = product.colors[0];
+      }
+
+      handleAddToCart(product?._id, "", variant);
     }
   };
 

@@ -61,13 +61,19 @@ const ShoppingHome = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
-  function handleAddToCart(getCurrentProductId) {
+  function handleAddToCart(
+    getCurrentProductId,
+    personalizationText = "",
+    variant = {}
+  ) {
     // console.log(getCurrentProductId);
     dispatch(
       addToCart({
         userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
+        personalizationText: personalizationText || "",
+        variant: variant || {},
       })
     ).then((data) => {
       if (data?.payload.success) {
