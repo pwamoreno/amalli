@@ -120,7 +120,7 @@ const ShoppingHome = () => {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <div className="relative w-full h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
+      <div className="relative w-full mt-4 h-[300px] sm:h-[400px] md:h-[500px] lg:h-[600px] overflow-hidden">
         {featureImageList && featureImageList.length > 0
           ? featureImageList.map((slide, index) => (
               <img
