@@ -13,6 +13,9 @@ const NewArrivalsSection = ({
   const [currentIndex, setCurrentIndex] = useState(0);
   const [itemsPerView, setItemsPerView] = useState(4);
 
+  // console.log(products);
+  
+
   // Responsive items per view
   useEffect(() => {
     const handleResize = () => {

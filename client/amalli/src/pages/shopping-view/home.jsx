@@ -66,6 +66,7 @@ const ShoppingHome = () => {
     personalizationText = "",
     variant = {}
   ) {
+    // console.log("Adding to cart:", { userId, getCurrentProductId, variant });
     // console.log(getCurrentProductId);
     dispatch(
       addToCart({
@@ -76,7 +77,7 @@ const ShoppingHome = () => {
         variant: variant || {},
       })
     ).then((data) => {
-      if (data?.payload.success) {
+      if (data?.payload?.success) {
         dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },

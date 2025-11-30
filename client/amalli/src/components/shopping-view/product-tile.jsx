@@ -9,6 +9,8 @@ const ShoppingProductTile = ({
   handleGetProductDetails,
   handleAddToCart,
 }) => {
+
+  // console.log(product.sizes)
   // Check if product has multiple variant options
   const hasMultipleColorOptions = product?.colors?.length > 1;
   const hasMultipleSizeOptions = product?.sizes?.length > 1;
@@ -26,7 +28,11 @@ const ShoppingProductTile = ({
       const variant = {};
 
       if (product?.colors?.length === 1) {
-        variant.color = product.colors[0];
+        variant.selectedColor = product.colors[0];
+      }
+
+      if(product?.sizes?.length === 1){
+        variant.selectedSize = product.sizes[0];
       }
 
       handleAddToCart(product?._id, "", variant);

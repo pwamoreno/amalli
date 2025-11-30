@@ -3,7 +3,8 @@ const Product = require("../../models/Product");
 
 const addToCart = async (req, res) => {
   try {
-    const { userId, productId, quantity, personalizationText, variant } = req.body;
+    const { userId, productId, quantity, personalizationText, variant } =
+      req.body;
 
     // console.log("Received request:", { userId, productId, quantity, personalizationText, variant });
 
@@ -33,13 +34,13 @@ const addToCart = async (req, res) => {
 
     // Validate variant requirements
     if (product.hasVariants) {
-      if (product.colors?.length > 0 && !variant?.color) {
+      if (product.colors?.length > 0 && !variant?.selectedColor) {
         return res.status(400).json({
           success: false,
           message: "Please select a color",
         });
       }
-      if (product.sizes?.length > 0 && !variant?.size) {
+      if (product.sizes?.length > 0 && !variant?.selectedSize) {
         return res.status(400).json({
           success: false,
           message: "Please select a size",
@@ -67,12 +68,12 @@ const addToCart = async (req, res) => {
 
       // Check variant match (color)
       const itemColorId = item.selectedColor?.id || null;
-      const newColorId = variant?.color?.id || null;
+      const newColorId = variant?.selectedColor?.id || null;
       if (itemColorId !== newColorId) return false;
 
       // Check variant match (size)
       const itemSizeId = item.selectedSize?.id || null;
-      const newSizeId = variant?.size?.id || null;
+      const newSizeId = variant?.selectedSize?.id || null;
       if (itemSizeId !== newSizeId) return false;
 
       return true;
@@ -87,22 +88,24 @@ const addToCart = async (req, res) => {
         productId,
         quantity,
         personalizationText: personalizationText?.trim() || "",
+        selectedColor: variant?.selectedColor || null, // Map variant to schema
+        selectedSize: variant?.selectedSize || null,
       };
 
       // Only add color if it exists
-      if (variant?.color) {
+      if (variant?.selectedColor) {
         newItem.selectedColor = {
-          id: variant.color.id,
-          name: variant.color.name,
-          hex: variant.color.hex,
+          id: variant.selectedColor.id,
+          name: variant.selectedColor.name,
+          hex: variant.selectedColor.hex,
         };
       }
 
       // Only add size if it exists
-      if (variant?.size) {
+      if (variant?.selectedSize) {
         newItem.selectedSize = {
-          id: variant.size.id,
-          name: variant.size.name,
+          id: variant.selectedSize.id,
+          name: variant.selectedSize.name,
         };
       }
 
@@ -215,7 +218,7 @@ const updateCartItemQuantity = async (req, res) => {
       (item) => item.productId.toString() === productId
     );
 
-    if (!findCurrentProductIndex === -1) {
+    if (findCurrentProductIndex === -1) {
       return res.status(404).json({
         success: false,
         message: "Cart item not found",

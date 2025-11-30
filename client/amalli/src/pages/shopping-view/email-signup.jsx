@@ -44,7 +44,7 @@ const EmailSignupSystem = () => {
     <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 text-center">
       <h2 className="text-4xl font-serif mb-4">Sign up for our newsletter</h2>
       <p className="text-gray-600 mb-8 max-w-md mx-auto">
-        Get nice exclusive deals, and be one of the first to see and get discounts on our
+        Get nice exclusive deals, and be one of the first to get discounts on our
         new jewelry.
       </p>
 
