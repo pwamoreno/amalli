@@ -228,7 +228,7 @@ const ShoppingFooter = () => {
 
       {/* WhatsApp Chat Button - Fixed Position */}
       <a
-        href="https://wa.me/+2348104832511"
+        href="https://wa.me/+2347077514923"
         target="_blank"
         rel="noopener noreferrer"
         onMouseEnter={() => setIsWhatsAppHovered(true)}
