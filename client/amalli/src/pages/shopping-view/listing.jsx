@@ -1,7 +1,7 @@
 import ProductFilter from "@/components/shopping-view/filter";
 import ProductDetailsDialog from "@/components/shopping-view/product-details";
 import ShoppingProductTile from "@/components/shopping-view/product-tile";
-import { PressableButton } from "@/components/common/pressable-button"; 
+import { PressableButton } from "@/components/common/pressable-button";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -89,8 +89,11 @@ const ShoppingListing = () => {
 
   // console.log("filters", filters, searchParams);
 
-  function handleAddToCart(getCurrentProductId, getTotalStock) {
-
+  function handleAddToCart(
+    getCurrentProductId,
+    personalizationText = "",
+    variant = {}
+  ) {
     let getCartItems = cartItems?.items || [];
 
     if (getCartItems.length) {
@@ -100,7 +103,9 @@ const ShoppingListing = () => {
 
       if (indexOfCurrentItem > -1) {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
-        if (getQuantity + 1 > getTotalStock) {
+        const product = productList.find(p => p._id === getCurrentProductId);
+        const totalStock = product?.totalStock || 0;
+        if (getQuantity + 1 > totalStock) {
           toast(`Only ${getQuantity} items can be added.`, {
             style: { background: "#fa113d", color: "white" },
           });
@@ -115,6 +120,8 @@ const ShoppingListing = () => {
         userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
+        personalizationText: personalizationText || "",
+        variant: variant || {},
       })
     ).then((data) => {
       if (data?.payload.success) {

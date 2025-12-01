@@ -47,7 +47,11 @@ const SearchProducts = () => {
     dispatch(fetchProductDetails(getCurrentProductId));
   }
 
-  function handleAddToCart(getCurrentProductId, getTotalStock) {
+  function handleAddToCart(
+    getCurrentProductId,
+    personalizationText = "",
+    variant = {}
+  ) {
     // console.log(cartItems);
 
     let getCartItems = cartItems.items || [];
@@ -59,7 +63,9 @@ const SearchProducts = () => {
 
       if (indexOfCurrentItem > -1) {
         const getQuantity = getCartItems[indexOfCurrentItem].quantity;
-        if (getQuantity + 1 > getTotalStock) {
+        const product = productList.find(p => p._id === getCurrentProductId);
+        const totalStock = product?.totalStock || 0;
+        if (getQuantity + 1 > totalStock) {
           toast(`Only ${getQuantity} items can be added.`, {
             style: { background: "#fa113d", color: "white" },
           });
@@ -74,9 +80,11 @@ const SearchProducts = () => {
         userId: userId,
         productId: getCurrentProductId,
         quantity: 1,
+        personalizationText: personalizationText || "",
+        variant: variant || {},
       })
     ).then((data) => {
-      if (data?.payload.success) {
+      if (data?.payload?.success) {
         dispatch(fetchCartItems(userId));
         toast("Product added to cart successfully.", {
           style: { background: "#22c55e", color: "white" },
